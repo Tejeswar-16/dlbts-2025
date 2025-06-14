@@ -6,6 +6,7 @@ import LogisticsList from "../LogisticsList";
 import Image from "next/image";
 import { db } from "../_util/config";
 import { query, collection, getDocs } from "firebase/firestore";
+import { useRouter } from "next/navigation";
 
 export default function Dashboard(){
 
@@ -20,6 +21,11 @@ export default function Dashboard(){
     const [filterHeading,setFilterHeading] = useState("Search by Name, Group, Samithi or Event");
     const [loading,setLoading] = useState(false);
     const [studentData,setStudentData] = useState([]);
+
+    const router = useRouter();
+    function handleEventsClick(){
+        router.push("/dashboard/events");
+    }
     
     useEffect(() => {
         const a = auth.onAuthStateChanged((user) => {
@@ -99,7 +105,7 @@ export default function Dashboard(){
                             <h1 className="font-sans text-sm md:text-xl px-3">{adminEmail}</h1>
                         </div>
                         <div className="flex flex-col md:flex md:flex-row md:justify-end">
-                            <button className="font-sans font-semibold text-md md:text-xl rounded-lg bg-yellow-100 px-2 md:rounded-xl my-3 mx-2 md:h-15 md:mx-2 md:my-2 hover:bg-yellow-500 hover:cursor-pointer transition duration-300 ease-in-out">Events</button>
+                            <button onClick={handleEventsClick} className="font-sans font-semibold text-md md:text-xl rounded-lg bg-yellow-100 px-2 md:rounded-xl my-3 mx-2 md:h-15 md:mx-2 md:my-2 hover:bg-yellow-500 hover:cursor-pointer transition duration-300 ease-in-out">Events</button>
                             <button className="font-sans font-semibold text-sm md:text-xl rounded-lg bg-red-200 px-2 md:rounded-xl mx-2 md:h-15 md:mx-2 md:my-2 hover:bg-red-500 hover:cursor-pointer hover:text-white transition duration-300 ease-in-out">Logout</button>
                         </div>
                     </div>

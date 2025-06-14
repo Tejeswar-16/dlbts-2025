@@ -26,6 +26,8 @@ export default function Home() {
       setLoading(false);
       if (userEmail === "admin@dlbts.ks")
         router.push("/dashboard");
+      if (userEmail.startsWith("judge"))
+        router.push("/evaluation");
 
     }
     catch(error)

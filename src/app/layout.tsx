@@ -14,6 +14,9 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "DLBTS 2025",
+  icons : {
+    icon : "/icon.png"
+  }
 };
 
 export default function RootLayout({

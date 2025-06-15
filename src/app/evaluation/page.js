@@ -27,7 +27,6 @@ export default function Evaluation(){
             }
         }
         return name;
-        
     }
 
     useEffect(() => {
@@ -41,13 +40,52 @@ export default function Evaluation(){
     },[]);
 
     const router = useRouter();
+
+    const groupMap =  {
+        "g1" : "Group 1",
+        "g2" : "Group 2",
+        "g3" : "Group 3"
+    };
+
+    const eventMap = {
+        "bh" : "Bhajans",
+        "sl" : "Slokas",
+        "ve" : "Vedam",
+        "tc" : "Tamizh Chants",
+        "ste" : "Story Telling (English)",
+        "stt" : "Story Telling (Tamil)",
+        "dw" : "Drawing",
+        "dsb" : "Devotional Singing - Boys",
+        "dsg" : "Devotional Singing - Girls",
+        "bb" : "Bhajans - Boys",
+        "bg" : "Bhajans - Girls",
+        "sb" : "Slokas - Boys",
+        "sg" : "Slokas - Girls",
+        "vb" : "Vedam - Boys",
+        "vg" : "Vedam - Girls",
+        "tcb" : "Tamizh chants - Boys",
+        "tcg" : "Tamizh chants - Girls",
+        "ee" : "Elocution (English)",
+        "et" : "Elocution (Tamil)",
+        "adb" : "Altar Decoration - Boys",
+        "adg" : "Altar Decoration - Girls",
+        "ncb" : "Rudram Namakam Chanting - Boys",
+        "ncg" : "Rudram Namakam Chanting - Girls"
+    }
     
     function handleOnClick(e){  
         e.preventDefault();
         if (judgeEvent === "")
             alert("Sairam! Please select an event");
         else
-            router.push("/evaluation/"+judgeGroup.trim().replace(/[\s-]/g,'').toLowerCase()+"/"+judgeEvent.trim().replace(/[\s-]/g,'').toLowerCase());
+        {
+            let grp = judgeEmail.substring(7,9);
+            let evt = cut(judgeEmail).substring(9);
+            if (groupMap[grp] !== judgeGroup || eventMap[evt] != judgeEvent)
+                alert("Sairam! You do not have access to visit this page. Please select the correct group and event");
+            else
+                router.push("/evaluation/"+judgeGroup.trim().replace(/[\s-()]/g,'').toLowerCase()+"/"+judgeEvent.trim().replace(/[\s-()]/g,'').toLowerCase());
+        }
     }
 
     return(
@@ -186,6 +224,7 @@ export default function Evaluation(){
                             </>
                         }
                     </div>
+
                     
                 </div>
             </div>

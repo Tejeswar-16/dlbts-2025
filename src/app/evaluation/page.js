@@ -39,8 +39,6 @@ export default function Evaluation(){
         })
     },[]);
 
-    const router = useRouter();
-
     const groupMap =  {
         "g1" : "Group 1",
         "g2" : "Group 2",
@@ -73,6 +71,8 @@ export default function Evaluation(){
         "ncg" : "Rudram Namakam Chanting - Girls"
     }
     
+    const router = useRouter();
+
     function handleOnClick(e){  
         e.preventDefault();
         if (judgeEvent === "")

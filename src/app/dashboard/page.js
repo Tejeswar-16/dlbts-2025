@@ -113,6 +113,10 @@ export default function Dashboard(){
             })
     }
 
+    function handleEClick(){
+        router.push("/evaluation")
+    }
+
     return (
         <>
             <div className="relative bg-gray-100 py-5 min-h-screen lg:bg-gray-100">
@@ -123,8 +127,9 @@ export default function Dashboard(){
                             <h1 className="font-sans text-sm md:text-xl px-3">{adminEmail}</h1>
                         </div>
                         <div className="flex flex-col md:flex md:flex-row md:justify-end">
-                            <button onClick={handleEventsClick} className="font-sans font-semibold text-md md:text-xl rounded-lg bg-yellow-100 px-2 md:rounded-xl my-3 mx-2 md:h-15 md:mx-2 md:my-2 hover:bg-yellow-500 hover:cursor-pointer transition duration-300 ease-in-out">Leadboard</button>
-                            <button onClick={handleLogout} className="font-sans font-semibold text-sm md:text-xl rounded-lg bg-red-200 px-2 md:rounded-xl mx-2 md:h-15 md:mx-2 md:my-2 hover:bg-red-500 hover:cursor-pointer hover:text-white transition duration-300 ease-in-out">Logout</button>
+                            <button onClick={handleEClick} className="font-sans font-semibold text-md md:text-xl rounded-lg bg-purple-200 px-2 md:rounded-xl mt-1 mb-2 mx-2 md:h-15 md:mx-2 md:my-2 hover:text-black hover:bg-purple-500 hover:cursor-pointer transition duration-300 ease-in-out">Events</button>
+                            <button onClick={handleEventsClick} className="font-sans font-semibold text-md md:text-xl rounded-lg bg-yellow-100 px-2 md:rounded-xl mb-2 mx-2 md:h-15 md:mx-2 md:my-2 hover:bg-yellow-500 hover:cursor-pointer transition duration-300 ease-in-out">Leadboard</button>
+                            <button onClick={handleLogout} className="font-sans font-semibold text-sm md:text-xl rounded-lg bg-red-200 px-2 md:rounded-xl mx-2 mb-1 md:h-15 md:mx-2 md:my-2 hover:bg-red-500 hover:cursor-pointer hover:text-white transition duration-300 ease-in-out">Logout</button>
                         </div>
                     </div>
                 </nav>
@@ -148,18 +153,22 @@ export default function Dashboard(){
                                 <h1 className="font-sans font-bold text-xl mt-2 ml-3 lg:mx-10">Samithi</h1>
                                 <select value={searchSamithi} onChange={(e) => {setSearchSamithi(e.target.value)}} className="font-sans border rounded-xl ml-3 lg:mx-10 mt-3 w-69 lg:w-60 h-10 p-2">
                                     <option value="All">All</option>
+                                    <option>Chengalpet</option>
+                                    <option>Collectorate</option>
+                                    <option>Guduvancheri</option>
+                                    <option>Indra Nagar</option>
+                                    <option>Irumbuliyur</option>
+                                    <option>Little Kancheepuram</option>
+                                    <option>Madambakkam</option>
+                                    <option>Main Kancheepuram</option>
+                                    <option>Mannivakkam</option>
+                                    <option>Maraimalai Nagar</option>
                                     <option>Parvathi Nagar</option>
                                     <option>Perungalathur</option>
-                                    <option>Guduvancheri</option>
-                                    <option>Guduvancheri</option>
-                                    <option>Parvathi Nagar</option>
-                                    <option>PN</option>
-                                    <option>Guduvancheri</option>
-                                    <option>pn</option>
-                                    <option>Parvathi Nagar</option>
-                                    <option>Perungalathur</option>
-                                    <option>Guduvancheri</option>
-                                    <option>Guduvancheri</option>
+                                    <option>Poondi Bazar</option>
+                                    <option>Sothupakkam</option>
+                                    <option>Sriperumpudur</option>
+                                    <option>Tambaram</option>
                                 </select>
                             </div>
                             <div className="flex flex-col">
@@ -266,18 +275,22 @@ export default function Dashboard(){
                             <h1 className="font-sans font-bold text-xl mt-2 ml-3 lg:mx-10">Samithi</h1>
                             <select value={searchSamithi} onChange={(e) => {setSearchSamithi(e.target.value)}} className="font-sans border rounded-xl ml-3 lg:mx-10 mt-3 w-69 lg:w-60 h-10 p-2">
                                 <option value="All">All</option>
-                                <option>Parvathi Nagar</option>
-                                <option>Perungalathur</option>
-                                <option>Guduvancheri</option>
-                                <option>Guduvancheri</option>
-                                <option>Parvathi Nagar</option>
-                                <option>PN</option>
-                                <option>Guduvancheri</option>
-                                <option>pn</option>
-                                <option>Parvathi Nagar</option>
-                                <option>Perungalathur</option>
-                                <option>Guduvancheri</option>
-                                <option>Guduvancheri</option>
+                                <option>Chengalpet</option>
+                                    <option>Collectorate</option>
+                                    <option>Guduvancheri</option>
+                                    <option>Indra Nagar</option>
+                                    <option>Irumbuliyur</option>
+                                    <option>Little Kancheepuram</option>
+                                    <option>Madambakkam</option>
+                                    <option>Main Kancheepuram</option>
+                                    <option>Mannivakkam</option>
+                                    <option>Maraimalai Nagar</option>
+                                    <option>Parvathi Nagar</option>
+                                    <option>Perungalathur</option>
+                                    <option>Poondi Bazar</option>
+                                    <option>Sothupakkam</option>
+                                    <option>Sriperumpudur</option>
+                                    <option>Tambaram</option>
                             </select>
                         </div>
                         <div className="flex flex-col">

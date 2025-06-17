@@ -28,6 +28,8 @@ export default function Home() {
         router.push("/dashboard");
       if (userEmail.startsWith("judge"))
         router.push("/evaluation");
+      if (userEmail.startsWith("officials"))
+        router.push("/register");
 
     }
     catch(error)

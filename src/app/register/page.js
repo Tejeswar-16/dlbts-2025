@@ -1,9 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { collection, addDoc, where, query, getDocs } from "firebase/firestore";
-import { db } from "../_util/config";
+import { auth, db } from "../_util/config";
 import Image from "next/image";
+import { signOut } from "firebase/auth";
+import { useRouter } from "next/navigation";
 
 export default function Register(){
 
@@ -19,6 +21,7 @@ export default function Register(){
     const [errorDoB,setErrorDoB] = useState("");
     const [errorEvent,setErrorEvent] = useState("");
     const [groupError,setGroupError] = useState("");
+    const [email,setEmail] = useState("");
 
     function handleDobChange(date){
         let selectedDate = new Date(date);
@@ -118,22 +121,69 @@ export default function Register(){
             }
             finally
             {
+                setName("");
+                setDob("");
+                setGender("");
+                setSamithi("Select a Samithi");
+                setGroup("Select a Group");
+                setEvent1("Select an event");
+                setEvent2("Select an event");
+                setGroupEvent("Select an event");
                 setLoading(false);
             }   
         }
     }
 
+    const router = useRouter();
+
+    useEffect(() => {
+        const a = auth.onAuthStateChanged((user) => {
+            if (!user)
+                router.push("/");
+        })
+    })
+
+    useEffect(() => {
+        const a = auth.onAuthStateChanged((user) => {
+            if (user)
+            {
+                setEmail(user.email);
+            }
+        })
+    });
+
+    function handleLogout(){
+        signOut(auth)
+            .then(() => {
+                alert("Sairam! Signed out successfully");
+            })
+            .catch((error) => {
+                console.log(error);
+            })
+    }
+
     return (
         <>
             <div className="relative bg-gray-100 py-5 min-h-screen lg:bg-gray-100">
-                <div className="mx-auto rounded-xl shadow-xl border bg-white font-sans font-bold w-70 h-13 text-xl md:w-100 md:h-15 md:text-2xl lg:w-120 lg:h-15 lg:text-3xl">
-                    <div className="flex justify-center py-3">
-                        DLBTS Registration Form
+                <nav className="mx-auto border shadow-xl bg-white rounded-xl w-75 pb-1 md:w-180 lg:w-250 lg:h-20">
+                    <div className="flex flex-row justify-between">
+                        <div className="flex flex-col">
+                            <h1 className="font-sans font-bold text-xl px-3 pt-3 md:text-3xl">Welcome, User</h1>
+                            <h1 className="font-sans text-sm md:text-xl px-3">{email}</h1>
+                        </div>
+                        <div className="flex flex-col md:flex md:flex-row md:justify-end">
+                            <button onClick={handleLogout} className="font-sans font-semibold text-sm md:text-xl rounded-lg bg-red-200 px-2 md:rounded-xl mr-2 my-4 p-2 md:h-15 md:mx-2 md:my-2 hover:bg-red-500 hover:cursor-pointer hover:text-white transition duration-300 ease-in-out">Logout</button>
+                        </div>
                     </div>
-                </div>
+                </nav>
 
                 <form onSubmit={handleSubmit} className="lg:flex justify-center">
                     <div className={loading ? "blur-sm pointer-events:none" : "mx-auto ml-2 mr-2 mt-10 p-2 mb-10 rounded-2xl shadow-2xl bg-white lg:w-250 lg:h-400"}>
+                        
+                        <div className="flex justify-center font-sans font-bold text-xl md:text-3xl mt-3">
+                            DLBTS Registration Form
+                        </div>
+                        
                         <div className="mx-auto mt-8 rounded-2xl shadow-2xl lg:w-220 lg:h-35 bg-gray-100">
                             <div className="p-4 mt-8 font-sans text-xl">
                                 Student's Full Name

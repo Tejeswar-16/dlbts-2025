@@ -82,10 +82,19 @@ export default function Evaluation(){
             let grp = judgeEmail.substring(7,9);
             let evt = cut(judgeEmail).substring(9);
             if (groupMap[grp] !== judgeGroup || eventMap[evt] != judgeEvent)
-                alert("Sairam! You do not have access to visit this page. Please select the correct group and event");
+            {
+                if (judgeEmail === "admin@dlbts.ks")
+                    router.push("/evaluation/"+judgeGroup.trim().replace(/[\s-()]/g,'').toLowerCase()+"/"+judgeEvent.trim().replace(/[\s-()]/g,'').toLowerCase());
+                else
+                    alert("Sairam! You do not have access to visit this page. Please select the correct group and event");
+            }
             else
                 router.push("/evaluation/"+judgeGroup.trim().replace(/[\s-()]/g,'').toLowerCase()+"/"+judgeEvent.trim().replace(/[\s-()]/g,'').toLowerCase());
         }
+    }
+
+    function handleEventsClick(){
+        router.push("/leaderboard");
     }
 
     return(
@@ -98,6 +107,7 @@ export default function Evaluation(){
                             <h1 className="font-sans text-sm md:text-xl px-3">{judgeEmail}</h1>
                         </div>
                         <div className="flex flex-col md:flex md:flex-row md:justify-end">
+                            <button onClick={handleEventsClick} className="font-sans font-semibold text-md md:text-xl rounded-lg bg-yellow-100 px-2 md:rounded-xl my-3 mx-2 md:h-15 md:mx-2 md:my-2 hover:bg-yellow-500 hover:cursor-pointer transition duration-300 ease-in-out">Leadboard</button>
                             <button className="font-sans font-semibold text-sm md:text-xl rounded-lg bg-red-200 px-2 md:rounded-xl mx-2 md:h-15 md:mx-2 md:my-2 hover:bg-red-500 hover:cursor-pointer hover:text-white transition duration-300 ease-in-out">Logout</button>
                         </div>
                     </div>

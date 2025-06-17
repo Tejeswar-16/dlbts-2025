@@ -47,6 +47,7 @@ export default function Judging(){
     const [amDoB,setAmDoB] = useState("");
     const [amGroup,setAmGroup] = useState("");
     const [amGender,setAmGender] = useState("");
+    const [amSamithi,setAmSamithi] = useState("");
     const [marks,setMarks] = useState([]);
     const [stcBhaavam,setStcBhaavam] = useState(0);
     const [stcTune,setStcTune] = useState(0);
@@ -188,12 +189,13 @@ export default function Judging(){
         return parts.join(" ");
     }
 
-    function handleAwardMarks(name,dob,group,gender){
+    function handleAwardMarks(name,dob,group,gender,samithi){
         setClicked(true);
         setAmName(name);
         setAmDoB(dob);
         setAmGroup(group);
         setAmGender(gender);
+        setAmSamithi(samithi);
         const currentId = cleanName(name)+dob;
         async function getData(){
             setLoading(true);
@@ -218,7 +220,8 @@ export default function Judging(){
                         event : "",
                         gender : "",
                         group : "",
-                        name : ""
+                        name : "",
+                        samithi : ""
                     }]
                 }
                 const mark = filteredData[0];
@@ -243,7 +246,8 @@ export default function Judging(){
                         event : "",
                         gender : "",
                         group : "",
-                        name : ""
+                        name : "",
+                        samithi : ""
                     }]
                 }
                 const mark = filteredData[0];
@@ -268,7 +272,8 @@ export default function Judging(){
                         event : "",
                         gender : "",
                         group : "",
-                        name : ""
+                        name : "",
+                        samithi : ""
                     }]
                 }
                 const mark = filteredData[0];
@@ -291,7 +296,8 @@ export default function Judging(){
                         event : "",
                         gender : "",
                         group : "",
-                        name : ""
+                        name : "",
+                        samithi : ""
                     }]
                 }
                 const mark = filteredData[0];
@@ -313,7 +319,8 @@ export default function Judging(){
                         event : "",
                         gender : "",
                         group : "",
-                        name : ""
+                        name : "",
+                        samithi : ""
                     }]
                 }
                 const mark = filteredData[0];
@@ -338,7 +345,8 @@ export default function Judging(){
                         event : "",
                         gender : "",
                         group : "",
-                        name : ""
+                        name : "",
+                        samithi : ""
                     }]
                 }
                 const mark = filteredData[0];
@@ -363,7 +371,8 @@ export default function Judging(){
                         event : "",
                         gender : "",
                         group : "",
-                        name : ""
+                        name : "",
+                        samithi : ""
                     }]
                 }
                 const mark = filteredData[0];
@@ -401,6 +410,7 @@ export default function Judging(){
                         dob : amDoB,
                         group : amGroup,
                         gender : amGender,
+                        samithi : amSamithi,
                         event : event,
                         bhaavam : stcBhaavam,
                         tune : stcTune,
@@ -418,6 +428,7 @@ export default function Judging(){
                         name : amName,
                         dob : amDoB,
                         group : amGroup,
+                        samithi : amSamithi,
                         gender : amGender,
                         event : event,
                         bhaavam : stcBhaavam,
@@ -440,6 +451,7 @@ export default function Judging(){
                         name : amName,
                         dob : amDoB,
                         group : amGroup,
+                        samithi : amSamithi,
                         gender : amGender,
                         event : event,
                         bhaavam : bgbBhaavam,
@@ -459,6 +471,7 @@ export default function Judging(){
                         name : amName,
                         dob : amDoB,
                         group : amGroup,
+                        samithi : amSamithi,
                         gender : amGender,
                         event : event,
                         bhaavam : bgbBhaavam,
@@ -482,6 +495,7 @@ export default function Judging(){
                         name : amName,
                         dob : amDoB,
                         group : amGroup,
+                        samithi : amSamithi,
                         gender : amGender,
                         event : event,
                         bhaavam : vBhaavam,
@@ -500,6 +514,7 @@ export default function Judging(){
                         name : amName,
                         dob : amDoB,
                         group : amGroup,
+                        samithi : amSamithi,
                         gender : amGender,
                         event : event,
                         bhaavam : vBhaavam,
@@ -522,6 +537,7 @@ export default function Judging(){
                         name : amName,
                         dob : amDoB,
                         group : amGroup,
+                        samithi : amSamithi,
                         gender : amGender,
                         event : event,
                         presentation : sPresentation,
@@ -539,6 +555,7 @@ export default function Judging(){
                         name : amName,
                         dob : amDoB,
                         group : amGroup,
+                        samithi : amSamithi,
                         gender : amGender,
                         event : event,
                         presentation : sPresentation,
@@ -560,6 +577,7 @@ export default function Judging(){
                         name : amName,
                         dob : amDoB,
                         group : amGroup,
+                        samithi : amSamithi,
                         gender : amGender,
                         event : event,
                         theme : dTheme,
@@ -577,6 +595,7 @@ export default function Judging(){
                         name : amName,
                         dob : amDoB,
                         group : amGroup,
+                        samithi : amSamithi,
                         gender : amGender,
                         event : event,
                         theme : dTheme,
@@ -598,6 +617,7 @@ export default function Judging(){
                         name : amName,
                         dob : amDoB,
                         group : amGroup,
+                        samithi : amSamithi,
                         gender : amGender,
                         event : event,
                         shruthi : dsShruthi,
@@ -618,6 +638,7 @@ export default function Judging(){
                         name : amName,
                         dob : amDoB,
                         group : amGroup,
+                        samithi : amSamithi,
                         gender : amGender,
                         event : event,
                         shruthi : dsShruthi,
@@ -642,6 +663,7 @@ export default function Judging(){
                         name : amName,
                         dob : amDoB,
                         group : amGroup,
+                        samithi : amSamithi,
                         gender : amGender,
                         event : event,
                         asthetics : adAsthetics,
@@ -659,6 +681,7 @@ export default function Judging(){
                         name : amName,
                         dob : amDoB,
                         group : amGroup,
+                        samithi : amSamithi,
                         gender : amGender,
                         event : event,
                         asthetics : adAsthetics,
@@ -988,7 +1011,7 @@ export default function Judging(){
                                                     )
                                                 }
                                             </td>
-                                            <td className="font-sans px-2 py-2 font-semibold border border-black"><button onClick={() => {handleAwardMarks(student.name,student.dob,student.group,student.gender)}} className="bg-yellow-200 p-2 rounded-xl shadow-xl hover:cursor-pointer">Award Marks</button></td>
+                                            <td className="font-sans px-2 py-2 font-semibold border border-black"><button onClick={() => {handleAwardMarks(student.name,student.dob,student.group,student.gender,student.samithi)}} className="bg-yellow-200 p-2 rounded-xl shadow-xl hover:cursor-pointer">Award Marks</button></td>
                                         </tr>
                                     ))
                                 }

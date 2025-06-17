@@ -180,7 +180,25 @@ export default function Register(){
                                 Samithi Name
                             </div>
                             <div>
-                                <input value={samithi} onChange={(e) => {setSamithi(e.target.value)}}required className="p-3 mb-4 mx-2 font-sans md:w-180 w-68 text-lg lg:mx-4 lg:mb-0 lg:w-210 rounded-xl border" type="text"/>
+                                <select value={samithi} onChange={(e) => {setSamithi(e.target.value)}} required className="p-3 mb-4 mx-2 font-sans md:w-180 w-68 text-lg lg:mx-4 lg:mb-0 lg:w-210 rounded-xl border">
+                                    <option value="">Select a Samithi</option>
+                                    <option>Chengalpet</option>
+                                    <option>Collectorate</option>
+                                    <option>Guduvancheri</option>
+                                    <option>Indra Nagar</option>
+                                    <option>Irumbuliyur</option>
+                                    <option>Little Kancheepuram</option>
+                                    <option>Madambakkam</option>
+                                    <option>Main Kancheepuram</option>
+                                    <option>Mannivakkam</option>
+                                    <option>Maraimalai Nagar</option>
+                                    <option>Parvathi Nagar</option>
+                                    <option>Perungalathur</option>
+                                    <option>Poondi Bazar</option>
+                                    <option>Sothupakkam</option>
+                                    <option>Sriperumpudur</option>
+                                    <option>Tambaram</option>
+                                </select>
                             </div>
                         </div>
 

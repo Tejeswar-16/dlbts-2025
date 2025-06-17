@@ -1,10 +1,11 @@
 "use client";
 
 import { auth, db } from "@/app/_util/config";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { query, getDocs, collection, doc, where, updateDoc, addDoc } from "firebase/firestore";
 import Image from "next/image";
+import { signOut } from "firebase/auth";
 
 export default function Judging(){
     
@@ -124,6 +125,13 @@ export default function Judging(){
         setGroup(uncut(params.group));
         setEvent(eventMap[params.event]);
     },[]);
+
+    useEffect(() => {
+        const a = auth.onAuthStateChanged((user) => {
+            if (!user)
+                router.push("/");
+        })
+    })
 
     useEffect(() => {
         setLoading(true);
@@ -695,29 +703,45 @@ export default function Judging(){
         
         setLoading(false);
     }
+
+    const router = useRouter();
+    function handleEventsClick(){
+        router.push("/leaderboard");
+    }
+
+    function handleLogout(){
+        signOut(auth)
+            .then(() => {
+                alert("Sairam! Signed out successfully");
+            })
+            .catch((error) => {
+                console.log(error.message);
+            })
+    }
     
     return(
         <>
             <div className="relative bg-gray-100 py-5 min-h-screen lg:bg-gray-100">
-                <nav className="mx-auto border shadow-xl bg-white rounded-xl w-75 h-20 md:w-180 lg:w-250 lg:h-20">
+                <nav className="mx-auto border shadow-xl bg-white rounded-xl w-75 pb-1 md:w-180 lg:w-250 lg:h-20">
                     <div className="flex flex-row justify-between">
                         <div className="flex flex-col">
                             <h1 className="font-sans font-bold text-xl px-3 pt-3 md:text-3xl">Welcome, {judge}</h1>
                             <h1 className="font-sans text-sm md:text-xl px-3">{judgeEmail}</h1>
                         </div>
                         <div className="flex flex-col md:flex md:flex-row md:justify-end">
-                            <button className="font-sans font-semibold text-sm md:text-xl rounded-lg bg-red-200 px-2 md:rounded-xl mx-2 md:h-15 md:mx-2 md:my-2 hover:bg-red-500 hover:cursor-pointer hover:text-white transition duration-300 ease-in-out">Logout</button>
+                            <button onClick={handleEventsClick} className="font-sans font-semibold text-md md:text-xl rounded-lg bg-yellow-100 px-2 md:rounded-xl h-8 mt-2 mx-2 md:h-15 md:mx-2 md:my-2 hover:bg-yellow-500 hover:cursor-pointer transition duration-300 ease-in-out">Leadboard</button>
+                            <button onClick={handleLogout} className="font-sans font-semibold text-sm md:text-xl rounded-lg bg-red-200 px-2 md:rounded-xl mx-2 h-8 mt-3 md:h-15 md:mx-2 md:my-2 hover:bg-red-500 hover:cursor-pointer hover:text-white transition duration-300 ease-in-out">Logout</button>
                         </div>
                     </div>
                 </nav>
 
-                <div className="mx-auto bg-white rounded-xl shadow-xl w-250 mt-5 pb-5">
-                    <h1 className="flex justify-center font-sans font-bold text-2xl p-2">{group+" --> "+event}</h1>
+                <div className="mx-auto bg-white rounded-xl shadow-xl w-75 md:w-180 lg:w-250 mt-5 pb-5">
+                    <h1 className="flex justify-center font-sans font-bold text-md md:text-xl lg:text-2xl p-2">{group+" --> "+event}</h1>
                     {((event === "Bhajans") || (event === "Bhajans - Boys") || (event === "Bhajans - Girls")) && 
                     
                     <>
-                        <h1 className="flex justify-center font-sans font-bold text-xl p-2">Evaluation Criteria</h1>
-                        <table className="mx-auto text-center w-150">
+                        <h1 className="flex justify-center font-sans font-bold text-md md:text-xl lg:text-xl p-2">Evaluation Criteria</h1>
+                        <table className="mx-auto text-center w-70 md:w-150 lg:w-150">
                             <thead className="bg-black text-white">
                                 <tr>
                                     <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Criteria</th>
@@ -756,8 +780,8 @@ export default function Judging(){
 
                     {((event === "Slokas") || (event === "Slokas - Boys") || (event === "Slokas - Girls") || (event === "Tamizh Chants") || (event === "Tamizh chants - Boys") || (event === "Tamizh chants - Girls")) && 
                     <>
-                        <h1 className="flex justify-center font-sans font-bold text-xl p-2">Evaluation Criteria</h1>
-                        <table className="mx-auto text-center w-150">
+                        <h1 className="flex justify-center font-sans font-bold text-md md:text-xl lg:text-xl p-2">Evaluation Criteria</h1>
+                        <table className="mx-auto text-center w-70 md:w-150 lg:w-150">
                             <thead className="bg-black text-white">
                                 <tr>
                                     <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Criteria</th>
@@ -792,8 +816,8 @@ export default function Judging(){
 
                     {((event === "Vedam") || (event === "Vedam - Boys") || (event === "Vedam - Girls") || (event === "Rudram Namakam Chanting - Boys") || (event === "Rudram Namakam Chanting - Girls")) && 
                     <>
-                        <h1 className="flex justify-center font-sans font-bold text-xl p-2">Evaluation Criteria</h1>
-                        <table className="mx-auto text-center w-150">
+                        <h1 className="flex justify-center font-sans font-bold text-md md:text-xl lg:text-xl p-2">Evaluation Criteria</h1>
+                        <table className="mx-auto text-center w-70 md:w-150 lg:w-150">
                             <thead className="bg-black text-white">
                                 <tr>
                                     <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Criteria</th>
@@ -828,8 +852,8 @@ export default function Judging(){
 
                     {((event === "Story Telling (English)") || (event === "Story Telling (Tamil)") || (event === "Elocution (English)") || (event === "Elocution (Tamil)")) && 
                     <>
-                        <h1 className="flex justify-center font-sans font-bold text-xl p-2">Evaluation Criteria</h1>
-                        <table className="mx-auto text-center w-150">
+                        <h1 className="flex justify-center font-sans font-bold text-md md:text-xl lg:text-xl p-2">Evaluation Criteria</h1>
+                        <table className="mx-auto text-center w-70 md:w-150 lg:w-150">
                             <thead className="bg-black text-white">
                                 <tr>
                                     <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Criteria</th>
@@ -860,8 +884,8 @@ export default function Judging(){
 
                     {((event === "Drawing")) && 
                     <>
-                        <h1 className="flex justify-center font-sans font-bold text-xl p-2">Evaluation Criteria</h1>
-                        <table className="mx-auto text-center w-150">
+                        <h1 className="flex justify-center font-sans font-bold text-md md:text-xl lg:text-xl p-2">Evaluation Criteria</h1>
+                        <table className="mx-auto text-center w-70 md:w-150 lg:w-150">
                             <thead className="bg-black text-white">
                                 <tr>
                                     <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Criteria</th>
@@ -892,8 +916,8 @@ export default function Judging(){
 
                     {((event === "Devotional Singing - Boys") || (event === "Devotional Singing - Girls")) && 
                     <>
-                        <h1 className="flex justify-center font-sans font-bold text-xl p-2">Evaluation Criteria</h1>
-                        <table className="mx-auto text-center w-150">
+                        <h1 className="flex justify-center font-sans font-bold text-md md:text-xl lg:text-xl p-2">Evaluation Criteria</h1>
+                        <table className="mx-auto text-center w-70 md:w-150 lg:w-150">
                             <thead className="bg-black text-white">
                                 <tr>
                                     <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Criteria</th>
@@ -936,8 +960,8 @@ export default function Judging(){
 
                     {((event === "Altar Decoration - Boys") || (event === "Altar Decoration - Girls")) && 
                     <>
-                        <h1 className="flex justify-center font-sans font-bold text-xl p-2">Evaluation Criteria</h1>
-                        <table className="mx-auto text-center w-150">
+                        <h1 className="flex justify-center font-sans font-bold text-md md:text-xl lg:text-xl p-2">Evaluation Criteria</h1>
+                        <table className="mx-auto text-center w-70 md:w-150 lg:w-150">
                             <thead className="bg-black text-white">
                                 <tr>
                                     <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Criteria</th>
@@ -978,9 +1002,9 @@ export default function Judging(){
                     </>
                 }
 
-                <div className="mx-auto bg-white rounded-xl shadow-xl mt-5 pb-5 w-250">
-                        <h1 className="flex justify-center font-sans font-bold pt-4 pb-4 text-xl">Students Registered for {group}: {event}</h1>
-                        <table className="mx-auto text-center w-150 pb-2">
+                <div className="mx-auto bg-white rounded-xl shadow-xl mt-5 pb-5 w-75 md:w-180 lg:w-250">
+                        <h1 className="flex justify-center font-sans font-bold pt-4 pb-4 p-4 text-md md:text-xl">Students Registered for {group}: {event}</h1>
+                        <table className="mx-auto text-center w-70 md:w-150 lg:w-150 pb-2">
                             <thead className="bg-black text-white">
                                 <tr>
                                     <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Student Details</th>
@@ -992,21 +1016,21 @@ export default function Judging(){
                                     studentData.map((student) => (
                                         <tr key={student.id}>
                                             <td className="font-sans px-2 py-4 font-semibold border border-black">
-                                                <div className="flex flex-row justify-between items-center">
+                                                <div className="md:flex md:flex-row md:justify-between md:items-center">
                                                     <div>
-                                                        <h1 className="font-sans font-bold text-2xl">{student.name}</h1>
+                                                        <h1 className="font-sans font-bold text-lg lg:text-2xl">{student.name}</h1>
                                                     </div>
-                                                    <div className="flex flex-col">
-                                                        <h1 className="font-sans text-md">Group: {student.group}</h1>
-                                                        <h1 className="font-sans text-md">Gender: {student.gender}</h1>
-                                                        <h1 className="font-sans text-md">DoB: {student.dob}</h1>
+                                                    <div className="flex flex-col justify-between items-center mt-2 mb-2 lg:mt-0 lg:mb-0">
+                                                        <h1 className="font-sans text-sm lg:text-md">Group: {student.group}</h1>
+                                                        <h1 className="font-sans text-sm lg:text-md">Gender: {student.gender}</h1>
+                                                        <h1 className="font-sans text-sm lg:text-md">DoB: {student.dob}</h1>
                                                     </div>
                                                     
                                                 </div>
                                                 {
                                                     (student.event2 !== "Select an event" || student.groupEvent !== "Select an event") && (
-                                                        <div className="mt-1">
-                                                            <h1 className="bg-red-100 p-2 rounded-xl">Participating in 2 events. Please evaluate first</h1>
+                                                        <div className="mt-3 lg:mt-1">
+                                                            <h1 className="mx-auto bg-red-100 p-1 rounded-lg text-sm lg:text-md w-40 md:w-100">Participating in 2 events. Please evaluate first</h1>
                                                         </div>
                                                     )
                                                 }
@@ -1022,10 +1046,10 @@ export default function Judging(){
                 {
                 clicked && ((event === "Slokas") || (event === "Slokas - Boys") || (event === "Slokas - Girls") || (event === "Tamizh Chants") || (event === "Tamizh chants - Boys") || (event === "Tamizh chants - Girls")) &&
                     <div className="fixed inset-0 flex flex-col justify-center backdrop-blur-sm items-center">
-                        <div className="bg-white w-125 rounded-xl shadow-xl">
-                            <h1 className="flex justify-center font-sans font-bold text-xl pt-2">Award Marks</h1>
-                            <h1 className="flex justify-center font-sans font-bold text-xl pt-2">Student Name: {amName}</h1>
-                            <table className="mx-auto text-center w-100 mt-2 mb-2">
+                        <div className="bg-white w-75 md:w-125 rounded-xl shadow-xl">
+                            <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Award Marks</h1>
+                            <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Student Name: {amName}</h1>
+                            <table className="mx-auto text-center w-70 md:w-100 mt-2 mb-2">
                                 <thead className="bg-black text-white">
                                     <tr>
                                         <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Criteria</th>
@@ -1112,10 +1136,10 @@ export default function Judging(){
 
                 {clicked && ((event === "Bhajans") || (event === "Bhajans - Boys") || (event === "Bhajans - Girls")) && 
                     <div className="fixed inset-0 flex flex-col justify-center backdrop-blur-sm items-center">
-                        <div className="bg-white w-125 rounded-xl shadow-xl">
-                            <h1 className="flex justify-center font-sans font-bold text-xl pt-2">Award Marks</h1>
-                            <h1 className="flex justify-center font-sans font-bold text-xl pt-2">Student Name: {amName}</h1>
-                            <table className="mx-auto text-center w-100 mt-2 mb-2">
+                        <div className="bg-white w-75 md:w-125 rounded-xl shadow-xl">
+                            <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Award Marks</h1>
+                            <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Student Name: {amName}</h1>
+                            <table className="mx-auto text-center w-70 md:w-100 mt-2 mb-2">
                                 <thead className="bg-black text-white">
                                     <tr>
                                         <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Criteria</th>
@@ -1230,10 +1254,10 @@ export default function Judging(){
 
                 {clicked && ((event === "Vedam") || (event === "Vedam - Boys") || (event === "Vedam - Girls") || (event === "Rudram Namakam Chanting - Boys") || (event === "Rudram Namakam Chanting - Girls")) && 
                     <div className="fixed inset-0 flex flex-col justify-center backdrop-blur-sm items-center">
-                        <div className="bg-white w-125 rounded-xl shadow-xl">
-                            <h1 className="flex justify-center font-sans font-bold text-xl pt-2">Award Marks</h1>
-                            <h1 className="flex justify-center font-sans font-bold text-xl pt-2">Student Name: {amName}</h1>
-                            <table className="mx-auto text-center w-100 mt-2 mb-2">
+                        <div className="bg-white w-75 md:w-125 rounded-xl shadow-xl">
+                            <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Award Marks</h1>
+                            <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Student Name: {amName}</h1>
+                            <table className="mx-auto text-center w-70 md:w-100 mt-2 mb-2">
                                 <thead className="bg-black text-white">
                                     <tr>
                                         <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Criteria</th>
@@ -1340,10 +1364,10 @@ export default function Judging(){
                 
                 {clicked && ((event === "Story Telling (English)") || (event === "Story Telling (Tamil)") || (event === "Elocution (English)") || (event === "Elocution (Tamil)")) && 
                     <div className="fixed inset-0 flex flex-col justify-center backdrop-blur-sm items-center">
-                        <div className="bg-white w-125 rounded-xl shadow-xl">
-                            <h1 className="flex justify-center font-sans font-bold text-xl pt-2">Award Marks</h1>
-                            <h1 className="flex justify-center font-sans font-bold text-xl pt-2">Student Name: {amName}</h1>
-                            <table className="mx-auto text-center w-100 mt-2 mb-2">
+                        <div className="bg-white w-75 md:w-125 rounded-xl shadow-xl">
+                            <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Award Marks</h1>
+                            <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Student Name: {amName}</h1>
+                            <table className="mx-auto text-center w-70 md:w-100 mt-2 mb-2">
                                 <thead className="bg-black text-white">
                                     <tr>
                                         <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Criteria</th>
@@ -1422,10 +1446,10 @@ export default function Judging(){
 
                 {clicked && ((event === "Drawing")) && 
                     <div className="fixed inset-0 flex flex-col justify-center backdrop-blur-sm items-center">
-                        <div className="bg-white w-125 rounded-xl shadow-xl">
-                            <h1 className="flex justify-center font-sans font-bold text-xl pt-2">Award Marks</h1>
-                            <h1 className="flex justify-center font-sans font-bold text-xl pt-2">Student Name: {amName}</h1>
-                            <table className="mx-auto text-center w-100 mt-2 mb-2">
+                        <div className="bg-white w-75 md:w-125 rounded-xl shadow-xl">
+                            <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Award Marks</h1>
+                            <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Student Name: {amName}</h1>
+                            <table className="mx-auto text-center w-70 md:w-100 mt-2 mb-2">
                                 <thead className="bg-black text-white">
                                     <tr>
                                         <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Criteria</th>
@@ -1504,10 +1528,10 @@ export default function Judging(){
 
                 {clicked && ((event === "Devotional Singing - Boys") || (event === "Devotional Singing - Girls")) && 
                     <div className="fixed inset-0 flex flex-col justify-center backdrop-blur-sm items-center">
-                        <div className="bg-white w-125 rounded-xl shadow-xl">
-                            <h1 className="flex justify-center font-sans font-bold text-xl pt-2">Award Marks</h1>
-                            <h1 className="flex justify-center font-sans font-bold text-xl pt-2">Student Name: {amName}</h1>
-                            <table className="mx-auto text-center w-100 mt-2 mb-2">
+                        <div className="bg-white w-75 md:w-125 rounded-xl shadow-xl">
+                            <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Award Marks</h1>
+                            <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Student Name: {amName}</h1>
+                            <table className="mx-auto text-center w-70 md:w-100 mt-2 mb-2">
                                 <thead className="bg-black text-white">
                                     <tr>
                                         <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Criteria</th>
@@ -1640,10 +1664,10 @@ export default function Judging(){
 
                 {clicked && ((event === "Altar Decoration - Boys") || (event === "Altar Decoration - Girls")) && 
                     <div className="fixed inset-0 flex flex-col justify-center backdrop-blur-sm items-center">
-                        <div className="bg-white w-125 rounded-xl shadow-xl">
-                            <h1 className="flex justify-center font-sans font-bold text-xl pt-2">Award Marks</h1>
-                            <h1 className="flex justify-center font-sans font-bold text-xl pt-2">Student Name: {amName}</h1>
-                            <table className="mx-auto text-center w-100 mt-2 mb-2">
+                        <div className="bg-white w-75 md:w-125 rounded-xl shadow-xl">
+                            <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Award Marks</h1>
+                            <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Student Name: {amName}</h1>
+                            <table className="mx-auto text-center w-70 md:w-100 mt-2 mb-2">
                                 <thead className="bg-black text-white">
                                     <tr>
                                         <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Criteria</th>

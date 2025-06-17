@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { auth } from "../_util/config";
 import { useRouter } from "next/navigation";
+import { signOut } from "firebase/auth";
 
 export default function Evaluation(){
 
@@ -28,6 +29,13 @@ export default function Evaluation(){
         }
         return name;
     }
+
+    useEffect(() => {
+        const a = auth.onAuthStateChanged((user) => {
+            if (!user)
+                router.push("/");
+        })
+    })
 
     useEffect(() => {
         const a = auth.onAuthStateChanged((user) => {
@@ -93,32 +101,37 @@ export default function Evaluation(){
         }
     }
 
-    function handleEventsClick(){
-        router.push("/leaderboard");
+    function handleLogout(){
+        signOut(auth)
+            .then(() => {
+                alert("Sairam! Signed out successfully");
+            })
+            .catch((error) => {
+                console.log(error.message);
+            })
     }
 
     return(
         <>
             <div className="relative bg-gray-100 py-5 min-h-screen lg:bg-gray-100">
-                <nav className="mx-auto border shadow-xl bg-white rounded-xl w-75 h-20 md:w-180 lg:w-250 lg:h-20">
+                <nav className="mx-auto border shadow-xl bg-white rounded-xl w-75 pb-1 md:w-180 lg:w-250 lg:h-20">
                     <div className="flex flex-row justify-between">
                         <div className="flex flex-col">
                             <h1 className="font-sans font-bold text-xl px-3 pt-3 md:text-3xl">Welcome, {judge}</h1>
                             <h1 className="font-sans text-sm md:text-xl px-3">{judgeEmail}</h1>
                         </div>
                         <div className="flex flex-col md:flex md:flex-row md:justify-end">
-                            <button onClick={handleEventsClick} className="font-sans font-semibold text-md md:text-xl rounded-lg bg-yellow-100 px-2 md:rounded-xl my-3 mx-2 md:h-15 md:mx-2 md:my-2 hover:bg-yellow-500 hover:cursor-pointer transition duration-300 ease-in-out">Leadboard</button>
-                            <button className="font-sans font-semibold text-sm md:text-xl rounded-lg bg-red-200 px-2 md:rounded-xl mx-2 md:h-15 md:mx-2 md:my-2 hover:bg-red-500 hover:cursor-pointer hover:text-white transition duration-300 ease-in-out">Logout</button>
+                            <button onClick={handleLogout} className="font-sans font-semibold text-sm md:text-xl rounded-lg bg-red-200 px-2 md:rounded-xl mx-2 my-7 h-10 md:h-15 md:mx-2 md:my-2 hover:bg-red-500 hover:cursor-pointer hover:text-white transition duration-300 ease-in-out">Logout</button>
                         </div>
                     </div>
                 </nav>
 
-                <div className="mx-auto bg-white rounded-xl shadow-xl mt-10 w-250 pt-5 pb-7">
-                    <div className="mx-auto bg-green-100 rounded-xl shadow-xl w-200 h-11">
-                        <h1 className="flex justify-center font-sans font-bold text-xl pt-2">Sairam! From the list below, please select the event you will be judging</h1>
+                <div className="mx-auto bg-white rounded-xl shadow-xl mt-10 w-75 md:w-180 lg:w-250 pt-5 pb-7">
+                    <div className="mx-auto bg-green-100 rounded-xl shadow-xl w-70 md:w-170 md:h-11 lg:w-200 lg:h-11">
+                        <h1 className="flex justify-center font-sans font-bold text-xl p-4 md:text-lg lg:text-xl md:p-2">Sairam! From the list below, please select the event you will be judging</h1>
                     </div>
                    
-                    <div className="mx-auto bg-green-100 rounded-xl shadow-xl mt-10 w-200 pb-4">
+                    <div className="mx-auto bg-green-100 rounded-xl shadow-xl mt-10 w-70 md:w-170 lg:w-200 pb-4">
                         <h1 className="font-sans font-bold text-xl mx-5 pt-4">Pick the Group</h1>
                         <select required value={judgeGroup} onChange={(e) => setJudgeGroup(e.target.value)}className="font-sans text-lg rounded-xl border mx-5 mt-3 w-50 h-10 px-2">
                             <option value="">Select a Group</option>

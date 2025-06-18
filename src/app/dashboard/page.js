@@ -29,14 +29,14 @@ export default function Dashboard(){
     }
 
     useEffect(() => {
-        const a = auth.onAuthStateChanged((user) => {
+        auth.onAuthStateChanged((user) => {
             if (!user)
                 router.push("/");
         })
-    },[])
+    },[router])
     
     useEffect(() => {
-        const a = auth.onAuthStateChanged((user) => {
+        auth.onAuthStateChanged((user) => {
             if (user)
             {
                 setAdminEmail(user.email);

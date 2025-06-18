@@ -31,21 +31,21 @@ export default function Evaluation(){
     }
 
     useEffect(() => {
-        const a = auth.onAuthStateChanged((user) => {
+        auth.onAuthStateChanged((user) => {
             if (!user)
                 router.push("/");
         })
     })
 
     useEffect(() => {
-        const a = auth.onAuthStateChanged((user) => {
+        auth.onAuthStateChanged((user) => {
             if (user)
             {
                 setJudgeEmail(user.email);
                 setJudge(cut(user.email).toUpperCase());
             }
         })
-    },[]);
+    },[cut]);
 
     const groupMap =  {
         "g1" : "Group 1",

@@ -74,7 +74,7 @@ export default function EventLeaderboard(){
     const params = useParams();
 
     useEffect(() => {
-        const a = auth.onAuthStateChanged((user) => {
+        auth.onAuthStateChanged((user) => {
             if (!user)
             {
                 router.push("/");
@@ -83,7 +83,7 @@ export default function EventLeaderboard(){
     });
 
     useEffect(() => {
-        const a = auth.onAuthStateChanged((user) => {
+        auth.onAuthStateChanged((user) => {
             if (user)
             {
                 setEmail(user.email);
@@ -95,7 +95,7 @@ export default function EventLeaderboard(){
     useEffect(() => {
         setGroup(groupMap[params.group]);
         setEvent(eventMap[params.event]);
-    },[]);
+    },[params.group,params.event]);
 
     function handleEventsClick(){
         router.push(`/evaluation/${params.group}/${params.event}`);

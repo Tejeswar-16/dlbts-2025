@@ -137,14 +137,14 @@ export default function Register(){
     const router = useRouter();
 
     useEffect(() => {
-        const a = auth.onAuthStateChanged((user) => {
+        auth.onAuthStateChanged((user) => {
             if (!user)
                 router.push("/");
         })
     })
 
     useEffect(() => {
-        const a = auth.onAuthStateChanged((user) => {
+        auth.onAuthStateChanged((user) => {
             if (user)
             {
                 setEmail(user.email);
@@ -186,7 +186,7 @@ export default function Register(){
                         
                         <div className="mx-auto mt-8 rounded-2xl shadow-2xl lg:w-220 lg:h-35 bg-gray-100">
                             <div className="p-4 mt-8 font-sans text-xl">
-                                Student's Full Name
+                                Student&aops;s Full Name
                             </div>
                             <div>
                                 <input value={name} onChange={(e)=>{setName(e.target.value.toUpperCase())}} required className="p-3 mb-4 ml-2 w-68 font-sans text-lg md:w-180 lg:mx-4 lg:mb-0 lg:w-210 rounded-xl border" type="text"/>
@@ -207,7 +207,7 @@ export default function Register(){
                         </div>
                         <div className="mx-auto mt-8 rounded-2xl shadow-2xl lg:w-220 lg:h-35 bg-gray-100">
                             <div className="p-4 font-sans text-xl">
-                                Student's Date of Birth (DoB)
+                                Student&apos;s Date of Birth (DoB)
                             </div>
                             <div>
                                 <input value={dob} onChange={(e)=>{setDob(e.target.value);handleDobChange(e.target.value);}} required className="p-3 mb-4 mx-2 font-sans w-68 md:w-180 text-lg w-68 lg:mx-4 lg:mb-0 lg:w-210 rounded-xl border" type="date"/>
@@ -216,7 +216,7 @@ export default function Register(){
                         </div>
                         <div className="mx-auto mt-8 pb-2 rounded-2xl shadow-2xl lg:w-220 lg:h-35 lg:pb-0 bg-gray-100">
                             <div className="p-4 font-sans text-xl">
-                                Student's Gender
+                                Student&apos;s Gender
                             </div>
                             <div>
                                 <input value="Male" checked={gender === "Male"} onChange={(e)=>{setGender(e.target.value)}} required className="p-3 mx-4 font-sans text-lg" type="radio" name="gender"/>

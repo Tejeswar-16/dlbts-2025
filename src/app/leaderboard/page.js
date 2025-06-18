@@ -40,14 +40,14 @@ export default function Leadboard(){
     }
 
     useEffect(() => {
-        const a = auth.onAuthStateChanged((user) => {
+        auth.onAuthStateChanged((user) => {
             if (!user)
                 router.push("/");
         })
     })
 
     useEffect(() => {
-        const a = auth.onAuthStateChanged((user) => {
+        auth.onAuthStateChanged((user) => {
             if (user)
             {
                 setEmail(user.email);
@@ -57,7 +57,7 @@ export default function Leadboard(){
                     setName(cut(user.email).toUpperCase());
             }
         })
-    },[]);
+    },[cut]);
 
     const router = useRouter();
     function handleEventsClick(){

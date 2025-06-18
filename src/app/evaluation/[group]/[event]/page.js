@@ -124,10 +124,10 @@ export default function Judging(){
     useEffect(() => {
         setGroup(uncut(params.group));
         setEvent(eventMap[params.event]);
-    },[]);
+    },[params.group,params.event]);
 
     useEffect(() => {
-        const a = auth.onAuthStateChanged((user) => {
+        auth.onAuthStateChanged((user) => {
             if (!user)
                 router.push("/");
         })
@@ -135,7 +135,7 @@ export default function Judging(){
 
     useEffect(() => {
         setLoading(true);
-        const a = auth.onAuthStateChanged((user) => {
+        auth.onAuthStateChanged((user) => {
             if (user)
             {
                 setJudgeEmail(user.email);
@@ -143,7 +143,7 @@ export default function Judging(){
             }
         })
         setLoading(false);
-    },[]);
+    },[cut]);
 
     useEffect(() => {
         async function fetchData(){

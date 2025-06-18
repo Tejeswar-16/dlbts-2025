@@ -169,7 +169,7 @@ export default function Register(){
                     <div className="flex flex-row justify-between">
                         <div className="flex flex-col">
                             <h1 className="font-sans font-bold text-xl px-3 pt-3 md:text-3xl">Welcome, User</h1>
-                            <h1 className="font-sans text-sm md:text-xl px-3">{email}</h1>
+                            <h1 className="font-sans text-xs md:text-xl px-3">{email}</h1>
                         </div>
                         <div className="flex flex-col md:flex md:flex-row md:justify-end">
                             <button onClick={handleLogout} className="font-sans font-semibold text-sm md:text-xl rounded-lg bg-red-200 px-2 md:rounded-xl mr-2 my-4 p-2 md:h-15 md:mx-2 md:my-2 hover:bg-red-500 hover:cursor-pointer hover:text-white transition duration-300 ease-in-out">Logout</button>

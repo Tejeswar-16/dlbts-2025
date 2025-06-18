@@ -139,25 +139,25 @@ export default function Leadboard(){
     return (
         <>
             <div className="relative bg-gray-100 py-5 min-h-screen lg:bg-gray-100">
-                <nav className="mx-auto border shadow-xl bg-white rounded-xl w-75 h-20 md:w-180 lg:w-250 lg:h-20">
+                <nav className="mx-auto border shadow-xl bg-white rounded-xl w-75 pb-1 md:w-180 lg:w-250 lg:h-20">
                     <div className="flex flex-row justify-between">
                         <div className="flex flex-col">
                             <h1 className="font-sans font-bold text-xl px-3 pt-3 md:text-3xl">Welcome, {name}</h1>
                             <h1 className="font-sans text-sm md:text-xl px-3">{email}</h1>
                         </div>
                         <div className="flex flex-col md:flex md:flex-row md:justify-end">
-                            <button onClick={handleEventsClick} className="font-sans font-semibold text-md md:text-xl rounded-lg bg-yellow-100 px-2 md:rounded-xl my-3 mx-2 md:h-15 md:mx-2 md:my-2 hover:bg-yellow-500 hover:cursor-pointer transition duration-300 ease-in-out">Dashboard</button>
-                            <button onClick={handleLogout} className="font-sans font-semibold text-sm md:text-xl rounded-lg bg-red-200 px-2 md:rounded-xl mx-2 md:h-15 md:mx-2 md:my-2 hover:bg-red-500 hover:cursor-pointer hover:text-white transition duration-300 ease-in-out">Logout</button>
+                            <button onClick={handleEventsClick} className="font-sans font-semibold text-md md:text-xl rounded-lg bg-yellow-100 px-2 md:rounded-xl h-8 mt-2 mx-2 md:h-15 md:mx-2 md:my-2 hover:bg-yellow-500 hover:cursor-pointer transition duration-300 ease-in-out">Dashboard</button>
+                            <button onClick={handleLogout} className="font-sans font-semibold text-sm md:text-xl rounded-lg bg-red-200 px-2 md:rounded-xl mx-2 h-8 mt-3 md:h-15 md:mx-2 md:my-2 hover:bg-red-500 hover:cursor-pointer hover:text-white transition duration-300 ease-in-out">Logout</button>
                         </div>
                     </div>
                 </nav>
 
-                <div className="mx-auto rounded-xl shadow-xl bg-white mt-5 w-250">
-                    <h1 className="flex justify-center font-sans font-bold text-2xl p-2">Leaderboard</h1>
-                    <div className="flex flex-row justify-between">
+                <div className="mx-auto rounded-xl shadow-xl bg-white mt-5 w-75 md:w-180 lg:w-250">
+                    <h1 className="flex justify-center font-sans font-bold text-xl md:text-2xl p-2">Leaderboard</h1>
+                    <div className="flex flex-col justify-between md:flex md:flex-row md:justify-between">
                         <div className="flex flex-col">
-                            <h1 className="font-sans font-bold text-xl pl-4">Group</h1>
-                            <select value={group} onChange={(e) => {setGroup(e.target.value)}} className="font-sans rounded-xl border w-40 ml-4 mt-2 mb-4 p-2">
+                            <h1 className="font-sans font-bold md:text-xl pl-4">Group</h1>
+                            <select value={group} onChange={(e) => {setGroup(e.target.value)}} className="font-sans rounded-xl border w-65 md:w-40 ml-4 mt-2 mb-4 p-2">
                                 <option value="All">All</option>
                                 <option>Group 1</option>
                                 <option>Group 2</option>
@@ -165,8 +165,8 @@ export default function Leadboard(){
                             </select>
                         </div>
                         <div className="flex flex-col">
-                            <h1 className="font-sans font-bold text-xl">Samithi</h1>
-                            <select value={samithi} onChange={(e) => {setSamithi(e.target.value)}} className="font-sans rounded-xl border w-45 mt-2 mb-4 p-2">
+                            <h1 className="font-sans font-bold md:text-xl ml-4 md:ml-0">Samithi</h1>
+                            <select value={samithi} onChange={(e) => {setSamithi(e.target.value)}} className="font-sans rounded-xl border w-65 ml-4 md:ml-0 md:w-45 mt-2 mb-4 p-2">
                                 <option value="All">All</option>
                                 <option>Chengalpet</option>
                                 <option>Collectorate</option>
@@ -187,10 +187,10 @@ export default function Leadboard(){
                             </select>
                         </div>
                         <div className="flex flex-col">
-                            <h1 className="font-sans font-bold text-xl">Event</h1>
+                            <h1 className="font-sans font-bold md:text-xl ml-4 md:ml-0">Event</h1>
                             {
                             (group === "Group 1") ? ( 
-                                <select value={event} onChange={(e) => {setEvent(e.target.value)}} className="font-sans rounded-xl border w-50 mt-2 mb-4 mr-4 p-2">
+                                <select value={event} onChange={(e) => {setEvent(e.target.value)}} className="font-sans rounded-xl border w-65 ml-4 md:ml-0 md:w-50 mt-2 mb-4 mr-4 p-2">
                                     <option value="All">All</option>
                                     <option>Bhajans</option>
                                     <option>Slokas</option>
@@ -203,7 +203,7 @@ export default function Leadboard(){
                                     <option>Devotional Singing - Girls</option>
                                 </select>
                             ) : (group === "Group 2") ? (
-                                <select value={event} onChange={(e) => {setEvent(e.target.value)}} className="font-sans rounded-xl border w-50 mt-2 mb-4 mr-4 p-2">
+                                <select value={event} onChange={(e) => {setEvent(e.target.value)}} className="font-sans rounded-xl border w-65 ml-4 md:ml-0 md:w-50 mt-2 mb-4 mr-4 p-2">
                                     <option value="All">All</option>
                                     <option>Bhajans - Boys</option>
                                     <option>Bhajans - Girls</option>
@@ -224,7 +224,7 @@ export default function Leadboard(){
                                     <option>Rudram Namakam Chanting - Girls</option>
                                 </select>
                             ) : (
-                                <select value={event} onChange={(e) => {setEvent(e.target.value)}} className="font-sans rounded-xl border w-50 mt-2 mb-4 mr-4 p-2">
+                                <select value={event} onChange={(e) => {setEvent(e.target.value)}} className="font-sans rounded-xl border w-65 ml-4 md:ml-0 md:w-50 mt-2 mb-4 mr-4 p-2">
                                     <option value="All">All</option>
                                     <option>Bhajans - Boys</option>
                                     <option>Bhajans - Girls</option>
@@ -249,16 +249,18 @@ export default function Leadboard(){
                     </div>
                 </div>
 
-                <div className="mx-auto rounded-xl shadow-xl bg-white w-75 lg:w-100 lg:h-60 mt-10">
+                <div className="mx-auto rounded-xl shadow-xl bg-white w-75 md:w-100 mt-10">
                     <h1 className="font-sans flex justify-center font-bold text-md p-2">{heading}</h1>
                     <div className="flex flex-row justify-between">
                         <div className="flex flex-col">
-                            <div className="flex flex-col justify-center w-50 bg-fuchsia-300 ml-5 lg:ml-4 mb-2 rounded-xl p-2">
-                                <h1 className="font-sans font-semibold mx-auto text-lg">Male Students</h1>
+                            <div className="flex flex-col justify-center w-30 md:w-50 bg-fuchsia-300 ml-5 lg:ml-4 mb-2 rounded-xl p-2">
+                                <h1 className="font-sans font-semibold mx-auto text-lg">Male</h1>
+                                <h1 className="font-sans font-semibold mx-auto text-lg">Students</h1>
                                 <h1 className="font-sans font-bold mx-auto text-3xl">{maleCount}</h1>
                             </div>
-                            <div className="flex flex-col justify-center bg-purple-300 ml-5 lg:ml-4 mb-2 rounded-xl p-2">
-                                <h1 className="font-sans font-semibold mx-auto text-lg">Female Students</h1>
+                            <div className="flex flex-col justify-center w-30 md:w-50 bg-purple-300 ml-5 lg:ml-4 mb-2 rounded-xl p-2">
+                                <h1 className="font-sans font-semibold mx-auto text-lg">Female</h1>
+                                <h1 className="font-sans font-semibold mx-auto text-lg">Students</h1>
                                 <h1 className="font-sans font-bold mx-auto text-3xl">{femaleCount}</h1>
                             </div>
                         </div>
@@ -281,36 +283,38 @@ export default function Leadboard(){
                     </>
                 }
 
-                <div className="mx-auto bg-white rounded-xl shadow-xl w-250 mt-5">
+                <div className="mx-auto bg-white rounded-xl shadow-xl w-75 md:w-180 lg:w-250 mt-5">
                     <div className="flex flex-col justify-center items-center">
                         <h1 className="font-sans font-bold rounded-xl shadow-lg bg-gray-200 text-black text-2xl p-2 mt-4">Leaderboard</h1>
                         {(studentData.length > 3) && (
                             <button onClick={handlePrizeWinners} className="font-sans font-bold rounded-xl shadow-lg bg-gray-200 text-black text-2xl p-2 mt-4 hover:cursor-pointer hover:text-white hover:bg-yellow-800 transition duration-300 ease-in-out">Get top 3 Scorers</button>
                         )}
-                        <table className="text-center w-200 mt-4 mb-4">
-                            <thead className="bg-black text-white">
-                                <tr>
-                                    <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Name</td>
-                                    <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Samithi</td>
-                                    <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Group</td>
-                                    <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Event</td>
-                                    <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Marks</td>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {
-                                    studentData.map((student) => (
-                                        <tr key={student.id} className="hover:bg-gray-200 transition duration-300 ease-in-out">
-                                            <td className="font-sans text-lg px-4 py-2 border border-black">{student.name}</td>
-                                            <td className="font-sans text-lg px-4 py-2 border border-black">{student.samithi}</td>
-                                            <td className="font-sans text-lg px-4 py-2 border border-black">{student.group}</td>
-                                            <td className="font-sans text-lg px-4 py-2 border border-black">{student.event}</td>
-                                            <td className="font-sans text-lg px-4 py-2 border border-black">{student.totalMarks}</td>
-                                        </tr>
-                                    ))
-                                }
-                            </tbody>
-                        </table>
+                        <div className="overflow-x-auto w-70 md:w-175 lg:w-245 mt-4 mb-4">
+                            <table className="mx-auto text-center">
+                                <thead className="bg-black text-white">
+                                    <tr>
+                                        <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Name</td>
+                                        <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Samithi</td>
+                                        <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Group</td>
+                                        <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Event</td>
+                                        <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Marks</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {
+                                        studentData.map((student) => (
+                                            <tr key={student.id} className="hover:bg-gray-200 transition duration-300 ease-in-out">
+                                                <td className="font-sans text-lg px-4 py-2 border border-black">{student.name}</td>
+                                                <td className="font-sans text-lg px-4 py-2 border border-black">{student.samithi}</td>
+                                                <td className="font-sans text-lg px-4 py-2 border border-black">{student.group}</td>
+                                                <td className="font-sans text-lg px-4 py-2 border border-black">{student.event}</td>
+                                                <td className="font-sans text-lg px-4 py-2 border border-black">{student.totalMarks}</td>
+                                            </tr>
+                                        ))
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>

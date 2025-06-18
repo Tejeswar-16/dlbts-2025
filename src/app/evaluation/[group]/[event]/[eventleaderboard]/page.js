@@ -136,15 +136,15 @@ export default function EventLeaderboard(){
     return (
         <>
             <div className="relative bg-gray-100 py-5 min-h-screen lg:bg-gray-100">
-                <nav className="mx-auto border shadow-xl bg-white rounded-xl w-75 md:w-180 lg:w-250 lg:h-20">
+                <nav className="mx-auto border shadow-xl bg-white rounded-xl w-75 pb-2 md:pb-1 md:w-180 lg:w-250 lg:h-20">
                     <div className="flex flex-row justify-between">
                         <div className="flex flex-col">
                             <h1 className="font-sans font-bold text-xl px-3 pt-3 md:text-3xl">Welcome, {name}</h1>
                             <h1 className="font-sans text-sm md:text-xl px-3">{email}</h1>
                         </div>
                         <div className="flex flex-col md:flex md:flex-row md:justify-end">
-                            <button onClick={handleEventsClick} className="font-sans font-semibold text-md md:text-xl rounded-lg bg-yellow-100 px-2 md:rounded-xl my-3 mx-2 md:h-15 md:mx-2 md:my-2 hover:bg-yellow-500 hover:cursor-pointer transition duration-300 ease-in-out">Evaluate</button>
-                            <button onClick={handleLogout} className="font-sans font-semibold text-sm md:text-xl rounded-lg bg-red-200 px-2 md:rounded-xl mx-2 md:h-15 md:mx-2 md:my-2 hover:bg-red-500 hover:cursor-pointer hover:text-white transition duration-300 ease-in-out">Logout</button>
+                            <button onClick={handleEventsClick} className="font-sans font-semibold text-md md:text-xl rounded-lg bg-yellow-100 px-2 md:rounded-xl h-8 mt-2 mx-2 md:h-15 md:mx-2 md:my-2 hover:bg-yellow-500 hover:cursor-pointer transition duration-300 ease-in-out">Evaluate</button>
+                            <button onClick={handleLogout} className="font-sans font-semibold text-sm md:text-xl rounded-lg bg-red-200 px-2 md:rounded-xl mx-2 h-8 mt-3 md:h-15 md:mx-2 md:my-2 hover:bg-red-500 hover:cursor-pointer hover:text-white transition duration-300 ease-in-out">Logout</button>
                         </div>
                     </div>
                 </nav>
@@ -160,16 +160,18 @@ export default function EventLeaderboard(){
                     </>
                 }
 
-                <div className="mx-auto rounded-xl shadow-xl bg-white w-75 lg:w-100 lg:h-60 mt-10">
+                <div className="mx-auto rounded-xl shadow-xl bg-white w-75 md:w-100 mt-10">
                     <h1 className="font-sans flex justify-center font-bold text-xl p-2">{group+" --> "+event}</h1>
                     <div className="flex flex-row justify-between">
                         <div className="flex flex-col">
-                            <div className="flex flex-col justify-center w-50 bg-fuchsia-300 ml-5 lg:ml-4 mb-2 rounded-xl p-2">
-                                <h1 className="font-sans font-semibold mx-auto text-lg">Male Students</h1>
+                            <div className="flex flex-col justify-center w-30 md:w-50 bg-fuchsia-300 ml-5 lg:ml-4 mb-2 rounded-xl p-2">
+                                <h1 className="font-sans font-semibold mx-auto text-lg">Male</h1>
+                                <h1 className="font-sans font-semibold mx-auto text-lg">Students</h1>
                                 <h1 className="font-sans font-bold mx-auto text-3xl">{maleCount}</h1>
                             </div>
-                            <div className="flex flex-col justify-center bg-purple-300 ml-5 lg:ml-4 mb-2 rounded-xl p-2">
-                                <h1 className="font-sans font-semibold mx-auto text-lg">Female Students</h1>
+                            <div className="flex flex-col justify-center w-30 md:w-50 bg-purple-300 ml-5 lg:ml-4 mb-2 rounded-xl p-2">
+                                <h1 className="font-sans font-semibold mx-auto text-lg">Female</h1>
+                                <h1 className="font-sans font-semibold mx-auto text-lg">Students</h1>
                                 <h1 className="font-sans font-bold mx-auto text-3xl">{femaleCount}</h1>
                             </div>
                         </div>
@@ -181,34 +183,38 @@ export default function EventLeaderboard(){
                     </div>
                 </div>
 
-                <div className="mx-auto rounded-xl shadow-xl bg-white mt-5 p-4 w-250">
-                    <h1 className="flex justify-center font-sans font-bold text-2xl">Leaderboard</h1>
-                    <h1 className="flex justify-center font-sans font-bold text-2xl">{group+" --> "+event}</h1>
+                <div className="mx-auto rounded-xl shadow-xl bg-white mt-10 w-75 md:w-180 lg:w-250">
+                    <div className="flex flex-col justify-center items-center">
+                        <h1 className="flex justify-center font-sans font-bold mt-2 text-2xl">Leaderboard</h1>
+                        <h1 className="flex justify-center font-sans font-bold text-2xl">{group+" --> "+event}</h1>
 
-                    <table className="mx-auto text-center w-200 mt-4 mb-4">
-                        <thead className="bg-black text-white">
-                            <tr>
-                                <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Name</td>
-                                <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">DoB</td>
-                                <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Gender</td>
-                                <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Samithi</td>
-                                <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Marks</td>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {
-                                studentData.map((student) => (
-                                    <tr key={student.id} className="hover:bg-gray-200 transition duration-300 ease-in-out">
-                                        <td className="font-sans text-lg px-4 py-2 border border-black">{student.name}</td>
-                                        <td className="font-sans text-lg px-4 py-2 border border-black">{student.dob}</td>
-                                        <td className="font-sans text-lg px-4 py-2 border border-black">{student.gender}</td>
-                                        <td className="font-sans text-lg px-4 py-2 border border-black">{student.samithi}</td>
-                                        <td className="font-sans text-lg px-4 py-2 border border-black">{student.totalMarks}</td>
+                        <div className="overflow-x-auto w-70 md:w-175 lg:w-245 mt-4 mb-4">
+                            <table className="mx-auto text-center">
+                                <thead className="bg-black text-white">
+                                    <tr>
+                                        <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Name</td>
+                                        <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">DoB</td>
+                                        <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Gender</td>
+                                        <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Samithi</td>
+                                        <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Marks</td>
                                     </tr>
-                                ))
-                            }
-                        </tbody>
-                    </table>
+                                </thead>
+                                <tbody>
+                                    {
+                                        studentData.map((student) => (
+                                            <tr key={student.id} className="hover:bg-gray-200 transition duration-300 ease-in-out">
+                                                <td className="font-sans text-lg px-4 py-2 border border-black">{student.name}</td>
+                                                <td className="font-sans text-lg px-4 py-2 border border-black">{student.dob}</td>
+                                                <td className="font-sans text-lg px-4 py-2 border border-black">{student.gender}</td>
+                                                <td className="font-sans text-lg px-4 py-2 border border-black">{student.samithi}</td>
+                                                <td className="font-sans text-lg px-4 py-2 border border-black">{student.totalMarks}</td>
+                                            </tr>
+                                        ))
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </>

@@ -706,7 +706,9 @@ export default function Judging(){
 
     const router = useRouter();
     function handleEventsClick(){
+        setLoading(true);
         router.push(`/evaluation/${params.group}/${params.event}/leaderboard`);
+        setLoading(false);
     }
 
     function handleLogout(){

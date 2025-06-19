@@ -127,10 +127,12 @@ export default function Judging(){
     },[params.group,params.event]);
 
     useEffect(() => {
+        setLoading(true);
         auth.onAuthStateChanged((user) => {
             if (!user)
                 router.push("/");
         })
+        setLoading(false);
     })
 
     useEffect(() => {
@@ -145,6 +147,7 @@ export default function Judging(){
         setLoading(false);
     },[cut]);
 
+    //Fetch the student details who have registered for that particular event
     useEffect(() => {
         async function fetchData(){
             setLoading(true);
@@ -204,7 +207,7 @@ export default function Judging(){
         setAmGroup(group);
         setAmGender(gender);
         setAmSamithi(samithi);
-        const currentId = cleanName(name)+dob;
+        const currentId = cleanName(name)+dob+judgeEmail.slice(0,7);
         async function getData(){
             setLoading(true);
             const q = query(
@@ -212,7 +215,7 @@ export default function Judging(){
             );
             const querySnapshot = await getDocs(q);
             const data = querySnapshot.docs.map((doc) => doc.data());
-            let filteredData = data.filter((fd) => fd.id == currentId);
+            let filteredData = data.filter((fd) => fd.id == currentId && fd.judge == judgeEmail);
             if ((event === "Slokas") || (event === "Slokas - Boys") || (event === "Slokas - Girls") || (event === "Tamizh Chants") || (event === "Tamizh chants - Boys") || (event === "Tamizh chants - Girls"))
             {
                 if (filteredData.length === 0)
@@ -229,7 +232,8 @@ export default function Judging(){
                         gender : "",
                         group : "",
                         name : "",
-                        samithi : ""
+                        samithi : "",
+                        judge : ""
                     }]
                 }
                 const mark = filteredData[0];
@@ -255,7 +259,8 @@ export default function Judging(){
                         gender : "",
                         group : "",
                         name : "",
-                        samithi : ""
+                        samithi : "",
+                        judge : ""
                     }]
                 }
                 const mark = filteredData[0];
@@ -281,7 +286,8 @@ export default function Judging(){
                         gender : "",
                         group : "",
                         name : "",
-                        samithi : ""
+                        samithi : "",
+                        judge : ""
                     }]
                 }
                 const mark = filteredData[0];
@@ -305,7 +311,8 @@ export default function Judging(){
                         gender : "",
                         group : "",
                         name : "",
-                        samithi : ""
+                        samithi : "",
+                        judge : ""
                     }]
                 }
                 const mark = filteredData[0];
@@ -328,7 +335,8 @@ export default function Judging(){
                         gender : "",
                         group : "",
                         name : "",
-                        samithi : ""
+                        samithi : "",
+                        judge : ""
                     }]
                 }
                 const mark = filteredData[0];
@@ -354,7 +362,8 @@ export default function Judging(){
                         gender : "",
                         group : "",
                         name : "",
-                        samithi : ""
+                        samithi : "",
+                        judge : ""
                     }]
                 }
                 const mark = filteredData[0];
@@ -380,7 +389,8 @@ export default function Judging(){
                         gender : "",
                         group : "",
                         name : "",
-                        samithi : ""
+                        samithi : "",
+                        judge : ""
                     }]
                 }
                 const mark = filteredData[0];
@@ -399,11 +409,12 @@ export default function Judging(){
     async function updateMarks(){
         setClicked(false);
         setLoading(true);
-        const id = cleanName(amName) + amDoB;
+        const id = cleanName(amName) + amDoB + judgeEmail.slice(0,7);
         const q = query(
             collection(db,"studentMarks"),
             where("id","==",id),
-            where("dob","==",amDoB)
+            where("dob","==",amDoB),
+            where("judge","==",judgeEmail)
         );
         const querySnapshot = await getDocs(q);
         if ((event === "Slokas") || (event === "Slokas - Boys") || (event === "Slokas - Girls") || (event === "Tamizh Chants") || (event === "Tamizh chants - Boys") || (event === "Tamizh chants - Girls"))
@@ -424,7 +435,8 @@ export default function Judging(){
                         tune : stcTune,
                         pronunciation : stcPronunciation,
                         memory : stcMemory,
-                        totalMarks : total
+                        totalMarks : total,
+                        judge : judgeEmail
                     });
                 });
                 alert("Sairam! Marks updated successfully!");
@@ -443,7 +455,8 @@ export default function Judging(){
                         tune : stcTune,
                         pronunciation : stcPronunciation,
                         memory : stcMemory,
-                        totalMarks : total  
+                        totalMarks : total,
+                        judge : judgeEmail  
                 });
                 alert("Sairam! Marks added successfully!");
             }
@@ -467,7 +480,8 @@ export default function Judging(){
                         ragam : bgbRagam,
                         talam : bgbTalam,
                         memory_pronunciation : bgbMP,
-                        totalMarks : bgbTotal
+                        totalMarks : bgbTotal,
+                        judge : judgeEmail
                     });
                 });
                 alert("Sairam! Marks updated successfully!");
@@ -487,7 +501,8 @@ export default function Judging(){
                         ragam : bgbRagam,
                         talam : bgbTalam,
                         memory_pronunciation : bgbMP,
-                        totalMarks : bgbTotal  
+                        totalMarks : bgbTotal,
+                        judge : judgeEmail  
                 });
                 alert("Sairam! Marks added successfully!");
             }   
@@ -510,7 +525,8 @@ export default function Judging(){
                         pronunciation : vPronunciation,
                         intonation : vIntonation,
                         memory : vMemory,
-                        totalMarks : vTotal
+                        totalMarks : vTotal,
+                        judge : judgeEmail
                     });
                 });
                 alert("Sairam! Marks updated successfully!");
@@ -529,7 +545,8 @@ export default function Judging(){
                         pronunciation : vPronunciation,
                         intonation : vIntonation,
                         memory : vMemory,
-                        totalMarks : vTotal 
+                        totalMarks : vTotal,
+                        judge : judgeEmail 
                 });
                 alert("Sairam! Marks added successfully!");
             }
@@ -551,7 +568,8 @@ export default function Judging(){
                         presentation : sPresentation,
                         content : sContent,
                         language : sLanguage,
-                        totalMarks : sTotal
+                        totalMarks : sTotal,
+                        judge : judgeEmail
                     });
                 });
                 alert("Sairam! Marks updated successfully!");
@@ -569,7 +587,8 @@ export default function Judging(){
                         presentation : sPresentation,
                         content : sContent,
                         language : sLanguage,
-                        totalMarks : sTotal
+                        totalMarks : sTotal,
+                        judge : judgeEmail
                 });
                 alert("Sairam! Marks added successfully!");
             }
@@ -591,7 +610,8 @@ export default function Judging(){
                         theme : dTheme,
                         colour_coordination : dCC,
                         layout : dLayout,
-                        totalMarks : dTotal
+                        totalMarks : dTotal,
+                        judge : judgeEmail
                     });
                 });
                 alert("Sairam! Marks updated successfully!");
@@ -609,7 +629,8 @@ export default function Judging(){
                         theme : dTheme,
                         colour_coordination : dCC,
                         layout : dLayout,
-                        totalMarks : dTotal
+                        totalMarks : dTotal,
+                        judge : judgeEmail
                 });
                 alert("Sairam! Marks added successfully!");
             }
@@ -634,7 +655,8 @@ export default function Judging(){
                         talam : dsTalam,
                         memory_pronunciation : dsMP,
                         harmony : dsHarmony,
-                        totalMarks : dsTotal
+                        totalMarks : dsTotal,
+                        judge : judgeEmail
                     });
                 });
                 alert("Sairam! Marks updated successfully!");
@@ -655,7 +677,8 @@ export default function Judging(){
                         talam : dsTalam,
                         memory_pronunciation : dsMP,
                         harmony : dsHarmony,
-                        totalMarks : dsTotal
+                        totalMarks : dsTotal,
+                        judge : judgeEmail
                 });
                 alert("Sairam! Marks added successfully!");
             }
@@ -677,7 +700,8 @@ export default function Judging(){
                         asthetics : adAsthetics,
                         resource_management : adRM,
                         teamwork : adTeamwork,
-                        totalMarks : adTotal
+                        totalMarks : adTotal,
+                        judge : judgeEmail
                     });
                 });
                 alert("Sairam! Marks updated successfully!");
@@ -695,7 +719,8 @@ export default function Judging(){
                         asthetics : adAsthetics,
                         resource_management : adRM,
                         teamwork : adTeamwork,
-                        totalMarks : adTotal
+                        totalMarks : adTotal,
+                        judge : judgeEmail
                 });
                 alert("Sairam! Marks added successfully!");
             }

@@ -119,8 +119,23 @@ export default function EventLeaderboard(){
             );
             const querySnapshot = await getDocs(q);
             const data = querySnapshot.docs.map((doc) => doc.data());
-
             let filteredData = data.filter((fd) => fd.group === group && fd.event === event);
+            for (let i=0;i<filteredData.length;i++)
+            {
+                let sum = filteredData[i].totalMarks;
+                let count = 1;
+                for (let j=i+1;j<filteredData.length;j++)
+                {
+                    if (filteredData[i].name === filteredData[j].name && filteredData[i].dob === filteredData[j].dob && filteredData[i].samithi === filteredData[j].samithi)
+                    {
+                        count++;
+                        sum += filteredData[j].totalMarks;
+                        filteredData.splice(j,1);
+                        j--;
+                    }
+                }
+                filteredData[i].totalMarks = Math.round(sum/count);
+            }
             filteredData = filteredData.sort((y,x) => x.totalMarks - y.totalMarks);
             const maleData = filteredData.filter((md) => md.gender === "Male");
             const femaleData = filteredData.filter((fd) => fd.gender === "Female");
@@ -186,7 +201,8 @@ export default function EventLeaderboard(){
                 <div className="mx-auto rounded-xl shadow-xl bg-white mt-10 w-75 md:w-180 lg:w-250">
                     <div className="flex flex-col justify-center items-center">
                         <h1 className="flex justify-center font-sans font-bold mt-2 text-2xl">Leaderboard</h1>
-                        <h1 className="flex justify-center font-sans font-bold text-2xl">{group+" --> "+event}</h1>
+                        <h1 className="flex justify-center font-sans font-bold ml-2 text-lg md:text-2xl">{group+" --> "+event}</h1>
+                        <h1 className="flex justify-center font-sans ml-2 mr-2 text-md">Sairam! Please note that the mark displayed here is the AVERAGE SCORE given to the student, as evaluated by all the judges</h1>
 
                         <div className="overflow-x-auto w-70 md:w-175 lg:w-245 mt-4 mb-4">
                             <table className="mx-auto text-center">

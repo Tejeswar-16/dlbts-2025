@@ -30,12 +30,27 @@ export default function Evaluation(){
         return name;
     }
 
+    const router = useRouter();
+
     useEffect(() => {
         auth.onAuthStateChanged((user) => {
             if (!user)
                 router.push("/");
         })
-    })
+    },[router])
+
+    useEffect(() => {
+        auth.onAuthStateChanged((user) => {
+            if (user)
+            {
+                if ((user.email).startsWith("officials"))
+                {
+                    alert("Sairam! You do not have access to visit Evaluation Page. Please login with correct credentials");
+                    router.push("/");
+                }
+            }
+        })
+    },[router])
 
     useEffect(() => {
         auth.onAuthStateChanged((user) => {
@@ -78,8 +93,6 @@ export default function Evaluation(){
         "ncb" : "Rudram Namakam Chanting - Boys",
         "ncg" : "Rudram Namakam Chanting - Girls"
     }
-    
-    const router = useRouter();
 
     function handleOnClick(e){  
         e.preventDefault();

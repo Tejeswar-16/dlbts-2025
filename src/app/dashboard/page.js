@@ -31,10 +31,25 @@ export default function Dashboard(){
     useEffect(() => {
         auth.onAuthStateChanged((user) => {
             if (!user)
+            {
                 router.push("/");
+            }
         })
     },[router])
     
+    useEffect(() => {
+        auth.onAuthStateChanged((user) => {
+            if (user)
+            {
+                if (user.email != "admin@dlbts.ks")
+                {
+                    alert("Sairam! You do not have access to visit Dashboard Page. Please login with correct credentials");
+                    router.push("/");
+                }
+            }
+        })
+    },[router])
+
     useEffect(() => {
         auth.onAuthStateChanged((user) => {
             if (user)
@@ -128,7 +143,7 @@ export default function Dashboard(){
                         </div>
                         <div className="flex flex-col md:flex md:flex-row md:justify-end">
                             <button onClick={handleEClick} className="font-sans font-semibold text-md md:text-xl rounded-lg bg-purple-200 px-2 md:rounded-xl mt-1 mb-2 mx-2 md:h-15 md:mx-2 md:my-2 hover:text-black hover:bg-purple-500 hover:cursor-pointer transition duration-300 ease-in-out">Events</button>
-                            <button onClick={handleEventsClick} className="font-sans font-semibold text-md md:text-xl rounded-lg bg-yellow-100 px-2 md:rounded-xl mb-2 mx-2 md:h-15 md:mx-2 md:my-2 hover:bg-yellow-500 hover:cursor-pointer transition duration-300 ease-in-out">Leadboard</button>
+                            <button onClick={handleEventsClick} className="font-sans font-semibold text-md md:text-xl rounded-lg bg-yellow-100 px-2 md:rounded-xl mb-2 mx-2 md:h-15 md:mx-2 md:my-2 hover:bg-yellow-500 hover:cursor-pointer transition duration-300 ease-in-out">Leaderboard</button>
                             <button onClick={handleLogout} className="font-sans font-semibold text-sm md:text-xl rounded-lg bg-red-200 px-2 md:rounded-xl mx-2 mb-1 md:h-15 md:mx-2 md:my-2 hover:bg-red-500 hover:cursor-pointer hover:text-white transition duration-300 ease-in-out">Logout</button>
                         </div>
                     </div>
@@ -395,7 +410,7 @@ export default function Dashboard(){
                     </div>
                     <div className="rounded-xl overflow-hidden border border-gray-300 mx-auto overflow-x-auto lg:w-240 border border-black">
                         <table className="text-center w-357">
-                            <thead className="bg-black text-white">
+                            <thead className="bg-blue-950 text-white">
                                 <tr>
                                     <th className="font-sans px-4 py-2 font-semibold border border-gray-400">Name</th>
                                     <th className="font-sans px-4 py-2 font-semibold border border-gray-400">Gender</th>

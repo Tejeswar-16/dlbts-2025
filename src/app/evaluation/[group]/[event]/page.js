@@ -745,6 +745,10 @@ export default function Judging(){
                 console.log(error.message);
             })
     }
+
+    function handleClose(){
+        setClicked(false);
+    }
     
     return(
         <>
@@ -756,7 +760,7 @@ export default function Judging(){
                             <h1 className="font-sans text-sm md:text-xl px-3">{judgeEmail}</h1>
                         </div>
                         <div className="flex flex-col md:flex md:flex-row md:justify-end">
-                            <button onClick={handleEventsClick} className="font-sans font-semibold text-md md:text-xl rounded-lg bg-yellow-100 px-2 md:rounded-xl h-8 mt-2 mx-2 md:h-15 md:mx-2 md:my-2 hover:bg-yellow-500 hover:cursor-pointer transition duration-300 ease-in-out">Leadboard</button>
+                            <button onClick={handleEventsClick} className="font-sans font-semibold text-md md:text-xl rounded-lg bg-yellow-100 px-2 md:rounded-xl h-8 mt-2 mx-2 md:h-15 md:mx-2 md:my-2 hover:bg-yellow-500 hover:cursor-pointer transition duration-300 ease-in-out">Leaderboard</button>
                             <button onClick={handleLogout} className="font-sans font-semibold text-sm md:text-xl rounded-lg bg-red-200 px-2 md:rounded-xl mx-2 h-8 mt-3 md:h-15 md:mx-2 md:my-2 hover:bg-red-500 hover:cursor-pointer hover:text-white transition duration-300 ease-in-out">Logout</button>
                         </div>
                     </div>
@@ -769,7 +773,7 @@ export default function Judging(){
                     <>
                         <h1 className="flex justify-center font-sans font-bold text-md md:text-xl lg:text-xl p-2">Evaluation Criteria</h1>
                         <table className="mx-auto text-center w-70 md:w-150 lg:w-150">
-                            <thead className="bg-black text-white">
+                            <thead className="bg-blue-950 text-white">
                                 <tr>
                                     <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Criteria</th>
                                     <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Marks</th>
@@ -809,7 +813,7 @@ export default function Judging(){
                     <>
                         <h1 className="flex justify-center font-sans font-bold text-md md:text-xl lg:text-xl p-2">Evaluation Criteria</h1>
                         <table className="mx-auto text-center w-70 md:w-150 lg:w-150">
-                            <thead className="bg-black text-white">
+                            <thead className="bg-blue-950 text-white">
                                 <tr>
                                     <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Criteria</th>
                                     <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Marks</th>
@@ -845,7 +849,7 @@ export default function Judging(){
                     <>
                         <h1 className="flex justify-center font-sans font-bold text-md md:text-xl lg:text-xl p-2">Evaluation Criteria</h1>
                         <table className="mx-auto text-center w-70 md:w-150 lg:w-150">
-                            <thead className="bg-black text-white">
+                            <thead className="bg-blue-950 text-white">
                                 <tr>
                                     <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Criteria</th>
                                     <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Marks</th>
@@ -881,7 +885,7 @@ export default function Judging(){
                     <>
                         <h1 className="flex justify-center font-sans font-bold text-md md:text-xl lg:text-xl p-2">Evaluation Criteria</h1>
                         <table className="mx-auto text-center w-70 md:w-150 lg:w-150">
-                            <thead className="bg-black text-white">
+                            <thead className="bg-blue-950 text-white">
                                 <tr>
                                     <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Criteria</th>
                                     <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Marks</th>
@@ -913,7 +917,7 @@ export default function Judging(){
                     <>
                         <h1 className="flex justify-center font-sans font-bold text-md md:text-xl lg:text-xl p-2">Evaluation Criteria</h1>
                         <table className="mx-auto text-center w-70 md:w-150 lg:w-150">
-                            <thead className="bg-black text-white">
+                            <thead className="bg-blue-950 text-white">
                                 <tr>
                                     <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Criteria</th>
                                     <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Marks</th>
@@ -945,7 +949,7 @@ export default function Judging(){
                     <>
                         <h1 className="flex justify-center font-sans font-bold text-md md:text-xl lg:text-xl p-2">Evaluation Criteria</h1>
                         <table className="mx-auto text-center w-70 md:w-150 lg:w-150">
-                            <thead className="bg-black text-white">
+                            <thead className="bg-blue-950 text-white">
                                 <tr>
                                     <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Criteria</th>
                                     <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Marks</th>
@@ -989,7 +993,7 @@ export default function Judging(){
                     <>
                         <h1 className="flex justify-center font-sans font-bold text-md md:text-xl lg:text-xl p-2">Evaluation Criteria</h1>
                         <table className="mx-auto text-center w-70 md:w-150 lg:w-150">
-                            <thead className="bg-black text-white">
+                            <thead className="bg-blue-950 text-white">
                                 <tr>
                                     <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Criteria</th>
                                     <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Marks</th>
@@ -1032,7 +1036,7 @@ export default function Judging(){
                 <div className="mx-auto bg-white rounded-xl shadow-xl mt-5 pb-5 w-75 md:w-180 lg:w-250">
                         <h1 className="flex justify-center font-sans font-bold pt-4 pb-4 p-4 text-md md:text-xl">Students Registered for {group}: {event}</h1>
                         <table className="mx-auto text-center w-70 md:w-150 lg:w-150 pb-2">
-                            <thead className="bg-black text-white">
+                            <thead className="bg-blue-950 text-white">
                                 <tr>
                                     <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Student Details</th>
                                     <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Action</th>
@@ -1050,14 +1054,14 @@ export default function Judging(){
                                                     <div className="flex flex-col justify-between items-center mt-2 mb-2 lg:mt-0 lg:mb-0">
                                                         <h1 className="font-sans text-sm lg:text-md">Group: {student.group}</h1>
                                                         <h1 className="font-sans text-sm lg:text-md">Gender: {student.gender}</h1>
-                                                        <h1 className="font-sans text-sm lg:text-md">DoB: {student.dob}</h1>
+                                                        <h1 className="font-sans text-sm lg:text-md">DOB: {student.dob}</h1>
                                                     </div>
                                                     
                                                 </div>
                                                 {
                                                     (student.event2 !== "Select an event" || student.groupEvent !== "Select an event") && (
                                                         <div className="mt-3 lg:mt-1">
-                                                            <h1 className="mx-auto bg-red-100 p-1 rounded-lg text-sm lg:text-md w-40 md:w-100">Participating in 2 events. Please evaluate first</h1>
+                                                            <h1 className="mx-auto bg-red-100 p-1 rounded-lg text-sm lg:text-md w-40 md:w-100">Participating in two events. Kindly prioritize evaluation</h1>
                                                         </div>
                                                     )
                                                 }
@@ -1074,10 +1078,13 @@ export default function Judging(){
                 clicked && ((event === "Slokas") || (event === "Slokas - Boys") || (event === "Slokas - Girls") || (event === "Tamizh Chants") || (event === "Tamizh chants - Boys") || (event === "Tamizh chants - Girls")) &&
                     <div className="fixed inset-0 flex flex-col justify-center backdrop-blur-sm items-center">
                         <div className="bg-white w-75 md:w-125 rounded-xl shadow-xl">
+                            <div className="flex justify-end pt-2 pr-2">
+                                <button onClick={handleClose} className="rounded-md p-1 font-sans bg-red-500 text-sm hover:cursor-pointer text-gray-100">X</button>
+                            </div>
                             <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Award Marks</h1>
                             <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Student Name: {amName}</h1>
                             <table className="mx-auto text-center w-70 md:w-100 mt-2 mb-2">
-                                <thead className="bg-black text-white">
+                                <thead className="bg-blue-950 text-white">
                                     <tr>
                                         <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Criteria</th>
                                         <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Marks</th>
@@ -1164,10 +1171,13 @@ export default function Judging(){
                 {clicked && ((event === "Bhajans") || (event === "Bhajans - Boys") || (event === "Bhajans - Girls")) && 
                     <div className="fixed inset-0 flex flex-col justify-center backdrop-blur-sm items-center">
                         <div className="bg-white w-75 md:w-125 rounded-xl shadow-xl">
+                            <div className="flex justify-end pt-2 pr-2">
+                                <button onClick={handleClose} className="rounded-md p-1 font-sans bg-red-500 text-sm hover:cursor-pointer text-gray-100">X</button>
+                            </div>
                             <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Award Marks</h1>
                             <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Student Name: {amName}</h1>
                             <table className="mx-auto text-center w-70 md:w-100 mt-2 mb-2">
-                                <thead className="bg-black text-white">
+                                <thead className="bg-blue-950 text-white">
                                     <tr>
                                         <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Criteria</th>
                                         <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Marks</th>
@@ -1282,10 +1292,13 @@ export default function Judging(){
                 {clicked && ((event === "Vedam") || (event === "Vedam - Boys") || (event === "Vedam - Girls") || (event === "Rudram Namakam Chanting - Boys") || (event === "Rudram Namakam Chanting - Girls")) && 
                     <div className="fixed inset-0 flex flex-col justify-center backdrop-blur-sm items-center">
                         <div className="bg-white w-75 md:w-125 rounded-xl shadow-xl">
+                            <div className="flex justify-end pt-2 pr-2">
+                                <button onClick={handleClose} className="rounded-md p-1 font-sans bg-red-500 text-sm hover:cursor-pointer text-gray-100">X</button>
+                            </div>
                             <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Award Marks</h1>
                             <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Student Name: {amName}</h1>
                             <table className="mx-auto text-center w-70 md:w-100 mt-2 mb-2">
-                                <thead className="bg-black text-white">
+                                <thead className="bg-blue-950 text-white">
                                     <tr>
                                         <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Criteria</th>
                                         <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Marks</th>
@@ -1392,10 +1405,13 @@ export default function Judging(){
                 {clicked && ((event === "Story Telling (English)") || (event === "Story Telling (Tamil)") || (event === "Elocution (English)") || (event === "Elocution (Tamil)")) && 
                     <div className="fixed inset-0 flex flex-col justify-center backdrop-blur-sm items-center">
                         <div className="bg-white w-75 md:w-125 rounded-xl shadow-xl">
+                            <div className="flex justify-end pt-2 pr-2">
+                                <button onClick={handleClose} className="rounded-md p-1 font-sans bg-red-500 text-sm hover:cursor-pointer text-gray-100">X</button>
+                            </div>
                             <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Award Marks</h1>
                             <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Student Name: {amName}</h1>
                             <table className="mx-auto text-center w-70 md:w-100 mt-2 mb-2">
-                                <thead className="bg-black text-white">
+                                <thead className="bg-blue-950 text-white">
                                     <tr>
                                         <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Criteria</th>
                                         <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Marks</th>
@@ -1474,10 +1490,13 @@ export default function Judging(){
                 {clicked && ((event === "Drawing")) && 
                     <div className="fixed inset-0 flex flex-col justify-center backdrop-blur-sm items-center">
                         <div className="bg-white w-75 md:w-125 rounded-xl shadow-xl">
+                            <div className="flex justify-end pt-2 pr-2">
+                                <button onClick={handleClose} className="rounded-md p-1 font-sans bg-red-500 text-sm hover:cursor-pointer text-gray-100">X</button>
+                            </div>
                             <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Award Marks</h1>
                             <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Student Name: {amName}</h1>
                             <table className="mx-auto text-center w-70 md:w-100 mt-2 mb-2">
-                                <thead className="bg-black text-white">
+                                <thead className="bg-blue-950 text-white">
                                     <tr>
                                         <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Criteria</th>
                                         <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Marks</th>
@@ -1556,10 +1575,13 @@ export default function Judging(){
                 {clicked && ((event === "Devotional Singing - Boys") || (event === "Devotional Singing - Girls")) && 
                     <div className="fixed inset-0 flex flex-col justify-center backdrop-blur-sm items-center">
                         <div className="bg-white w-75 md:w-125 rounded-xl shadow-xl">
+                            <div className="flex justify-end pt-2 pr-2">
+                                <button onClick={handleClose} className="rounded-md p-1 font-sans bg-red-500 text-sm hover:cursor-pointer text-gray-100">X</button>
+                            </div>
                             <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Award Marks</h1>
                             <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Student Name: {amName}</h1>
                             <table className="mx-auto text-center w-70 md:w-100 mt-2 mb-2">
-                                <thead className="bg-black text-white">
+                                <thead className="bg-blue-950 text-white">
                                     <tr>
                                         <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Criteria</th>
                                         <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Marks</th>
@@ -1692,10 +1714,13 @@ export default function Judging(){
                 {clicked && ((event === "Altar Decoration - Boys") || (event === "Altar Decoration - Girls")) && 
                     <div className="fixed inset-0 flex flex-col justify-center backdrop-blur-sm items-center">
                         <div className="bg-white w-75 md:w-125 rounded-xl shadow-xl">
+                            <div className="flex justify-end pt-2 pr-2">
+                                <button onClick={handleClose} className="rounded-md p-1 font-sans bg-red-500 text-sm hover:cursor-pointer text-gray-100">X</button>
+                            </div>
                             <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Award Marks</h1>
                             <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Student Name: {amName}</h1>
                             <table className="mx-auto text-center w-70 md:w-100 mt-2 mb-2">
-                                <thead className="bg-black text-white">
+                                <thead className="bg-blue-950 text-white">
                                     <tr>
                                         <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Criteria</th>
                                         <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Marks</th>

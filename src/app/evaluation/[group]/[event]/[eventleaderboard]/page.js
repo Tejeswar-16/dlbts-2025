@@ -206,10 +206,10 @@ export default function EventLeaderboard(){
 
                         <div className="overflow-x-auto w-70 md:w-175 lg:w-245 mt-4 mb-4">
                             <table className="mx-auto text-center">
-                                <thead className="bg-black text-white">
+                                <thead className="bg-blue-950 text-white">
                                     <tr>
                                         <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Name</td>
-                                        <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">DoB</td>
+                                        <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">DOB</td>
                                         <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Gender</td>
                                         <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Samithi</td>
                                         <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Marks</td>

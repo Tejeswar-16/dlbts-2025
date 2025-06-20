@@ -186,7 +186,7 @@ export default function Register(){
                         
                         <div className="mx-auto mt-8 rounded-2xl shadow-2xl lg:w-220 lg:h-35 bg-gray-100">
                             <div className="p-4 mt-8 font-sans text-xl">
-                                Student&aops;s Full Name
+                                Student&apos;s Full Name
                             </div>
                             <div>
                                 <input value={name} onChange={(e)=>{setName(e.target.value.toUpperCase())}} required className="p-3 mb-4 ml-2 w-68 font-sans text-lg md:w-180 lg:mx-4 lg:mb-0 lg:w-210 rounded-xl border" type="text"/>

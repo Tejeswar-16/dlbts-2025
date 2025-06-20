@@ -83,7 +83,7 @@ export default function Leadboard(){
                 let count = 1;
                 for (let j=i+1;j<filteredData.length;j++)
                 {
-                    if (filteredData[i].name === filteredData[j].name && filteredData[i].dob === filteredData[j].dob && filteredData[i].samithi === filteredData[j].samithi)
+                    if (filteredData[i].name === filteredData[j].name && filteredData[i].dob === filteredData[j].dob && filteredData[i].samithi === filteredData[j].samithi && filteredData[i].event === filteredData[j].event)
                     {
                         count++;
                         sum += filteredData[j].totalMarks;

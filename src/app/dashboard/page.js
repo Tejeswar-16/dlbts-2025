@@ -88,7 +88,7 @@ export default function Dashboard(){
             }
             if (searchEvent !== "All")
             {
-                filteredContent = filteredContent.filter((fc) => fc.event1 === searchEvent || fc.event2 === searchEvent);
+                filteredContent = filteredContent.filter((fc) => fc.event1 === searchEvent || fc.event2 === searchEvent || fc.groupEvent == searchEvent);
             }
             if (searchSamithi !== "All")
             {

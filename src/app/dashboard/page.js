@@ -202,8 +202,8 @@ export default function Dashboard(){
                                         <option>Story Telling (English)</option>
                                         <option>Story Telling (Tamil)</option>
                                         <option>Drawing</option>
-                                        <option>Devotional Singing - Boys (GROUP)</option>
-                                        <option>Devotional Singing - Girls (GROUP)</option>
+                                        <option>Devotional Singing - Boys</option>
+                                        <option>Devotional Singing - Girls</option>
                                     </select>
                                 : (searchGroup === "Group 2") ?
                                     <select value={searchEvent} onChange={(e) => {setSearchEvent(e.target.value)}} className="font-sans border rounded-xl ml-3 lg:mx-10 mt-3 w-69 lg:w-93 h-10 p-2">
@@ -219,12 +219,12 @@ export default function Dashboard(){
                                         <option>Elocution (English)</option>
                                         <option>Elocution (Tamil)</option>
                                         <option>Drawing</option>
-                                        <option>Altar Decoration - Boys (GROUP)</option>
-                                        <option>Altar Decoration - Girls (GROUP)</option>
-                                        <option>Devotional Singing - Boys (GROUP)</option>
-                                        <option>Devotional Singing - Girls (GROUP)</option>
-                                        <option>Rudram Namakam Chanting - Boys (GROUP)</option>
-                                        <option>Rudram Namakam Chanting - Girls (GROUP)</option>
+                                        <option>Altar Decoration - Boys</option>
+                                        <option>Altar Decoration - Girls</option>
+                                        <option>Devotional Singing - Boys</option>
+                                        <option>Devotional Singing - Girls</option>
+                                        <option>Rudram Namakam Chanting - Boys</option>
+                                        <option>Rudram Namakam Chanting - Girls</option>
                                     </select>
                                 :
                                     <select value={searchEvent} onChange={(e) => {setSearchEvent(e.target.value)}} className="font-sans border rounded-xl ml-3 lg:mx-10 mt-3 w-69 lg:w-93 h-10 p-2">
@@ -240,12 +240,12 @@ export default function Dashboard(){
                                         <option>Elocution (English)</option>
                                         <option>Elocution (Tamil)</option>
                                         <option>Drawing</option>
-                                        <option>Altar Decoration - Boys (GROUP)</option>
-                                        <option>Altar Decoration - Girls (GROUP)</option>
-                                        <option>Devotional Singing - Boys (GROUP)</option>
-                                        <option>Devotional Singing - Girls (GROUP)</option>
-                                        <option>Rudram Namakam Chanting - Boys (GROUP)</option>
-                                        <option>Rudram Namakam Chanting - Girls (GROUP)</option>
+                                        <option>Altar Decoration - Boys</option>
+                                        <option>Altar Decoration - Girls</option>
+                                        <option>Devotional Singing - Boys</option>
+                                        <option>Devotional Singing - Girls</option>
+                                        <option>Rudram Namakam Chanting - Boys</option>
+                                        <option>Rudram Namakam Chanting - Girls</option>
                                     </select>
                                 }
                             </div>

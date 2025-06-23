@@ -122,6 +122,7 @@ export default function Dashboard(){
         signOut(auth)
             .then(() => {
                 alert("Sairam! Signed out sucessfully");
+                router.push("/");
             })
             .catch((error) => {
                 console.log(error.message);

@@ -156,6 +156,7 @@ export default function Register(){
         signOut(auth)
             .then(() => {
                 alert("Sairam! Signed out successfully");
+                router.push("/");
             })
             .catch((error) => {
                 console.log(error);

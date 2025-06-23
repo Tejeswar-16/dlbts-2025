@@ -740,6 +740,7 @@ export default function Judging(){
         signOut(auth)
             .then(() => {
                 alert("Sairam! Signed out successfully");
+                router.push("/");
             })
             .catch((error) => {
                 console.log(error.message);

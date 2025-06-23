@@ -40,7 +40,7 @@ export default function Evaluation(){
     },[router])
 
     useEffect(() => {
-        auth.onAuthStateChanged((user) => {
+        const a = auth.onAuthStateChanged((user) => {
             if (user)
             {
                 if ((user.email).startsWith("officials"))
@@ -49,8 +49,11 @@ export default function Evaluation(){
                     router.push("/");
                 }
             }
-        })
-    },[router])
+        });
+        return () => {
+            a();
+        }
+    },[router]);
 
     useEffect(() => {
         auth.onAuthStateChanged((user) => {

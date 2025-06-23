@@ -38,7 +38,7 @@ export default function Dashboard(){
     },[router])
     
     useEffect(() => {
-        auth.onAuthStateChanged((user) => {
+        const a = auth.onAuthStateChanged((user) => {
             if (user)
             {
                 if (user.email != "admin@dlbts.ks")
@@ -47,7 +47,10 @@ export default function Dashboard(){
                     router.push("/");
                 }
             }
-        })
+        });
+        return () => {
+            a();
+        }
     },[router])
 
     useEffect(() => {

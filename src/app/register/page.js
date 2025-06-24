@@ -345,15 +345,15 @@ export default function Register(){
                 {
                     !clicked && 
                     <>
-                        <nav className="mx-auto border shadow-xl bg-white rounded-xl w-75 pb-1 md:w-180 lg:w-250">
+                        <nav className="mx-auto border shadow-xl bg-white rounded-xl w-75 pb-1 md:w-180 lg:w-250 lg:h-20">
                             <div className="flex flex-row justify-between">
                                 <div className="flex flex-col">
                                     <h1 className="font-sans font-bold text-xl px-3 pt-3 md:text-3xl">Welcome, User</h1>
                                     <h1 className="font-sans text-xs md:text-xl px-3">{email}</h1>
                                 </div>
                                 <div className="flex flex-col md:flex md:flex-row md:justify-end">
-                                    <button onClick={handleAddStudent} className="font-sans font-semibold text-md md:text-xl rounded-lg bg-yellow-100 px-2 md:rounded-xl mb-2 mx-2 md:h-15 md:mx-2 md:my-2 hover:bg-yellow-500 hover:cursor-pointer transition duration-300 ease-in-out">Add Student</button>
-                                    <button onClick={handleLogout} className="font-sans font-semibold text-sm md:text-xl rounded-lg bg-red-200 px-2 md:rounded-xl mr-2 my-4 p-2 md:h-15 md:mx-2 md:my-2 hover:bg-red-500 hover:cursor-pointer hover:text-white transition duration-300 ease-in-out">Logout</button>
+                                    <button onClick={handleAddStudent} className="font-sans font-semibold text-sm md:text-xl rounded-lg bg-yellow-100 px-2 md:rounded-xl mt-1 mb-1 mx-2 md:h-15 md:mx-2 md:my-2 hover:bg-yellow-500 hover:cursor-pointer transition duration-300 ease-in-out">Add Student</button>
+                                    <button onClick={handleLogout} className="font-sans font-semibold text-sm md:text-xl rounded-lg bg-red-200 px-2 md:rounded-xl ml-2 p-1 w-21 md:h-15 md:mx-2 md:my-2 hover:bg-red-500 hover:cursor-pointer hover:text-white transition duration-300 ease-in-out">Logout</button>
                                 </div>
                             </div>
                         </nav>

@@ -91,7 +91,7 @@ export default function Leadboard(){
                         j--;
                     }
                 }
-                filteredData[i].totalMarks = Math.round(sum/count);
+                filteredData[i].totalMarks = sum;
             }
             console.log(group);
             if (group !== "All")
@@ -179,6 +179,7 @@ export default function Leadboard(){
                                 <option>Group 1</option>
                                 <option>Group 2</option>
                                 <option>Group 3</option>
+                                <option>Group 4</option>
                             </select>
                         </div>
                         <div className="flex flex-col">
@@ -240,7 +241,7 @@ export default function Leadboard(){
                                     <option>Rudram Namakam Chanting - Boys</option>
                                     <option>Rudram Namakam Chanting - Girls</option>
                                 </select>
-                            ) : (
+                            ) : (group === "Group 3") ? (
                                 <select value={event} onChange={(e) => {setEvent(e.target.value)}} className="font-sans rounded-xl border w-65 ml-4 md:ml-0 md:w-50 mt-2 mb-4 mr-4 p-2">
                                     <option value="All">All</option>
                                     <option>Bhajans - Boys</option>
@@ -254,6 +255,7 @@ export default function Leadboard(){
                                     <option>Elocution (English)</option>
                                     <option>Elocution (Tamil)</option>
                                     <option>Drawing</option>
+                                    <option>Quiz</option>
                                     <option>Altar Decoration - Boys</option>
                                     <option>Altar Decoration - Girls</option>
                                     <option>Devotional Singing - Boys</option>
@@ -261,7 +263,12 @@ export default function Leadboard(){
                                     <option>Rudram Namakam Chanting - Boys</option>
                                     <option>Rudram Namakam Chanting - Girls</option>
                                 </select>
-                            )}
+                            ) : 
+                                <select value={event} onChange={(e) => {setEvent(e.target.value)}} className="font-sans rounded-xl border w-65 ml-4 md:ml-0 md:w-50 mt-2 mb-4 mr-4 p-2">
+                                    <option value="All">All</option>
+                                    <option>Quiz</option>
+                                </select>
+                            }
                         </div>                   
                     </div>
                 </div>

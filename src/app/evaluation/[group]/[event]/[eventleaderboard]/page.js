@@ -135,7 +135,7 @@ export default function EventLeaderboard(){
                         j--;
                     }
                 }
-                filteredData[i].totalMarks = Math.round(sum/count);
+                filteredData[i].totalMarks = sum;
             }
             filteredData = filteredData.sort((y,x) => x.totalMarks - y.totalMarks);
             const maleData = filteredData.filter((md) => md.gender === "Male");
@@ -203,7 +203,7 @@ export default function EventLeaderboard(){
                     <div className="flex flex-col justify-center items-center">
                         <h1 className="flex justify-center font-sans font-bold mt-2 text-2xl">Leaderboard</h1>
                         <h1 className="flex justify-center font-sans font-bold ml-2 text-lg md:text-2xl">{group+" --> "+event}</h1>
-                        <h1 className="flex justify-center font-sans ml-2 mr-2 text-md">Sairam! Please note that the mark displayed here is the AVERAGE SCORE given to the student, as evaluated by all the judges</h1>
+                        <h1 className="flex justify-center font-sans ml-2 mr-2 text-md">Sairam! Please note that the mark displayed here is the TOTAL SCORE given to the student, as evaluated by all the judges</h1>
 
                         <div className="overflow-x-auto w-70 md:w-175 lg:w-245 mt-4 mb-4">
                             <table className="mx-auto text-center">

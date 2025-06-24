@@ -166,6 +166,7 @@ export default function Dashboard(){
                                     <option>Group 1</option>
                                     <option>Group 2</option>
                                     <option>Group 3</option>
+                                    <option>Group 4</option>
                                 </select>
                             </div>
                             <div className="flex flex-col">
@@ -226,7 +227,7 @@ export default function Dashboard(){
                                         <option>Rudram Namakam Chanting - Boys</option>
                                         <option>Rudram Namakam Chanting - Girls</option>
                                     </select>
-                                :
+                                : (searchGroup === "Group 3") ?
                                     <select value={searchEvent} onChange={(e) => {setSearchEvent(e.target.value)}} className="font-sans border rounded-xl ml-3 lg:mx-10 mt-3 w-69 lg:w-93 h-10 p-2">
                                         <option value="All">All</option>
                                         <option>Bhajans - Boys</option>
@@ -240,12 +241,19 @@ export default function Dashboard(){
                                         <option>Elocution (English)</option>
                                         <option>Elocution (Tamil)</option>
                                         <option>Drawing</option>
+                                        <option>Quiz</option>
                                         <option>Altar Decoration - Boys</option>
                                         <option>Altar Decoration - Girls</option>
                                         <option>Devotional Singing - Boys</option>
                                         <option>Devotional Singing - Girls</option>
                                         <option>Rudram Namakam Chanting - Boys</option>
                                         <option>Rudram Namakam Chanting - Girls</option>
+                                        <option>Rudram Namakam Chanting - Girls</option>
+                                    </select>
+                                :   
+                                    <select value={searchEvent} onChange={(e) => {setSearchEvent(e.target.value)}} className="font-sans border rounded-xl ml-3 lg:mx-10 mt-3 w-69 lg:w-93 h-10 p-2">
+                                        <option value="All">All</option>
+                                        <option>Quiz</option>
                                     </select>
                                 }
                             </div>
@@ -288,6 +296,7 @@ export default function Dashboard(){
                                 <option>Group 1</option>
                                 <option>Group 2</option>
                                 <option>Group 3</option>
+                                <option>Group 4</option>
                             </select>
                         </div>
                         <div className="flex flex-col">
@@ -348,7 +357,7 @@ export default function Dashboard(){
                                     <option>Rudram Namakam Chanting - Boys</option>
                                     <option>Rudram Namakam Chanting - Girls</option>
                                 </select>
-                            :
+                            : (searchGroup === "Group 3") ?
                                 <select value={searchEvent} onChange={(e) => {setSearchEvent(e.target.value)}} className="font-sans border rounded-xl ml-3 lg:mx-10 mt-3 w-69 lg:w-70 h-10 p-2">
                                     <option value="All">All</option>
                                     <option>Bhajans - Boys</option>
@@ -362,12 +371,18 @@ export default function Dashboard(){
                                     <option>Elocution (English)</option>
                                     <option>Elocution (Tamil)</option>
                                     <option>Drawing</option>
+                                    <option>Quiz</option>
                                     <option>Altar Decoration - Boys</option>
                                     <option>Altar Decoration - Girls</option>
                                     <option>Devotional Singing - Boys</option>
                                     <option>Devotional Singing - Girls</option>
                                     <option>Rudram Namakam Chanting - Boys</option>
                                     <option>Rudram Namakam Chanting - Girls</option>
+                                </select>
+                            : 
+                                <select value={searchEvent} onChange={(e) => {setSearchEvent(e.target.value)}} className="font-sans border rounded-xl ml-3 lg:mx-10 mt-3 w-69 lg:w-70 h-10 p-2">
+                                    <option value="All">All</option>
+                                    <option>Quiz</option>
                                 </select>
                             }
                         </div>

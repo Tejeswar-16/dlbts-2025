@@ -124,12 +124,10 @@ export default function EventLeaderboard(){
             for (let i=0;i<filteredData.length;i++)
             {
                 let sum = filteredData[i].totalMarks;
-                let count = 1;
                 for (let j=i+1;j<filteredData.length;j++)
                 {
                     if (filteredData[i].name === filteredData[j].name && filteredData[i].dob === filteredData[j].dob && filteredData[i].samithi === filteredData[j].samithi)
                     {
-                        count++;
                         sum += filteredData[j].totalMarks;
                         filteredData.splice(j,1);
                         j--;

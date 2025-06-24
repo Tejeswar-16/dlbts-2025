@@ -88,19 +88,24 @@ export default function Judging(){
 
     function uncut(a)
     {
-        if (!a)
-            return "";
-        let name1 = "";
-        let name2 = "";
-        for (let i=0;i<a.length;i++)
+        if (a === "group2%26group3groupevents")
+            return "Group Events - Group 2 & 3";
+        else
         {
-            if (a[i]>='0' && a[i]<=9)
-                name1 += a[i];
-            else
-                name2 += a[i];
+            if (!a)
+                return "";
+            let name1 = "";
+            let name2 = "";
+            for (let i=0;i<a.length;i++)
+            {
+                if (a[i]>='0' && a[i]<=9)
+                    name1 += a[i];
+                else
+                    name2 += a[i];
+            }
+            let name3 = name2.charAt(0).toUpperCase()+name2.slice(1)+" "+name1;
+            return name3;
         }
-        let name3 = name2.charAt(0).toUpperCase()+name2.slice(1)+" "+name1;
-        return name3;
     }
 
     let name = "";
@@ -157,7 +162,43 @@ export default function Judging(){
             const querySnapshot = await getDocs(q);
             const data = querySnapshot.docs.map((doc) => doc.data());
 
-            const filteredData = data.filter((fd) => (fd.group === group && (fd.event1 === event || fd.event2 === event || fd.groupEvent === event)));
+            let filteredData;
+            if (group === "Group 1" && event === "Devotional Singing - Boys")
+            {
+                filteredData = data.filter((fd) => (fd.group === "Group 1" && fd.groupEvent === "Devotional Singing - Boys"));
+            }
+            else if (group === "Group 1" && event === "Devotional Singing - Girls")
+            {
+                filteredData = data.filter((fd) => (fd.group === "Group 1" && fd.groupEvent === "Devotional Singing - Girls"));
+            }
+            else if (event === "Altar Decoration - Boys")
+            {
+                filteredData = data.filter((fd) => ((fd.group === "Group 2" || fd.group === "Group 3") && fd.groupEvent === "Altar Decoration - Boys"));
+            }
+            else if (event === "Altar Decoration - Girls")
+            {
+                filteredData = data.filter((fd) => ((fd.group === "Group 2" || fd.group === "Group 3") && fd.groupEvent === "Altar Decoration - Girls"));
+            }
+            else if (event === "Devotional Singing - Boys")
+            {
+                filteredData = data.filter((fd) => ((fd.group === "Group 2" || fd.group === "Group 3") && fd.groupEvent === "Devotional Singing - Boys"));
+            }
+            else if (event === "Devotional Singing - Girls")
+            {
+                filteredData = data.filter((fd) => ((fd.group === "Group 2" || fd.group === "Group 3") && fd.groupEvent === "Devotional Singing - Girls"));
+            }
+            else if (event === "Rudram Namakam Chanting - Boys")
+            {
+                filteredData = data.filter((fd) => ((fd.group === "Group 2" || fd.group === "Group 3") && fd.groupEvent === "Rudram Namakam Chanting - Boys"));
+            }
+            else if (event === "Rudram Namakam Chanting - Girls")
+            {
+                filteredData = data.filter((fd) => ((fd.group === "Group 2" || fd.group === "Group 3") && fd.groupEvent === "Rudram Namakam Chanting - Girls"));
+            }
+            else 
+            {
+                filteredData = data.filter((fd) => (fd.group === group && (fd.event1 === event || fd.event2 === event)));
+            }
             setStudentData(filteredData);
             setLoading(false);
         }

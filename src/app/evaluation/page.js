@@ -68,7 +68,9 @@ export default function Evaluation(){
     const groupMap =  {
         "g1" : "Group 1",
         "g2" : "Group 2",
-        "g3" : "Group 3"
+        "g3" : "Group 3",
+        "g4" : "Group 4",
+        "ge" : "Group 2 & Group 3 - Group Events"
     };
 
     const eventMap = {
@@ -102,10 +104,10 @@ export default function Evaluation(){
         if (judgeEvent === "")
             alert("Sairam! Please select an event");
         else
-        {
+        {   
             let grp = judgeEmail.substring(7,9);
             let evt = cut(judgeEmail).substring(9);
-            if (groupMap[grp] !== judgeGroup || eventMap[evt] != judgeEvent)
+            if (groupMap[grp] !== judgeGroup || eventMap[evt] !== judgeEvent)
             {
                 if (judgeEmail === "admin@dlbts.ks")
                     router.push("/evaluation/"+judgeGroup.trim().replace(/[\s-()]/g,'').toLowerCase()+"/"+judgeEvent.trim().replace(/[\s-()]/g,'').toLowerCase());
@@ -155,6 +157,8 @@ export default function Evaluation(){
                             <option>Group 1</option>
                             <option>Group 2</option>
                             <option>Group 3</option>
+                            <option>Group 4</option>
+                            <option>Group 2 & Group 3 - Group Events</option>
                         </select>
 
                         {
@@ -206,21 +210,9 @@ export default function Evaluation(){
                                     <label className="font-sans text-lg">Elocution (Tamil)</label><br></br>
                                     <input value="Drawing" checked={judgeEvent === "Drawing"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
                                     <label className="font-sans text-lg">Drawing</label><br></br>
-                                    <input value="Altar Decoration - Boys" checked={judgeEvent === "Altar Decoration - Boys"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
-                                    <label className="font-sans text-lg">Altar Decoration - Boys</label><br></br>
-                                    <input value="Altar Decoration - Girls" checked={judgeEvent === "Altar Decoration - Girls"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
-                                    <label className="font-sans text-lg">Altar Decoration - Girls</label><br></br>
-                                    <input value="Devotional Singing - Boys" checked={judgeEvent === "Devotional Singing - Boys"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
-                                    <label className="font-sans text-lg">Devotional Singing - Boys</label><br></br>
-                                    <input value="Devotional Singing - Girls" checked={judgeEvent === "Devotional Singing - Girls"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
-                                    <label className="font-sans text-lg">Devotional Singing - Girls</label><br></br>
-                                    <input value="Rudram Namakam Chanting - Boys" checked={judgeEvent === "Rudram Namakam Chanting - Boys"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
-                                    <label className="font-sans text-lg">Rudram Namakam Chanting - Boys</label><br></br>
-                                    <input value="Rudram Namakam Chanting - Girls" checked={judgeEvent === "Rudram Namakam Chanting - Girls"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
-                                    <label className="font-sans text-lg">Rudram Namakam Chanting - Girls</label><br></br>
                                 </div> )
-                            : 
-                                (<div>
+                            :  (judgeGroup === "Group 3") ? (
+                                <div>
                                     <input value="Bhajans - Boys" checked={judgeEvent === "Bhajans - Boys"} onChange={(e) => setJudgeEvent(e.target.value)} required className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
                                     <label className="font-sans text-lg">Bhajans - Boys</label><br></br>
                                     <input value="Bhajans - Girls" checked={judgeEvent === "Bhajans - Girls"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
@@ -243,6 +235,17 @@ export default function Evaluation(){
                                     <label className="font-sans text-lg">Elocution (Tamil)</label><br></br>
                                     <input value="Drawing" checked={judgeEvent === "Drawing"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
                                     <label className="font-sans text-lg">Drawing</label><br></br>
+                                    <input value="Quiz" checked={judgeEvent === "Quiz"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
+                                    <label className="font-sans text-lg">Quiz</label><br></br>
+                                </div>)
+                            :  (judgeGroup === "Group 4") ?
+                                <div>
+                                    <input value="Quiz" checked={judgeEvent === "Quiz"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
+                                    <label className="font-sans text-lg">Quiz</label><br></br>
+                                </div>
+
+                            :   
+                                <div>
                                     <input value="Altar Decoration - Boys" checked={judgeEvent === "Altar Decoration - Boys"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
                                     <label className="font-sans text-lg">Altar Decoration - Boys</label><br></br>
                                     <input value="Altar Decoration - Girls" checked={judgeEvent === "Altar Decoration - Girls"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
@@ -255,7 +258,7 @@ export default function Evaluation(){
                                     <label className="font-sans text-lg">Rudram Namakam Chanting - Boys</label><br></br>
                                     <input value="Rudram Namakam Chanting - Girls" checked={judgeEvent === "Rudram Namakam Chanting - Girls"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
                                     <label className="font-sans text-lg">Rudram Namakam Chanting - Girls</label><br></br>
-                                </div>)
+                                </div>
                             }
 
                             <div className="mx-auto bg-gray-100 w-25 h-15 mt-4 rounded-xl shadow-lg border">

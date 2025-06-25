@@ -6,7 +6,6 @@ import { signOut } from "firebase/auth";
 import { collection, getDocs, query } from "firebase/firestore";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { fileURLToPath } from "url";
 
 
 export default function EventLeaderboard(){
@@ -222,7 +221,7 @@ export default function EventLeaderboard(){
             });
             const judgeEmailList = Array.from(judgeEmailsSet);
             setJudgeEmails(judgeEmailList);
-
+            console.log(judgeEmails);
 
             setLoading(false);
         }

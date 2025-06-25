@@ -21,7 +21,6 @@ export default function Dashboard(){
     const [countFemale,setCountFemale] = useState(0);
     const [filterHeading,setFilterHeading] = useState("Search by Name, Group, Samithi or Event");
     const [loading,setLoading] = useState(false);
-    const [refresh,setRefresh] = useState(0);
     const [studentData,setStudentData] = useState([]);
 
     const router = useRouter();

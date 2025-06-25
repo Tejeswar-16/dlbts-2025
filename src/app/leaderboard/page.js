@@ -91,19 +91,50 @@ export default function Leadboard(){
                 }
                 filteredData[i].totalMarks = sum;
             }
-            console.log(group);
-            if (group !== "All")
+            if (group === "Group 2 & Group 3 - Group Events")
             {
-                filteredData = filteredData.filter((fd) => fd.group === group)
+                if (event === "Altar Decoration - Boys")
+                {
+                    filteredData = filteredData.filter((fd) => (fd.group === "Group 2" || fd.group === "Group 3") && fd.event === "Altar Decoration - Boys") 
+                }
+                else if (event === "Altar Decoration - Girls")
+                {
+                    filteredData = filteredData.filter((fd) => (fd.group === "Group 2" || fd.group === "Group 3") && fd.event === "Altar Decoration - Girls") 
+                }
+                else if (event === "Devotional Singing - Boys")
+                {
+                    filteredData = filteredData.filter((fd) => (fd.group === "Group 2" || fd.group === "Group 3") && fd.event === "Devotional Singing - Boys") 
+                }
+                else if (event === "Devotional Singing - Girls")
+                {
+                    filteredData = filteredData.filter((fd) => (fd.group === "Group 2" || fd.group === "Group 3") && fd.event === "Devotional Singing - Girls") 
+                }
+                else if (event === "Rudram Namakam Chanting - Boys")
+                {
+                    filteredData = filteredData.filter((fd) => (fd.group === "Group 2" || fd.group === "Group 3") && fd.event === "Rudram Namakam Chanting - Boys") 
+                }
+                else if (event === "Rudram Namakam Chanting - Girls")
+                {
+                    filteredData = filteredData.filter((fd) => (fd.group === "Group 2" || fd.group === "Group 3") && fd.event === "Rudram Namakam Chanting - Girls") 
+                }
+
             }
-            if (samithi !== "All")
+            else
             {
-                filteredData = filteredData.filter((fd) => fd.samithi === samithi)
+                if (group !== "All")
+                {
+                    filteredData = filteredData.filter((fd) => fd.group === group)
+                }
+                if (samithi !== "All")
+                {
+                    filteredData = filteredData.filter((fd) => fd.samithi === samithi)
+                }
+                if (event !== "All")
+                {
+                    filteredData = filteredData.filter((fd) => fd.event === event)
+                }
             }
-            if (event !== "All")
-            {
-                filteredData = filteredData.filter((fd) => fd.event === event)
-            }
+            
 
             filteredData = filteredData.sort((y,x) => x.totalMarks - y.totalMarks)
             const maleData = filteredData.filter((md) => md.gender === "Male");
@@ -178,6 +209,7 @@ export default function Leadboard(){
                                 <option>Group 2</option>
                                 <option>Group 3</option>
                                 <option>Group 4</option>
+                                <option>Group 2 & Group 3 - Group Events</option>
                             </select>
                         </div>
                         <div className="flex flex-col">
@@ -232,12 +264,6 @@ export default function Leadboard(){
                                     <option>Elocution (English)</option>
                                     <option>Elocution (Tamil)</option>
                                     <option>Drawing</option>
-                                    <option>Altar Decoration - Boys</option>
-                                    <option>Altar Decoration - Girls</option>
-                                    <option>Devotional Singing - Boys</option>
-                                    <option>Devotional Singing - Girls</option>
-                                    <option>Rudram Namakam Chanting - Boys</option>
-                                    <option>Rudram Namakam Chanting - Girls</option>
                                 </select>
                             ) : (group === "Group 3") ? (
                                 <select value={event} onChange={(e) => {setEvent(e.target.value)}} className="font-sans rounded-xl border w-65 ml-4 md:ml-0 md:w-50 mt-2 mb-4 mr-4 p-2">
@@ -254,19 +280,23 @@ export default function Leadboard(){
                                     <option>Elocution (Tamil)</option>
                                     <option>Drawing</option>
                                     <option>Quiz</option>
+                                </select>
+                            ) : (group === "Group 4") ? (
+                                <select value={event} onChange={(e) => {setEvent(e.target.value)}} className="font-sans rounded-xl border w-65 ml-4 md:ml-0 md:w-50 mt-2 mb-4 mr-4 p-2">
+                                    <option value="All">All</option>
+                                    <option>Quiz</option>
+                                </select>
+                            ) : (
+                                <select value={event} onChange={(e) => {setEvent(e.target.value)}} className="font-sans rounded-xl border w-65 ml-4 md:ml-0 md:w-50 mt-2 mb-4 mr-4 p-2">
+                                    <option value="All">All</option>
                                     <option>Altar Decoration - Boys</option>
                                     <option>Altar Decoration - Girls</option>
                                     <option>Devotional Singing - Boys</option>
                                     <option>Devotional Singing - Girls</option>
                                     <option>Rudram Namakam Chanting - Boys</option>
-                                    <option>Rudram Namakam Chanting - Girls</option>
-                                </select>
-                            ) : 
-                                <select value={event} onChange={(e) => {setEvent(e.target.value)}} className="font-sans rounded-xl border w-65 ml-4 md:ml-0 md:w-50 mt-2 mb-4 mr-4 p-2">
-                                    <option value="All">All</option>
-                                    <option>Quiz</option>
-                                </select>
-                            }
+                                    <option>Rudram Namakam Chanting - Girls</option> 
+                                </select>  
+                            )}
                         </div>                   
                     </div>
                 </div>
@@ -319,7 +349,7 @@ export default function Leadboard(){
                                         <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Samithi</td>
                                         <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Group</td>
                                         <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Event</td>
-                                        <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Marks</td>
+                                        <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Total Marks</td>
                                     </tr>
                                 </thead>
                                 <tbody>

@@ -85,7 +85,7 @@ export default function Judging(){
     const [adRM,setAdRM] = useState(0);
     const [adTeamwork,setAdTeamwork] = useState(0);
     const [adTotal,setAdTotal] = useState(0);
-    const [disabled,setDisabed] = useState(false);
+    const [disabled,setDisabled] = useState(false);
 
     function uncut(a)
     {
@@ -149,9 +149,7 @@ export default function Judging(){
                 setJudgeEmail(user.email);
                 setJudge(cut(user.email).toUpperCase());
                 if (user.email === "admin@dlbts.ks")
-                    setDisabed(true);
-                else    
-                    setDisabed(false);
+                    setDisabled(true);
             }
         })
         setLoading(false);
@@ -786,7 +784,6 @@ export default function Judging(){
     function handleLogout(){
         signOut(auth)
             .then(() => {
-                alert("Sairam! Signed out successfully");
                 router.push("/");
             })
             .catch((error) => {
@@ -796,6 +793,10 @@ export default function Judging(){
 
     function handleClose(){
         setClicked(false);
+    }
+
+    function handleLock(){
+        setDisabled(true);
     }
     
     return(
@@ -808,6 +809,9 @@ export default function Judging(){
                             <h1 className="font-sans text-sm md:text-xl px-3">{judgeEmail}</h1>
                         </div>
                         <div className="flex flex-col md:flex md:flex-row md:justify-end">
+                            {judgeEmail.startsWith("judge01") &&
+                                <button onClick={handleLock} className="font-sans font-semibold text-md md:text-xl rounded-lg bg-indigo-100 px-2 md:rounded-xl h-8 mt-2 mr-1 md:h-15 md:mx-2 md:my-2 hover:bg-indigo-500 hover:text-white hover:cursor-pointer transition duration-300 ease-in-out">Lock Evaluation</button>
+                            }
                             <button onClick={handleEventsClick} className="font-sans font-semibold text-md md:text-xl rounded-lg bg-yellow-100 px-2 md:rounded-xl h-8 mt-2 mr-1 md:h-15 md:mx-2 md:my-2 hover:bg-yellow-500 hover:cursor-pointer transition duration-300 ease-in-out">Leaderboard</button>
                             <button onClick={handleLogout} className="font-sans font-semibold text-sm md:text-xl rounded-lg bg-red-200 px-2 md:rounded-xl mx-2 h-8 mt-3 md:h-15 md:mx-2 md:my-2 hover:bg-red-500 hover:cursor-pointer hover:text-white transition duration-300 ease-in-out">Logout</button>
                         </div>

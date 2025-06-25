@@ -85,6 +85,7 @@ export default function Judging(){
     const [adRM,setAdRM] = useState(0);
     const [adTeamwork,setAdTeamwork] = useState(0);
     const [adTotal,setAdTotal] = useState(0);
+    const [disabled,setDisabed] = useState(false);
 
     function uncut(a)
     {
@@ -147,6 +148,10 @@ export default function Judging(){
             {
                 setJudgeEmail(user.email);
                 setJudge(cut(user.email).toUpperCase());
+                if (user.email === "admin@dlbts.ks")
+                    setDisabed(true);
+                else    
+                    setDisabed(false);
             }
         })
         setLoading(false);
@@ -157,7 +162,8 @@ export default function Judging(){
         async function fetchData(){
             setLoading(true);
             const q = query(
-                collection(db,"studentDetails")
+                collection(db,"studentDetails"),
+                where("attendance","==","P")
             );
             const querySnapshot = await getDocs(q);
             const data = querySnapshot.docs.map((doc) => doc.data());
@@ -248,7 +254,7 @@ export default function Judging(){
         setAmGroup(group);
         setAmGender(gender);
         setAmSamithi(samithi);
-        const currentId = cleanName(name)+dob+judgeEmail.slice(0,7);
+        const currentId = cleanName(name)+dob+judgeEmail.slice(0,7)+event;
         async function getData(){
             setLoading(true);
             const q = query(
@@ -450,7 +456,7 @@ export default function Judging(){
     async function updateMarks(){
         setClicked(false);
         setLoading(true);
-        const id = cleanName(amName) + amDoB + judgeEmail.slice(0,7);
+        const id = cleanName(amName) + amDoB + judgeEmail.slice(0,7) + event;
         const q = query(
             collection(db,"studentMarks"),
             where("id","==",id),
@@ -1108,7 +1114,7 @@ export default function Judging(){
                                                     )
                                                 }
                                             </td>
-                                            <td className="font-sans px-2 py-2 font-semibold border border-black"><button onClick={() => {handleAwardMarks(student.name,student.dob,student.group,student.gender,student.samithi)}} className="bg-yellow-200 p-2 rounded-xl shadow-xl hover:cursor-pointer">Award Marks</button></td>
+                                            <td className="font-sans px-2 py-2 font-semibold border border-black"><button disabled={disabled} onClick={() => {handleAwardMarks(student.name,student.dob,student.group,student.gender,student.samithi)}} className="bg-yellow-200 p-2 rounded-xl shadow-xl hover:cursor-pointer">Award Marks</button></td>
                                         </tr>
                                     ))
                                 }

@@ -6,6 +6,7 @@ import { signOut } from "firebase/auth";
 import { collection, getDocs, query } from "firebase/firestore";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { fileURLToPath } from "url";
 
 
 export default function EventLeaderboard(){
@@ -39,7 +40,8 @@ export default function EventLeaderboard(){
     const groupMap = {
         "group1" : "Group 1",
         "group2" : "Group 2",
-        "group3" : "Group 3"
+        "group3" : "Group 3",
+        "group2%26group3groupevents" : "Group Events - Group 2 & 3"
     }
 
     const [name,setName] = useState("");
@@ -47,6 +49,7 @@ export default function EventLeaderboard(){
     const [group,setGroup] = useState("");
     const [event,setEvent] = useState("");
     const [studentData,setStudentData] = useState([]);
+    const [judgeEmails, setJudgeEmails] = useState([]);
     const [loading,setLoading] = useState(false);
     const [maleCount,setMaleCount] = useState(0);
     const [femaleCount,setFemaleCount] = useState(0);
@@ -120,28 +123,107 @@ export default function EventLeaderboard(){
             );
             const querySnapshot = await getDocs(q);
             const data = querySnapshot.docs.map((doc) => doc.data());
-            let filteredData = data.filter((fd) => fd.group === group && fd.event === event);
-            for (let i=0;i<filteredData.length;i++)
+
+            let filteredData;
+            if (group === "Group 1" && event === "Devotional Singing - Boys")
             {
-                let sum = filteredData[i].totalMarks;
-                for (let j=i+1;j<filteredData.length;j++)
-                {
-                    if (filteredData[i].name === filteredData[j].name && filteredData[i].dob === filteredData[j].dob && filteredData[i].samithi === filteredData[j].samithi)
-                    {
-                        sum += filteredData[j].totalMarks;
-                        filteredData.splice(j,1);
-                        j--;
-                    }
-                }
-                filteredData[i].totalMarks = sum;
+                filteredData = data.filter((fd) => (fd.group === "Group 1" && fd.event === "Devotional Singing - Boys"));
             }
-            filteredData = filteredData.sort((y,x) => x.totalMarks - y.totalMarks);
-            const maleData = filteredData.filter((md) => md.gender === "Male");
-            const femaleData = filteredData.filter((fd) => fd.gender === "Female");
+            else if (group === "Group 1" && event === "Devotional Singing - Girls")
+            {
+                filteredData = data.filter((fd) => (fd.group === "Group 1" && fd.event === "Devotional Singing - Girls"));
+            }
+            else if (event === "Altar Decoration - Boys")
+            {
+                filteredData = data.filter((fd) => ((fd.group === "Group 2" || fd.group === "Group 3") && fd.event === "Altar Decoration - Boys"));
+            }
+            else if (event === "Altar Decoration - Girls")
+            {
+                filteredData = data.filter((fd) => ((fd.group === "Group 2" || fd.group === "Group 3") && fd.event === "Altar Decoration - Girls"));
+            }
+            else if (event === "Devotional Singing - Boys")
+            {
+                filteredData = data.filter((fd) => ((fd.group === "Group 2" || fd.group === "Group 3") && fd.event === "Devotional Singing - Boys"));
+            }
+            else if (event === "Devotional Singing - Girls")
+            {
+                filteredData = data.filter((fd) => ((fd.group === "Group 2" || fd.group === "Group 3") && fd.event === "Devotional Singing - Girls"));
+            }
+            else if (event === "Rudram Namakam Chanting - Boys")
+            {
+                filteredData = data.filter((fd) => ((fd.group === "Group 2" || fd.group === "Group 3") && fd.event === "Rudram Namakam Chanting - Boys"));
+            }
+            else if (event === "Rudram Namakam Chanting - Girls")
+            {
+                filteredData = data.filter((fd) => ((fd.group === "Group 2" || fd.group === "Group 3") && fd.event === "Rudram Namakam Chanting - Girls"));
+            }
+            else 
+            {
+                filteredData = data.filter((fd) => fd.group === group && fd.event === event);
+            }
+            let mergedData = [];
+
+            for (let i = 0; i < filteredData.length; i++) {
+                const current = filteredData[i];
+
+                // Extract judge number from email (e.g., judge01g1bh@dlbts.ks -> 1)
+                let judgeNumber = null;
+                const judgeMatch = current.judge.match(/^judge(0[1-3])/);
+                if (judgeMatch) {
+                    judgeNumber = parseInt(judgeMatch[1], 10); // 1, 2, or 3
+                }
+
+                if (!judgeNumber) continue; // Skip if judge email doesn't match pattern
+
+                const existing = mergedData.find(s =>
+                    s.name === current.name &&
+                    s.dob === current.dob &&
+                    s.samithi === current.samithi
+                );
+
+                const marks = Number(current.totalMarks) || 0;
+
+                if (existing) {
+                    existing[`judge${judgeNumber}`] = marks;
+                } else {
+                    const newStudent = {
+                        name: current.name,
+                        dob: current.dob,
+                        gender: current.gender,
+                        samithi: current.samithi,
+                        judge1: 0,
+                        judge2: 0,
+                        judge3: 0,
+                    };
+                    newStudent[`judge${judgeNumber}`] = marks;
+                    mergedData.push(newStudent);
+                }
+            }
+
+            // Compute total marks
+            for (const student of mergedData) {
+                student.totalMarks = (student.judge1 || 0) + (student.judge2 || 0) + (student.judge3 || 0);
+            }
+
+            mergedData = mergedData.sort((y,x) => x.totalMarks - y.totalMarks);
+            const maleData = mergedData.filter((md) => md.gender === "Male");
+            const femaleData = mergedData.filter((fd) => fd.gender === "Female");
             setMaleCount(maleData.length);
             setFemaleCount(femaleData.length);
-            setTotalCount(filteredData.length);
-            setStudentData(filteredData);
+            setTotalCount(mergedData.length);
+            setStudentData(mergedData);
+            console.log(filteredData);
+            
+            const judgeEmailsSet = new Set();
+            mergedData.forEach(student => {
+                if (student.judgeMarks) {
+                    Object.keys(student.judgeMarks).forEach(email => judgeEmailsSet.add(email));
+                }
+            });
+            const judgeEmailList = Array.from(judgeEmailsSet);
+            setJudgeEmails(judgeEmailList);
+
+
             setLoading(false);
         }
         getData();
@@ -201,7 +283,6 @@ export default function EventLeaderboard(){
                     <div className="flex flex-col justify-center items-center">
                         <h1 className="flex justify-center font-sans font-bold mt-2 text-2xl">Leaderboard</h1>
                         <h1 className="flex justify-center font-sans font-bold ml-2 text-lg md:text-2xl">{group+" --> "+event}</h1>
-                        <h1 className="flex justify-center font-sans ml-2 mr-2 text-md">Sairam! Please note that the mark displayed here is the TOTAL SCORE given to the student, as evaluated by all the judges</h1>
 
                         <div className="overflow-x-auto w-70 md:w-175 lg:w-245 mt-4 mb-4">
                             <table className="mx-auto text-center">
@@ -211,18 +292,24 @@ export default function EventLeaderboard(){
                                         <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">DOB</td>
                                         <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Gender</td>
                                         <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Samithi</td>
-                                        <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Marks</td>
+                                        <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Judge 1</td>
+                                        <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Judge 2</td>
+                                        <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Judge 3</td>
+                                        <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Total Marks</td>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {
                                         studentData.map((student) => (
-                                            <tr key={student.id} className="hover:bg-gray-200 transition duration-300 ease-in-out">
+                                            <tr key={`${student.name}_${student.dob}_${student.samithi}`} className="hover:bg-gray-200 transition duration-300 ease-in-out">
                                                 <td className="font-sans text-lg px-4 py-2 border border-black">{student.name}</td>
                                                 <td className="font-sans text-lg px-4 py-2 border border-black">{student.dob}</td>
                                                 <td className="font-sans text-lg px-4 py-2 border border-black">{student.gender}</td>
                                                 <td className="font-sans text-lg px-4 py-2 border border-black">{student.samithi}</td>
-                                                <td className="font-sans text-lg px-4 py-2 border border-black">{student.totalMarks}</td>
+                                                <td className="font-sans text-lg px-4 py-2 border border-black">{student.judge1}</td>
+                                                <td className="font-sans text-lg px-4 py-2 border border-black">{student.judge2}</td>
+                                                <td className="font-sans text-lg px-4 py-2 border border-black">{student.judge3}</td>
+                                                <td className="font-sans text-lg px-4 py-2 border border-black">{student.totalMarks ?? 0}</td>
                                             </tr>
                                         ))
                                     }

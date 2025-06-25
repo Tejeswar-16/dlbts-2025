@@ -167,81 +167,89 @@ export default function Register(){
             if (grpGenderError !== "")
                 alert(grpGenderError);
             if (errorDOJ !== "")
-                alert(errorDOJ)
+                alert(errorDOJ);
             if (errorGrp2Exam !== "")
                 alert(errorGrp2Exam);
         } 
         else 
         {
-            try
+            if (event1 === "Select an event" && groupEvent === "Select an event")
             {
-                const id = cleanName(name)+dob;
-                setLoading(true);
-                const q = query(
-                    collection(db,"studentDetails"),
-                    where("id","==",id),
-                    where("dob","==",dob),
-                );
-                const querySnapshot = await getDocs(q);
-                if (querySnapshot.empty)
+                alert("Sairam! Kindly select an event");
+            }
+            else
+            {
+                try
                 {
-                    await addDoc(collection(db,"studentDetails"),{
-                        id : id,
-                        name : name,
-                        dob : dob,
-                        doj : doj,
-                        grp2Exam : grp2Exam,
-                        gender : gender,
-                        samithi : samithi,
-                        group : group,
-                        event1 : event1,
-                        event2 : event2,
-                        groupEvent : groupEvent,
-                        timestamp : new Date()
-                    });
-                    alert("Sairam! Registered Successfully. Kindly refresh the screen to get the updated data");
-                }
-                else
-                {
-                    console.log("Id"+id);
-                    querySnapshot.forEach(async (document) => {
-                        const docRef = doc(db,"studentDetails",document.id);
-                        await updateDoc(docRef,{
+                    const id = cleanName(name)+dob;
+                    setLoading(true);
+                    const q = query(
+                        collection(db,"studentDetails"),
+                        where("id","==",id),
+                        where("dob","==",dob),
+                    );
+                    const querySnapshot = await getDocs(q);
+                    if (querySnapshot.empty)
+                    {
+                        await addDoc(collection(db,"studentDetails"),{
                             id : id,
                             name : name,
                             dob : dob,
                             doj : doj,
-                            grp2Exam : grp2Exam,
+                            grp2Exam : grp2Exam !== "" ? grp2Exam : "N/A",
                             gender : gender,
                             samithi : samithi,
                             group : group,
                             event1 : event1,
                             event2 : event2,
                             groupEvent : groupEvent,
+                            attendance : "A",
                             timestamp : new Date()
                         });
-                    });
-                    alert("Sairam! Updated Successfully. Kindly refresh the screen to view the update");
+                        alert("Sairam! Registered Successfully. Kindly refresh the screen to get the updated data");
+                    }
+                    else
+                    {
+                        querySnapshot.forEach(async (document) => {
+                            const docRef = doc(db,"studentDetails",document.id);
+                            await updateDoc(docRef,{
+                                id : id,
+                                name : name,
+                                dob : dob,
+                                doj : doj,
+                                grp2Exam : grp2Exam,
+                                gender : gender,
+                                samithi : samithi,
+                                group : group,
+                                event1 : event1,
+                                event2 : event2,
+                                groupEvent : groupEvent,
+                                attendance : "A",
+                                timestamp : new Date()
+                            });
+                        });
+                        alert("Sairam! Updated Successfully. Kindly refresh the screen to view the update");
+                    }
                 }
-            }
-            catch(error)
-            {
-                console.log(error.message);
-            }
-            finally
-            {
-                setName("");
-                setDob("");
-                setDoj("");
-                setGender("");
-                setGrp2Exam("");
-                setSamithi("Select a Samithi");
-                setGroup("Select a Group");
-                setEvent1("Select an event");
-                setEvent2("Select an event");
-                setGroupEvent("Select an event");
-                setClicked(false);
-                setLoading(false);
+                catch(error)
+                {
+                    console.log(error.message);
+                }
+                finally
+                {
+                    setName("");
+                    setDob("");
+                    setDoj("");
+                    setGender("");
+                    setGrp2Exam("");
+                    setSamithi(samithiMap[email]);
+                    setGroup("Select a Group");
+                    setEvent1("Select an event");
+                    setEvent2("Select an event");
+                    setGroupEvent("Select an event");
+                    setClicked(false);
+                    setLoading(false);
+                }
             }   
         }
     }
@@ -300,7 +308,8 @@ export default function Register(){
             );
             const querySnapshot = await getDocs(q);
             const data = querySnapshot.docs.map((doc) => doc.data());
-            const filteredData = data.filter((fd) => fd.samithi === samithiMap[email]);
+            let filteredData = data.filter((fd) => fd.samithi === samithiMap[email]);
+            filteredData = filteredData.sort((y,x) => x.timestamp - y.timestamp);
             setStudentData(filteredData);
             setLoading(false);
         }
@@ -314,7 +323,7 @@ export default function Register(){
         setDoj("");
         setGender("");
         setGrp2Exam("");
-        setSamithi("Select a Samithi");
+        setSamithi(samithiMap[email]);
         setGroup("Select a Group");
         setEvent1("Select an event");
         setEvent2("Select an event");
@@ -325,7 +334,7 @@ export default function Register(){
         setClicked(true);
         setName(nameValue);
         setGroup(grpValue);
-        setGrp2Exam(grp2ExamValue);
+        setGrp2Exam(grp2ExamValue !== "" ? grp2ExamValue : "N/A");
         setDob(dobValue);
         setDoj(dojValue);
         setGender(genderValue);
@@ -487,25 +496,7 @@ export default function Register(){
                                         Samithi Name
                                     </div>
                                     <div>
-                                        <select value={samithi} onChange={(e) => {setSamithi(e.target.value)}} required className="p-3 mb-4 mx-2 font-sans md:w-180 w-68 text-lg lg:mx-4 lg:mb-0 lg:w-210 rounded-xl border">
-                                            <option value="">Select a Samithi</option>
-                                            <option>Chengalpet</option>
-                                            <option>Collectorate</option>
-                                            <option>Guduvancheri</option>
-                                            <option>Indra Nagar</option>
-                                            <option>Irumbuliyur</option>
-                                            <option>Little Kancheepuram</option>
-                                            <option>Madambakkam</option>
-                                            <option>Main Kancheepuram</option>
-                                            <option>Mannivakkam</option>
-                                            <option>Maraimalai Nagar</option>
-                                            <option>Parvathi Nagar</option>
-                                            <option>Perungalathur</option>
-                                            <option>Poondi Bazar</option>
-                                            <option>Sothupakkam</option>
-                                            <option>Sriperumpudur</option>
-                                            <option>Tambaram</option>
-                                        </select>
+                                        <input disabled defaultValue={samithiMap[email]} onChange={(e)=>{setSamithi(e.target.value)}} required className="p-3 mb-4 ml-2 w-68 font-sans text-lg md:w-180 lg:mx-4 lg:mb-0 lg:w-210 rounded-xl border" type="text"/>
                                     </div>
                                 </div>
 

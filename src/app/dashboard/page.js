@@ -5,7 +5,7 @@ import { auth } from "../_util/config";
 import LogisticsList from "../LogisticsList";
 import Image from "next/image";
 import { db } from "../_util/config";
-import { query, collection, getDocs } from "firebase/firestore";
+import { query, collection, getDocs, doc, updateDoc, where } from "firebase/firestore";
 import { useRouter } from "next/navigation";
 import { signOut } from "firebase/auth";
 
@@ -21,6 +21,7 @@ export default function Dashboard(){
     const [countFemale,setCountFemale] = useState(0);
     const [filterHeading,setFilterHeading] = useState("Search by Name, Group, Samithi or Event");
     const [loading,setLoading] = useState(false);
+    const [refresh,setRefresh] = useState(0);
     const [studentData,setStudentData] = useState([]);
 
     const router = useRouter();
@@ -94,6 +95,7 @@ export default function Dashboard(){
             {
                 filteredContent = filteredContent.filter((fc) => fc.samithi === searchSamithi);
             }
+            filteredContent = filteredContent.sort((x,y) => x.name.localeCompare(y.name));
             setStudentData(filteredContent);
 
             if (searchName !== "" || searchGroup !== "All" || searchEvent !== "All" || searchSamithi !== "All")
@@ -134,6 +136,21 @@ export default function Dashboard(){
 
     function handleEClick(){
         router.push("/evaluation")
+    }
+
+    const handleAttendance = async (nameValue) => {
+         const q = query(
+            collection(db,"studentDetails"),
+            where("name","==",nameValue)
+         );
+         const querySnapshot = await getDocs(q);
+         querySnapshot.forEach(async (document) => {
+            const docRef = doc(db,"studentDetails",document.id);
+            const currentAttendance = document.data().attendance;
+            await updateDoc(docRef,{
+                attendance : (currentAttendance === "P") ? "A" : "P"
+            });
+         });
     }
 
     return (
@@ -430,12 +447,15 @@ export default function Dashboard(){
                     <div className="rounded-xl overflow-hidden border border-gray-300 mx-auto overflow-x-auto lg:w-240 border border-black">
                         <table className="text-center w-357">
                             <thead className="bg-blue-950 text-white">
-                                <tr>
+                                <tr>    
+                                    <th className="font-sans px-4 py-2 font-semibold border border-gray-400">Attendance</th>
                                     <th className="font-sans px-4 py-2 font-semibold border border-gray-400">Name</th>
                                     <th className="font-sans px-4 py-2 font-semibold border border-gray-400">Gender</th>
-                                    <th className="font-sans px-4 py-2 font-semibold border border-gray-400">DoB</th>
+                                    <th className="font-sans px-4 py-2 font-semibold border border-gray-400">DOB</th>
+                                    <th className="font-sans px-4 py-2 font-semibold border border-gray-400">DOJ</th>
                                     <th className="font-sans px-4 py-2 font-semibold border border-gray-400">Group</th>
                                     <th className="font-sans px-4 py-2 font-semibold border border-gray-400">Samithi</th>
+                                    <th className="font-sans px-4 py-2 font-semibold border border-gray-400">Group 2 Exam</th>
                                     <th className="font-sans px-4 py-2 font-semibold border border-gray-400">Event 1</th>
                                     <th className="font-sans px-4 py-2 font-semibold border border-gray-400">Event 2</th>
                                     <th className="font-sans px-4 py-2 font-semibold border border-gray-400">Group Event</th>
@@ -445,12 +465,15 @@ export default function Dashboard(){
                             {
                                 (!loading &&   
                                     studentData.map((student) => (
-                                        <tr key={student.id} className="hover:bg-gray-200 transition duration-300 ease-in-out">
+                                        <tr key={student.id} className={student.attendance === "P" ? "hover:bg-green-200 bg-green-100 transition duration-300 ease-in-out" : "hover:bg-red-200 bg-red-100 transition duration-300 ease-in-out"}>
+                                            <td onClick={() => handleAttendance(student.name)} className="font-sans text-xl px-4 py-2 border border-black hover:cursor-pointer select-none">{student.attendance}</td>
                                             <td className="font-sans text-xl px-4 py-2 border border-black">{student.name}</td>
                                             <td className="font-sans text-xl px-4 py-2 border border-black">{student.gender}</td>
                                             <td className="font-sans text-xl px-4 py-2 border border-black">{student.dob}</td>
+                                            <td className="font-sans text-xl px-4 py-2 border border-black">{student.doj}</td>
                                             <td className="font-sans text-xl px-4 py-2 border border-black">{student.group}</td>
                                             <td className="font-sans text-xl px-4 py-2 border border-black">{student.samithi}</td>
+                                            <td className="font-sans text-xl px-4 py-2 border border-black">{student.grp2Exam}</td>
                                             <td className="font-sans text-xl px-4 py-2 border border-black">{student.event1}</td>
                                             <td className="font-sans text-xl px-4 py-2 border border-black">{student.event2}</td>
                                             <td className="font-sans text-xl px-4 py-2 border border-black">{student.groupEvent}</td>

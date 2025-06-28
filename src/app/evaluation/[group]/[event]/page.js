@@ -35,6 +35,42 @@ export default function Judging(){
         "rudramnamakamchantinggirls" : "Rudram Namakam Chanting - Girls",
     }
 
+    const lockMap = {
+        "g1bh@dlbts.ks" : ["Group 1","Bhajans"],
+        "g1sl@dlbts.ks" : ["Group 1","Slokas"],
+        "g1ve@dlbts.ks" : ["Group 1","Vedam"],
+        "g1tc@dlbts.ks" : ["Group 1","Tamizh Chants"],
+        "g1ste@dlbts.ks" : ["Group 1","Story Telling (English)"],
+        "g1stt@dlbts.ks" : ["Group 1","Story Telling (Tamil)"],
+        "g1dw@dlbts.ks" : ["Group 1","Drawing"],
+        "g1dsb@dlbts.ks" : ["Group 1","Devotional Singing - Boys"],
+        "g1dsg@dlbts.ks" : ["Group 1","Devotional Singing - Girls"],
+
+        "g2bb@dlbts.ks" : ["Group 2","Bhajans - Boys"],
+        "g2bg@dlbts.ks" : ["Group 2","Bhajans - Girls"],
+        "g2sb@dlbts.ks" : ["Group 2","Slokas - Boys"],
+        "g2sg@dlbts.ks" : ["Group 2","Slokas - Girls"],
+        "g2vb@dlbts.ks" : ["Group 2","Vedam - Boys"],
+        "g2vg@dlbts.ks" : ["Group 2","Vedam - Girls"],
+        "g2tcb@dlbts.ks" : ["Group 2","Tamizh Chants - Boys"],
+        "g2tcg@dlbts.ks" : ["Group 2","Tamizh Chants - Girls"],
+        "g2ee@dlbts.ks" : ["Group 2","Elocution (English)"],
+        "g2et@dlbts.ks" : ["Group 2","Elocution (Tamil)"],
+        "g2dw@dlbts.ks" : ["Group 2","Drawing"],
+
+        "g3bb@dlbts.ks" : ["Group 3","Bhajans - Boys"],
+        "g3bg@dlbts.ks" : ["Group 3","Bhajans - Girls"],
+        "g3sb@dlbts.ks" : ["Group 3","Slokas - Boys"],
+        "g3sg@dlbts.ks" : ["Group 3","Slokas - Girls"],
+        "g3vb@dlbts.ks" : ["Group 3","Vedam - Boys"],
+        "g3vg@dlbts.ks" : ["Group 3","Vedam - Girls"],
+        "g3tcb@dlbts.ks" : ["Group 3","Tamizh Chants - Boys"],
+        "g3tcg@dlbts.ks" : ["Group 3","Tamizh Chants - Girls"],
+        "g3ee@dlbts.ks" : ["Group 3","Elocution (English)"],
+        "g3et@dlbts.ks" : ["Group 3","Elocution (Tamil)"],
+        "g3dw@dlbts.ks" : ["Group 3","Drawing"],
+    }
+
     const params = useParams();
 
     const [group,setGroup] = useState("");
@@ -278,7 +314,8 @@ export default function Judging(){
                         group : "",
                         name : "",
                         samithi : "",
-                        judge : ""
+                        judge : "",
+                        lock : ""
                     }]
                 }
                 const mark = filteredData[0];
@@ -305,7 +342,8 @@ export default function Judging(){
                         group : "",
                         name : "",
                         samithi : "",
-                        judge : ""
+                        judge : "",
+                        lock : ""
                     }]
                 }
                 const mark = filteredData[0];
@@ -332,7 +370,8 @@ export default function Judging(){
                         group : "",
                         name : "",
                         samithi : "",
-                        judge : ""
+                        judge : "",
+                        lock : ""
                     }]
                 }
                 const mark = filteredData[0];
@@ -357,7 +396,8 @@ export default function Judging(){
                         group : "",
                         name : "",
                         samithi : "",
-                        judge : ""
+                        judge : "",
+                        lock : ""
                     }]
                 }
                 const mark = filteredData[0];
@@ -381,7 +421,8 @@ export default function Judging(){
                         group : "",
                         name : "",
                         samithi : "",
-                        judge : ""
+                        judge : "",
+                        lock : ""
                     }]
                 }
                 const mark = filteredData[0];
@@ -408,7 +449,8 @@ export default function Judging(){
                         group : "",
                         name : "",
                         samithi : "",
-                        judge : ""
+                        judge : "",
+                        lock : ""
                     }]
                 }
                 const mark = filteredData[0];
@@ -435,7 +477,8 @@ export default function Judging(){
                         group : "",
                         name : "",
                         samithi : "",
-                        judge : ""
+                        judge : "",
+                        lock : ""
                     }]
                 }
                 const mark = filteredData[0];
@@ -501,7 +544,8 @@ export default function Judging(){
                         pronunciation : stcPronunciation,
                         memory : stcMemory,
                         totalMarks : total,
-                        judge : judgeEmail  
+                        judge : judgeEmail,
+                        lock : ""  
                 });
                 alert("Sairam! Marks added successfully!");
             }
@@ -547,7 +591,8 @@ export default function Judging(){
                         talam : bgbTalam,
                         memory_pronunciation : bgbMP,
                         totalMarks : bgbTotal,
-                        judge : judgeEmail  
+                        judge : judgeEmail,
+                        lock : ""  
                 });
                 alert("Sairam! Marks added successfully!");
             }   
@@ -591,7 +636,8 @@ export default function Judging(){
                         intonation : vIntonation,
                         memory : vMemory,
                         totalMarks : vTotal,
-                        judge : judgeEmail 
+                        judge : judgeEmail,
+                        lock : "" 
                 });
                 alert("Sairam! Marks added successfully!");
             }
@@ -633,7 +679,8 @@ export default function Judging(){
                         content : sContent,
                         language : sLanguage,
                         totalMarks : sTotal,
-                        judge : judgeEmail
+                        judge : judgeEmail,
+                        lock : ""
                 });
                 alert("Sairam! Marks added successfully!");
             }
@@ -675,7 +722,8 @@ export default function Judging(){
                         colour_coordination : dCC,
                         layout : dLayout,
                         totalMarks : dTotal,
-                        judge : judgeEmail
+                        judge : judgeEmail,
+                        lock : ""
                 });
                 alert("Sairam! Marks added successfully!");
             }
@@ -723,7 +771,8 @@ export default function Judging(){
                         memory_pronunciation : dsMP,
                         harmony : dsHarmony,
                         totalMarks : dsTotal,
-                        judge : judgeEmail
+                        judge : judgeEmail,
+                        lock : ""
                 });
                 alert("Sairam! Marks added successfully!");
             }
@@ -765,7 +814,8 @@ export default function Judging(){
                         resource_management : adRM,
                         teamwork : adTeamwork,
                         totalMarks : adTotal,
-                        judge : judgeEmail
+                        judge : judgeEmail,
+                        lock : ""
                 });
                 alert("Sairam! Marks added successfully!");
             }
@@ -795,9 +845,51 @@ export default function Judging(){
         setClicked(false);
     }
 
-    function handleLock(){
-        setDisabled(true);
+    async function handleLock(){
+        const confirmed = window.confirm("Sairam! Once you lock, you won't be able to edit the marks");
+        if(confirmed)
+        {
+            if (judgeEmail)
+            {
+                const q = query(
+                    collection(db,"studentMarks"),
+                    where("group","==",lockMap[judgeEmail.slice(7)][0]),
+                    where("event","==",lockMap[judgeEmail.slice(7)][1])
+                );
+                const querySnapshot = await getDocs(q);
+                querySnapshot.forEach(async (document) => {
+                    const docRef = doc(db,"studentMarks",document.id);
+                    await updateDoc(docRef,{
+                            lock : "true"
+                        });
+                    });
+            }
+            handleLogout();
+        }
     }
+
+    useEffect(() => {
+        async function fetchLock(){
+            if (judgeEmail)
+            {
+                const q = query(
+                    collection(db,"studentMarks"),
+                        where("group","==",lockMap[judgeEmail.slice(7)][0]),
+                    where("event","==",lockMap[judgeEmail.slice(7)][1])
+                );
+                const querySnapshot = await getDocs(q);
+                const data = querySnapshot.docs.map((doc) => doc.data());
+                if (data.length !== 0)
+                {
+                    if (data[0].lock === "true")
+                    {
+                        setDisabled(true);
+                    }
+                }
+            }
+        }
+        fetchLock();
+    },[judgeEmail]);
     
     return(
         <>

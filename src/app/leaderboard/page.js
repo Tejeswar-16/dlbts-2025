@@ -6,7 +6,6 @@ import { auth, db } from "../_util/config";
 import { useRouter } from "next/navigation";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { signOut } from "firebase/auth";
-import Evaluation from "../evaluation/page";
 
 export default function Leadboard(){
     

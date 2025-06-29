@@ -204,11 +204,23 @@ export default function Leadboard(){
         async function fetchLock(){
             if (group !== "All" && event !== "All")
             {
-                const q = query(
-                    collection(db,"studentMarks"),
-                    where("group","==",group),
-                    where("event","==",event)
-                );
+                let q;
+                if (group === "Group 2 & Group 3 - Group Events")
+                {
+                    q = query(
+                        collection(db,"studentMarks"),
+                        where("group","in",["Group 2","Group 3"]),
+                        where("event","==",event)
+                    );
+                }
+                else
+                {
+                    q = query(
+                        collection(db,"studentMarks"),
+                        where("group","==",group),
+                        where("event","==",event)
+                    );
+                }
                 const querySnapshot = await getDocs(q);
                 const data = querySnapshot.docs.map((doc) => doc.data());
                 if (data.length !== 0)

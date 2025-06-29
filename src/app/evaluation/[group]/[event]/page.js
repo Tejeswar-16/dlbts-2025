@@ -69,6 +69,13 @@ export default function Judging(){
         "g3ee@dlbts.ks" : ["Group 3","Elocution (English)"],
         "g3et@dlbts.ks" : ["Group 3","Elocution (Tamil)"],
         "g3dw@dlbts.ks" : ["Group 3","Drawing"],
+
+        "geadb@dlbts.ks" : ["Group 2 & 3","Altar Decoration - Boys"],
+        "geadg@dlbts.ks" : ["Group 2 & 3","Altar Decoration - Girls"],
+        "gedsb@dlbts.ks" : ["Group 2 & 3","Devotional Singing - Boys"],
+        "gedsg@dlbts.ks" : ["Group 2 & 3","Devotional Singing - Girls"],
+        "gencb@dlbts.ks" : ["Group 2 & 3","Rudram Namakam Chanting - Boys"],
+        "gencg@dlbts.ks" : ["Group 2 & 3","Rudram Namakam Chanting - Girls"],
     }
 
     const params = useParams();
@@ -851,11 +858,24 @@ export default function Judging(){
         {
             if (judgeEmail)
             {
-                const q = query(
-                    collection(db,"studentMarks"),
-                    where("group","==",lockMap[judgeEmail.slice(7)][0]),
-                    where("event","==",lockMap[judgeEmail.slice(7)][1])
-                );
+                let q;
+                if (judgeEmail.slice(7,9) === "ge")
+                {
+                    q = query(
+                        collection(db,"studentMarks"),
+                        where("group","in",["Group 2","Group 3"]),
+                        where("event","==",lockMap[judgeEmail.slice(7)][1])
+                    );
+                }
+                else
+                {
+                    q = query(
+                        collection(db,"studentMarks"),
+                        where("group","==",lockMap[judgeEmail.slice(7)][0]),
+                        where("event","==",lockMap[judgeEmail.slice(7)][1])
+                    );
+                }
+                
                 const querySnapshot = await getDocs(q);
                 querySnapshot.forEach(async (document) => {
                     const docRef = doc(db,"studentMarks",document.id);
@@ -864,7 +884,6 @@ export default function Judging(){
                         });
                     });
             }
-            handleLogout();
         }
     }
 
@@ -872,11 +891,23 @@ export default function Judging(){
         async function fetchLock(){
             if (judgeEmail)
             {
-                const q = query(
-                    collection(db,"studentMarks"),
+                let q;
+                if (judgeEmail.slice(7,9) === "ge")
+                {
+                    q = query(
+                        collection(db,"studentMarks"),
+                        where("group","in",["Group 2","Group 3"]),
+                        where("event","==",lockMap[judgeEmail.slice(7)][1])
+                    );
+                }
+                else
+                {
+                    q = query(
+                        collection(db,"studentMarks"),
                         where("group","==",lockMap[judgeEmail.slice(7)][0]),
-                    where("event","==",lockMap[judgeEmail.slice(7)][1])
-                );
+                        where("event","==",lockMap[judgeEmail.slice(7)][1])
+                    );
+                }
                 const querySnapshot = await getDocs(q);
                 const data = querySnapshot.docs.map((doc) => doc.data());
                 if (data.length !== 0)
@@ -902,7 +933,7 @@ export default function Judging(){
                         </div>
                         <div className="flex flex-col md:flex md:flex-row md:justify-end">
                             {judgeEmail.startsWith("judge01") &&
-                                <button onClick={handleLock} className="font-sans font-semibold text-md md:text-xl rounded-lg bg-indigo-100 px-2 md:rounded-xl h-8 mt-2 mr-1 md:h-15 md:mx-2 md:my-2 hover:bg-indigo-500 hover:text-white hover:cursor-pointer transition duration-300 ease-in-out">Lock Evaluation</button>
+                                <button onClick={handleLock} className={!disabled ? `font-sans font-semibold text-md md:text-xl rounded-lg bg-indigo-100 px-2 md:rounded-xl h-8 mt-2 mr-1 md:h-15 md:mx-2 md:my-2 hover:bg-indigo-500 hover:text-white hover:cursor-pointer transition duration-300 ease-in-out` : `font-sans font-semibold text-md md:text-xl rounded-lg bg-indigo-100 px-2 md:rounded-xl h-8 mt-2 mr-1 md:h-15 md:mx-2 md:my-2 hover:cursor-not-allowed transition duration-300 ease-in-out`}>Lock Evaluation</button>
                             }
                             <button onClick={handleEventsClick} className="font-sans font-semibold text-md md:text-xl rounded-lg bg-yellow-100 px-2 md:rounded-xl h-8 mt-2 mr-1 md:h-15 md:mx-2 md:my-2 hover:bg-yellow-500 hover:cursor-pointer transition duration-300 ease-in-out">Leaderboard</button>
                             <button onClick={handleLogout} className="font-sans font-semibold text-sm md:text-xl rounded-lg bg-red-200 px-2 md:rounded-xl mx-2 h-8 mt-3 md:h-15 md:mx-2 md:my-2 hover:bg-red-500 hover:cursor-pointer hover:text-white transition duration-300 ease-in-out">Logout</button>
@@ -1210,7 +1241,7 @@ export default function Judging(){
                                                     )
                                                 }
                                             </td>
-                                            <td className="font-sans px-2 py-2 font-semibold border border-black"><button disabled={disabled} onClick={() => {handleAwardMarks(student.name,student.dob,student.group,student.gender,student.samithi)}} className="bg-yellow-200 p-2 rounded-xl shadow-xl hover:cursor-pointer">Award Marks</button></td>
+                                            <td className="font-sans px-2 py-2 border border-black"><button disabled={disabled} onClick={() => {handleAwardMarks(student.name,student.dob,student.group,student.gender,student.samithi)}} className={!disabled ? `bg-yellow-200 p-2 rounded-xl font-semibold shadow-xl hover:cursor-pointer` : `bg-gray-200 p-2 rounded-xl shadow-xl hover:cursor-not-allowed`}>Award Marks</button></td>
                                         </tr>
                                     ))
                                 }

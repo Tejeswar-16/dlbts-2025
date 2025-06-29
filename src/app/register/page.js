@@ -32,23 +32,29 @@ export default function Register(){
     const [studentData,setStudentData] = useState([]);
     const [clicked,setClicked] = useState(false);
 
-    function handleDojChange(groupValue,joiningDate){
+    function handleDojChange(groupValue,joiningDate,dobValue){
         let currentDOJ = new Date(joiningDate);
+        let currentDOB = new Date(dobValue);
         let grp1Cutoff = new Date("2025-06-25");
         let grp2Cutoff = new Date("2024-12-25");
         let grp3Cutoff = new Date("2022-12-25"); 
-
-        if (groupValue === "Group 1" && currentDOJ>grp1Cutoff){
+        
+        if (currentDOJ<currentDOB)
+            setErrorDOJ("Sairam! DOJ cannot be lesser than DOB");
+        else
+        {
+            if (groupValue === "Group 1" && currentDOJ>grp1Cutoff){
             setErrorDOJ("Sairam! For Group 1, student should have been in Balvikas for a minimum period of SIX MONTHS");
-        }
-        else if (groupValue === "Group 2" && currentDOJ>grp2Cutoff){
-            setErrorDOJ("Sairam! For Group 2, student should have been in Balvikas for a minimum period of ONE YEAR");
-        }
-        else if ((groupValue === "Group 3" || groupValue === "Group 4") && currentDOJ>grp3Cutoff){
-            setErrorDOJ("Sairam! For Group 3 & 4, student should have been in Balvikas for a minimum period of THREE YEARS");
-        }
-        else{
-            setErrorDOJ("");
+            }
+            else if (groupValue === "Group 2" && currentDOJ>grp2Cutoff){
+                setErrorDOJ("Sairam! For Group 2, student should have been in Balvikas for a minimum period of ONE YEAR");
+            }
+            else if ((groupValue === "Group 3" || groupValue === "Group 4") && currentDOJ>grp3Cutoff){
+                setErrorDOJ("Sairam! For Group 3 & 4, student should have been in Balvikas for a minimum period of THREE YEARS");
+            }
+            else{
+                setErrorDOJ("");
+            }
         }
     }
 
@@ -437,13 +443,13 @@ export default function Register(){
                                         Which Group does the student belong to?
                                     </div>
                                     <div>
-                                        <input value="Group 1" checked={group === "Group 1"} onChange={(e)=>{setGroup(e.target.value);handleDojChange(e.target.value,doj);}} required className="p-3 mx-4 font-sans text-lg" type="radio" name="group"/>
+                                        <input value="Group 1" checked={group === "Group 1"} onChange={(e)=>{setGroup(e.target.value);handleDojChange(e.target.value,doj,dob);}} required className="p-3 mx-4 font-sans text-lg" type="radio" name="group"/>
                                         <label className="font-sans text-lg">Group 1</label><br></br>
-                                        <input value="Group 2" checked={group === "Group 2"} onChange={(e)=>{setGroup(e.target.value);handleDojChange(e.target.value,doj);}} className="p-3 mx-4 font-sans text-lg" type="radio" name="group"/>
+                                        <input value="Group 2" checked={group === "Group 2"} onChange={(e)=>{setGroup(e.target.value);handleDojChange(e.target.value,doj,dob);}} className="p-3 mx-4 font-sans text-lg" type="radio" name="group"/>
                                         <label className="font-sans text-lg">Group 2</label><br></br>
-                                        <input value="Group 3" checked={group === "Group 3"} onChange={(e)=>{setGroup(e.target.value);handleDojChange(e.target.value,doj);}} className="p-3 mx-4 font-sans text-lg" type="radio" name="group"/>
+                                        <input value="Group 3" checked={group === "Group 3"} onChange={(e)=>{setGroup(e.target.value);handleDojChange(e.target.value,doj,dob);}} className="p-3 mx-4 font-sans text-lg" type="radio" name="group"/>
                                         <label className="font-sans text-lg">Group 3</label><br></br>
-                                        <input value="Group 4" checked={group === "Group 4"} onChange={(e)=>{setGroup(e.target.value);handleDojChange(e.target.value,doj);}} className="p-3 mx-4 font-sans text-lg" type="radio" name="group"/>
+                                        <input value="Group 4" checked={group === "Group 4"} onChange={(e)=>{setGroup(e.target.value);handleDojChange(e.target.value,doj,dob);}} className="p-3 mx-4 font-sans text-lg" type="radio" name="group"/>
                                         <label className="font-sans text-lg">Group 4</label>
                                 </div>
                                 </div>
@@ -467,7 +473,7 @@ export default function Register(){
                                         Student&apos;s Date of Birth (DOB)
                                     </div>
                                     <div>
-                                        <input value={dob} onChange={(e)=>{setDob(e.target.value);handleDobChange(e.target.value);}} required className="p-3 mb-4 mx-2 font-sans w-68 md:w-180 text-lg w-68 lg:mx-4 lg:mb-0 lg:w-210 rounded-xl border" type="date"/>
+                                        <input value={dob} onChange={(e)=>{setDob(e.target.value);handleDobChange(e.target.value);handleDojChange(group,doj,e.target.value);}} required className="p-3 mb-4 mx-2 font-sans w-68 md:w-180 text-lg w-68 lg:mx-4 lg:mb-0 lg:w-210 rounded-xl border" type="date"/>
                                         <label className="flex justify-center font-sans text-red-500 ml-2 lg:ml-4">{errorDoB}</label>
                                     </div>
                                 </div>
@@ -476,7 +482,7 @@ export default function Register(){
                                         Student&apos;s Date of Joining (DOJ) Balvikas
                                     </div>
                                     <div>
-                                        <input value={doj} onChange={(e)=>{setDoj(e.target.value);handleDojChange(group,e.target.value);}} required className="p-3 mb-4 mx-2 font-sans w-68 md:w-180 text-lg w-68 lg:mx-4 lg:mb-0 lg:w-210 rounded-xl border" type="date"/>
+                                        <input value={doj} onChange={(e)=>{setDoj(e.target.value);handleDojChange(group,e.target.value,dob);}} required className="p-3 mb-4 mx-2 font-sans w-68 md:w-180 text-lg w-68 lg:mx-4 lg:mb-0 lg:w-210 rounded-xl border" type="date"/>
                                         <label className="flex justify-center font-sans text-red-500 ml-2 lg:ml-4">{errorDOJ}</label>
                                     </div>
                                 </div>

@@ -165,14 +165,13 @@ export default function EventLeaderboard(){
             for (let i = 0; i < filteredData.length; i++) {
                 const current = filteredData[i];
 
-                // Extract judge number from email (e.g., judge01g1bh@dlbts.ks -> 1)
                 let judgeNumber = null;
                 const judgeMatch = current.judge.match(/^judge(0[1-3])/);
                 if (judgeMatch) {
                     judgeNumber = parseInt(judgeMatch[1], 10); // 1, 2, or 3
                 }
 
-                if (!judgeNumber) continue; // Skip if judge email doesn't match pattern
+                if (!judgeNumber) continue;
 
                 const existing = mergedData.find(s =>
                     s.name === current.name &&
@@ -199,7 +198,6 @@ export default function EventLeaderboard(){
                 }
             }
 
-            // Compute total marks
             for (const student of mergedData) {
                 student.totalMarks = (student.judge1 || 0) + (student.judge2 || 0) + (student.judge3 || 0);
             }

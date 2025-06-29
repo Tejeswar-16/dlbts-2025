@@ -6,6 +6,7 @@ import { auth, db } from "../_util/config";
 import { useRouter } from "next/navigation";
 import { collection, getDocs, query, where } from "firebase/firestore";
 import { signOut } from "firebase/auth";
+import Evaluation from "../evaluation/page";
 
 export default function Leadboard(){
     
@@ -200,21 +201,29 @@ export default function Leadboard(){
         },1000);
     },[]);
 
-    async function fetchLock(){
-        if (group !== "All" && event !== "All")
-        {
-            const q = query(
-                collection(db,"studentMarks"),
-                where("group","==",group),
-                where("event","==",event)
-            );
-            const querySnapshot = await getDocs(q);
-            const data = querySnapshot.docs.map((doc) => doc.data());
-            if (data.length !== 0)
-                setLock(data[0].lock);
+    useEffect(() => {
+        async function fetchLock(){
+            if (group !== "All" && event !== "All")
+            {
+                const q = query(
+                    collection(db,"studentMarks"),
+                    where("group","==",group),
+                    where("event","==",event)
+                );
+                const querySnapshot = await getDocs(q);
+                const data = querySnapshot.docs.map((doc) => doc.data());
+                if (data.length !== 0)
+                    setLock(data[0].lock);
+                else    
+                    setLock("false");
+            }
+            else 
+            {
+                setLock("false");
+            } 
         }
-    }
-    fetchLock();
+        fetchLock();
+    },[group,event]);
     
     return (
         <>
@@ -372,11 +381,12 @@ export default function Leadboard(){
                 <div className="mx-auto bg-white rounded-xl shadow-xl w-75 md:w-180 lg:w-250 mt-5">
                     <div className="flex flex-col justify-center items-center">
                         <h1 className="font-sans font-bold rounded-xl shadow-lg bg-gray-200 text-black text-2xl p-2 mt-4">Leaderboard</h1>
+                        { console.log(lock)}
                         {
-                            (lock === "true") ? 
-                                <h1 className={`font-sans font-bold rounded-xl shadow-lg transition-colors duration-700 ${colors[index]} text-black text-xl p-2 mt-4`}>Evaluation is Locked</h1>
-                            :
-                                <h1 className={`font-sans font-bold rounded-xl shadow-lg transition-colors duration-700 ${colors[index]} text-black text-xl p-2 mt-4`}>Evaluation in Process</h1>
+                           
+                            <h1 className={`font-sans font-bold rounded-xl shadow-lg transition-colors duration-700 ${colors[index]} text-black text-xl p-2 mt-4`}>
+                                {lock === "true" ? "Evaluation is Locked" : "Evaluation in Process"}
+                            </h1>
                         }
                         {(studentData.length > 3) && (
                             <button onClick={handlePrizeWinners} className="font-sans font-bold rounded-xl shadow-lg bg-gray-200 text-black text-2xl p-2 mt-4 hover:cursor-pointer hover:text-white hover:bg-yellow-800 transition duration-300 ease-in-out">Get top 3 Scorers</button>

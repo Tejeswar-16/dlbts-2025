@@ -5,7 +5,7 @@ import { auth } from "../_util/config";
 import LogisticsList from "../LogisticsList";
 import Image from "next/image";
 import { db } from "../_util/config";
-import { query, collection, getDocs, doc, updateDoc, where } from "firebase/firestore";
+import { query, collection, getDocs, doc, updateDoc, where, onSnapshot } from "firebase/firestore";
 import { useRouter } from "next/navigation";
 import { signOut } from "firebase/auth";
 
@@ -136,6 +136,16 @@ export default function Dashboard(){
     function handleEClick(){
         router.push("/evaluation")
     }
+
+    useEffect(() => {
+        onSnapshot(collection(db,"studentDetails"), (snapshot) => {
+            const updatedData = snapshot.docs.map((doc) => ({
+                id : doc.id,
+                ...doc.data()
+            }));
+            setStudentData(updatedData);
+        });
+    },[]);
 
     const handleAttendance = async (nameValue) => {
          const q = query(

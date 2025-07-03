@@ -58,8 +58,8 @@ export default function Register(){
         }
     }
 
-    function handleDobChange(date){
-        let selectedDate = new Date(date);
+    function handleDobChange(grpValue,dateValue){
+        let selectedDate = new Date(dateValue);
         let grp1StartDate = new Date("2016-12-25");
         let grp1EndDate = new Date("2020-12-24");
         let grp2StartDate = new Date("2013-12-25");
@@ -69,17 +69,17 @@ export default function Register(){
         let grp4StartDate = new Date("2007-12-25");
         let grp4EndDate = new Date("2009-12-24");
 
-        if (group === "Group 1" && !(selectedDate>=grp1StartDate && selectedDate<=grp1EndDate)){
+        if (grpValue === "Group 1" && !(selectedDate>=grp1StartDate && selectedDate<=grp1EndDate)){
             setErrorDoB("Sairam! For Group 1, DoB should be between 25-12-2016 and 24-12-2020");
         }
-        else if (group === "Group 2" && !(selectedDate>=grp2StartDate && selectedDate<=grp2EndDate)){
+        else if (grpValue === "Group 2" && !(selectedDate>=grp2StartDate && selectedDate<=grp2EndDate)){
             setErrorDoB("Sairam! For Group 2, DoB should be between 25-12-2013 and 24-12-2016");
         }
-        else if (group === "Group 3" && !(selectedDate>=grp3StartDate && selectedDate<=grp3EndDate)){
+        else if (grpValue === "Group 3" && !(selectedDate>=grp3StartDate && selectedDate<=grp3EndDate)){
             setErrorDoB("Sairam! For Group 3, DoB should be between 25-12-2009 and 24-12-2013");
         }
-        else if (group === "Group 4" && !(selectedDate>=grp4StartDate && selectedDate<=grp4EndDate)){
-            setErrorDoB("Sairam! For Group 3, DoB should be between 25-12-2007 and 24-12-2009");
+        else if (grpValue === "Group 4" && !(selectedDate>=grp4StartDate && selectedDate<=grp4EndDate)){
+            setErrorDoB("Sairam! For Group 4, DoB should be between 25-12-2007 and 24-12-2009");
         }
         else{
             setErrorDoB("");
@@ -93,6 +93,8 @@ export default function Register(){
             setErrorEvent("Sairam! Event 1 and Event 2 cannot be the same");
         else if ((event1Value === "Drawing" && event2Value === "Quiz") || (event1Value === "Quiz" && event2Value === "Drawing"))
             setErrorEvent("Sairam! Students participating in Quiz cannot participate in Drawing and vice-versa");
+        else if ((event1Value === "Bhajans" && event2Value === "Tamizh Chants") || (event1Value === "Tamizh Chants" && event2Value === "Bhajans"))
+            setErrorEvent("Sairam! Same student cannot participate in both Bhajans and Tamizh Chants");
         else    
             setErrorEvent("");
     }
@@ -443,13 +445,13 @@ export default function Register(){
                                         Which Group does the student belong to?
                                     </div>
                                     <div>
-                                        <input value="Group 1" checked={group === "Group 1"} onChange={(e)=>{setGroup(e.target.value);handleDojChange(e.target.value,doj,dob);}} required className="p-3 mx-4 font-sans text-lg" type="radio" name="group"/>
+                                        <input value="Group 1" checked={group === "Group 1"} onChange={(e)=>{setGroup(e.target.value);handleDojChange(e.target.value,doj,dob);handleDobChange(e.target.value,dob)}} required className="p-3 mx-4 font-sans text-lg" type="radio" name="group"/>
                                         <label className="font-sans text-lg">Group 1</label><br></br>
-                                        <input value="Group 2" checked={group === "Group 2"} onChange={(e)=>{setGroup(e.target.value);handleDojChange(e.target.value,doj,dob);}} className="p-3 mx-4 font-sans text-lg" type="radio" name="group"/>
+                                        <input value="Group 2" checked={group === "Group 2"} onChange={(e)=>{setGroup(e.target.value);handleDojChange(e.target.value,doj,dob);handleDobChange(e.target.value,dob)}} className="p-3 mx-4 font-sans text-lg" type="radio" name="group"/>
                                         <label className="font-sans text-lg">Group 2</label><br></br>
-                                        <input value="Group 3" checked={group === "Group 3"} onChange={(e)=>{setGroup(e.target.value);handleDojChange(e.target.value,doj,dob);}} className="p-3 mx-4 font-sans text-lg" type="radio" name="group"/>
+                                        <input value="Group 3" checked={group === "Group 3"} onChange={(e)=>{setGroup(e.target.value);handleDojChange(e.target.value,doj,dob);handleDobChange(e.target.value,dob)}} className="p-3 mx-4 font-sans text-lg" type="radio" name="group"/>
                                         <label className="font-sans text-lg">Group 3</label><br></br>
-                                        <input value="Group 4" checked={group === "Group 4"} onChange={(e)=>{setGroup(e.target.value);handleDojChange(e.target.value,doj,dob);}} className="p-3 mx-4 font-sans text-lg" type="radio" name="group"/>
+                                        <input value="Group 4" checked={group === "Group 4"} onChange={(e)=>{setGroup(e.target.value);handleDojChange(e.target.value,doj,dob);handleDobChange(e.target.value,dob)}} className="p-3 mx-4 font-sans text-lg" type="radio" name="group"/>
                                         <label className="font-sans text-lg">Group 4</label>
                                 </div>
                                 </div>
@@ -473,7 +475,7 @@ export default function Register(){
                                         Student&apos;s Date of Birth (DOB)
                                     </div>
                                     <div>
-                                        <input value={dob} onChange={(e)=>{setDob(e.target.value);handleDobChange(e.target.value);handleDojChange(group,doj,e.target.value);}} required className="p-3 mb-4 mx-2 font-sans w-68 md:w-180 text-lg w-68 lg:mx-4 lg:mb-0 lg:w-210 rounded-xl border" type="date"/>
+                                        <input value={dob} onChange={(e)=>{setDob(e.target.value);handleDobChange(group,e.target.value);handleDojChange(group,doj,e.target.value);}} required className="p-3 mb-4 mx-2 font-sans w-68 md:w-180 text-lg w-68 lg:mx-4 lg:mb-0 lg:w-210 rounded-xl border" type="date"/>
                                         <label className="flex justify-center font-sans text-red-500 ml-2 lg:ml-4">{errorDoB}</label>
                                     </div>
                                 </div>

@@ -271,8 +271,7 @@ export default function Leadboard(){
                     distinctData.push(filteredData[i]);
                 }
             }
-            console.log("FD",filteredData);
-            console.log("DD",distinctData);
+            distinctData = distinctData.sort((x,y) => (x.group).localeCompare(y.group));
             setLockedEvents(distinctData);
         }
         fetchLockedEvents();

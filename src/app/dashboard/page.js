@@ -139,10 +139,11 @@ export default function Dashboard(){
 
     useEffect(() => {
         onSnapshot(collection(db,"studentDetails"), (snapshot) => {
-            const updatedData = snapshot.docs.map((doc) => ({
+            let updatedData = snapshot.docs.map((doc) => ({
                 id : doc.id,
                 ...doc.data()
             }));
+            updatedData = updatedData.sort((x,y) => x.name.localeCompare(y.name));
             setStudentData(updatedData);
         });
     },[]);

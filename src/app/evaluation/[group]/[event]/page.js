@@ -883,6 +883,7 @@ export default function Judging(){
                             lock : "true"
                         });
                     });
+                window.location.reload();
             }
         }
     }

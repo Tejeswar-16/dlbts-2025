@@ -22,6 +22,8 @@ export default function Leadboard(){
     const [index,setIndex] = useState(0);
     const [heading,setHeading] = useState("Search by Group, Samithi or Event");
     const [lock,setLock] = useState("");
+    const [clicked,setClicked] = useState(false);
+    const [lockedEvents,setLockedEvents] = useState([]);
 
     let judgeName = "";
     function cut(a)
@@ -235,6 +237,46 @@ export default function Leadboard(){
         }
         fetchLock();
     },[group,event]);
+
+    function handleClose(){
+        setClicked(false);
+    }
+
+    function handleLockedEvents(){
+        setClicked(true);
+    }
+
+    useEffect(() => {
+        async function fetchLockedEvents(){
+            const q = query(
+                collection(db,"studentMarks")
+            );
+            const querySnapshot = await getDocs(q);
+            const data = querySnapshot.docs.map((doc) => doc.data());
+            let filteredData = data.filter((fd) => fd.lock === "true");
+            let distinctData = [];
+            for (let i=0;i<filteredData.length;i++)
+            {
+                let exists = false;
+                for (let j=0;j<distinctData.length;j++)
+                {
+                    if (filteredData[i].group === distinctData[j].group && filteredData[i].event === distinctData[j].event)
+                    {
+                        exists = true;
+                        break;
+                    }
+                }
+                if (!exists)
+                {
+                    distinctData.push(filteredData[i]);
+                }
+            }
+            console.log("FD",filteredData);
+            console.log("DD",distinctData);
+            setLockedEvents(distinctData);
+        }
+        fetchLockedEvents();
+    },[clicked]);
     
     return (
         <>
@@ -246,11 +288,41 @@ export default function Leadboard(){
                             <h1 className="font-sans text-sm md:text-xl px-3">{email}</h1>
                         </div>
                         <div className="flex flex-col md:flex md:flex-row md:justify-end">
-                            <button onClick={handleEventsClick} className="font-sans font-semibold text-md md:text-xl rounded-lg bg-yellow-100 px-2 md:rounded-xl h-8 mt-2 mx-2 md:h-15 md:mx-2 md:my-2 hover:bg-yellow-500 hover:cursor-pointer transition duration-300 ease-in-out">Dashboard</button>
-                            <button onClick={handleLogout} className="font-sans font-semibold text-sm md:text-xl rounded-lg bg-red-200 px-2 md:rounded-xl mx-2 h-8 mt-3 md:h-15 md:mx-2 md:my-2 hover:bg-red-500 hover:cursor-pointer hover:text-white transition duration-300 ease-in-out">Logout</button>
+                            <button onClick={handleLockedEvents} className="font-sans font-semibold text-md w-32 md:w-40 md:text-xl h-8 rounded-lg bg-purple-200 px-2 md:rounded-xl mt-1 mb-2 mx-2 md:h-15 md:mx-2 md:my-2 hover:text-black hover:bg-purple-500 hover:cursor-pointer transition duration-300 ease-in-out">Locked Events</button>
+                            <button onClick={handleEventsClick} className="font-sans font-semibold text-md md:text-xl rounded-lg bg-yellow-100 px-2 md:rounded-xl h-8 mx-2 md:h-15 md:mx-2 md:my-2 hover:bg-yellow-500 hover:cursor-pointer transition duration-300 ease-in-out">Dashboard</button>
+                            <button onClick={handleLogout} className="font-sans font-semibold text-sm md:text-xl rounded-lg bg-red-200 px-2 md:rounded-xl mx-2 h-8 mt-2 md:h-15 md:mx-2 md:my-2 hover:bg-red-500 hover:cursor-pointer hover:text-white transition duration-300 ease-in-out">Logout</button>
                         </div>
                     </div>
                 </nav>
+
+                {clicked && 
+                    <div className="mx-auto rounded-xl shadow-xl bg-white mt-5 w-75 md:w-180 lg:w-250">
+                        <div className="flex justify-end mr-2 pt-2">
+                            <h1 onClick={handleClose} className="select-none text-white bg-red-500 p-1 rounded-lg hover:cursor-pointer">X</h1>
+                        </div>
+                        <h1 className="flex justify-center font-sans font-bold text-xl md:text-2xl p-2">Locked Events</h1>
+                        <div className="overflow-x-auto w-70 md:w-175 lg:w-245 mt-2 mb-4 pb-4">
+                            <table className="mx-auto text-center">
+                                <thead className="bg-blue-950 text-white">
+                                    <tr>
+                                        <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Group</td>
+                                        <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Event</td>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {
+                                        lockedEvents.map((lockedEvent) => (
+                                            <tr key={lockedEvent.id} className="hover:bg-gray-200 transition duration-300 ease-in-out">
+                                                <td className="font-sans text-lg px-4 py-2 border border-black">{lockedEvent.group}</td>
+                                                <td className="font-sans text-lg px-4 py-2 border border-black">{lockedEvent.event}</td>
+                                            </tr>
+                                        ))
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                }   
 
                 <div className="mx-auto rounded-xl shadow-xl bg-white mt-5 w-75 md:w-180 lg:w-250">
                     <h1 className="flex justify-center font-sans font-bold text-xl md:text-2xl p-2">Leaderboard</h1>
@@ -392,7 +464,6 @@ export default function Leadboard(){
                 <div className="mx-auto bg-white rounded-xl shadow-xl w-75 md:w-180 lg:w-250 mt-5">
                     <div className="flex flex-col justify-center items-center">
                         <h1 className="font-sans font-bold rounded-xl shadow-lg bg-gray-200 text-black text-2xl p-2 mt-4">Leaderboard</h1>
-                        { console.log(lock)}
                         {
                            
                             <h1 className={`font-sans font-bold rounded-xl shadow-lg transition-colors duration-700 ${colors[index]} text-black text-xl p-2 mt-4`}>

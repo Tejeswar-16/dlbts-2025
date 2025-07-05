@@ -317,7 +317,7 @@ export default function Register(){
             const querySnapshot = await getDocs(q);
             const data = querySnapshot.docs.map((doc) => doc.data());
             let filteredData = data.filter((fd) => fd.samithi === samithiMap[email]);
-            filteredData = filteredData.sort((y,x) => x.timestamp - y.timestamp);
+            filteredData = filteredData.sort((x,y) => x.group.localeCompare(y.group));
             setStudentData(filteredData);
             setLoading(false);
         }

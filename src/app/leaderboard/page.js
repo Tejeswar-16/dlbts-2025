@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { auth, db } from "../_util/config";
 import { useRouter } from "next/navigation";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, doc, getDocs, onSnapshot, query, updateDoc, where } from "firebase/firestore";
 import { signOut } from "firebase/auth";
 
 export default function Leadboard(){
@@ -249,33 +249,43 @@ export default function Leadboard(){
     useEffect(() => {
         async function fetchLockedEvents(){
             const q = query(
-                collection(db,"studentMarks")
+                collection(db,"eventLock")
             );
             const querySnapshot = await getDocs(q);
             const data = querySnapshot.docs.map((doc) => doc.data());
-            let filteredData = data.filter((fd) => fd.lock === "true");
-            let distinctData = [];
-            for (let i=0;i<filteredData.length;i++)
-            {
-                let exists = false;
-                for (let j=0;j<distinctData.length;j++)
-                {
-                    if (filteredData[i].group === distinctData[j].group && filteredData[i].event === distinctData[j].event)
-                    {
-                        exists = true;
-                        break;
-                    }
-                }
-                if (!exists)
-                {
-                    distinctData.push(filteredData[i]);
-                }
-            }
-            distinctData = distinctData.sort((x,y) => (x.group).localeCompare(y.group));
-            setLockedEvents(distinctData);
+            let sortedData = data.sort((x,y) => x.group.localeCompare(y.group));
+            setLockedEvents(sortedData);
         }
         fetchLockedEvents();
     },[clicked]);
+
+    async function handleLock(groupValue,eventValue)
+    {
+        const q = query(
+            collection(db,"eventLock"),
+            where("group","==",groupValue),
+            where("event","==",eventValue)
+        );
+        const querySnapshot = await getDocs(q);
+        querySnapshot.forEach(async (document) => {
+            const docRef = doc(db,"eventLock",document.id);
+            let currentLock = document.data().lock;
+            await updateDoc(docRef,{
+                lock : (currentLock === "true") ? "false" : "true"
+            });
+        });
+    }
+
+    useEffect(() => {
+        onSnapshot(collection(db,"eventLock"), (snapshot) => {
+            let updatedData = snapshot.docs.map((doc) => ({
+                id : doc.id,
+                ...doc.data()
+            }));
+            let sortedData = updatedData.sort((x,y) => x.group.localeCompare(y.group));
+            setLockedEvents(sortedData);
+        });
+    },[]);
     
     return (
         <>
@@ -287,7 +297,7 @@ export default function Leadboard(){
                             <h1 className="font-sans text-sm md:text-xl px-3">{email}</h1>
                         </div>
                         <div className="flex flex-col md:flex md:flex-row md:justify-end">
-                            <button onClick={handleLockedEvents} className="font-sans font-semibold text-md w-32 md:w-40 md:text-xl h-8 rounded-lg bg-purple-200 px-2 md:rounded-xl mt-1 mb-2 mx-2 md:h-15 md:mx-2 md:my-2 hover:text-black hover:bg-purple-500 hover:cursor-pointer transition duration-300 ease-in-out">Locked Events</button>
+                            <button onClick={handleLockedEvents} className="font-sans font-semibold text-md w-32 md:w-40 md:text-xl h-8 rounded-lg bg-purple-200 px-2 md:rounded-xl mt-1 mb-2 mx-2 md:h-15 md:mx-2 md:my-2 hover:text-black hover:bg-purple-500 hover:cursor-pointer transition duration-300 ease-in-out">Lock Events</button>
                             <button onClick={handleEventsClick} className="font-sans font-semibold text-md md:text-xl rounded-lg bg-yellow-100 px-2 md:rounded-xl h-8 mx-2 md:h-15 md:mx-2 md:my-2 hover:bg-yellow-500 hover:cursor-pointer transition duration-300 ease-in-out">Dashboard</button>
                             <button onClick={handleLogout} className="font-sans font-semibold text-sm md:text-xl rounded-lg bg-red-200 px-2 md:rounded-xl mx-2 h-8 mt-2 md:h-15 md:mx-2 md:my-2 hover:bg-red-500 hover:cursor-pointer hover:text-white transition duration-300 ease-in-out">Logout</button>
                         </div>
@@ -299,21 +309,23 @@ export default function Leadboard(){
                         <div className="flex justify-end mr-2 pt-2">
                             <h1 onClick={handleClose} className="select-none text-white bg-red-500 p-1 rounded-lg hover:cursor-pointer">X</h1>
                         </div>
-                        <h1 className="flex justify-center font-sans font-bold text-xl md:text-2xl p-2">Locked Events</h1>
+                        <h1 className="flex justify-center font-sans font-bold text-xl md:text-2xl p-2">Lock Events</h1>
                         <div className="overflow-x-auto w-70 md:w-175 lg:w-245 mt-2 mb-4 pb-4">
                             <table className="mx-auto text-center">
                                 <thead className="bg-blue-950 text-white">
                                     <tr>
                                         <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Group</td>
                                         <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Event</td>
+                                        <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Action</td>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     {
-                                        lockedEvents.map((lockedEvent) => (
-                                            <tr key={lockedEvent.id} className="hover:bg-gray-200 transition duration-300 ease-in-out">
+                                        lockedEvents.map((lockedEvent,index) => (
+                                            <tr key={index} className="hover:bg-gray-200 transition duration-300 ease-in-out">
                                                 <td className="font-sans text-lg px-4 py-2 border border-black">{lockedEvent.group}</td>
                                                 <td className="font-sans text-lg px-4 py-2 border border-black">{lockedEvent.event}</td>
+                                                <td className="font-sans text-lg px-4 py-2 border border-black"><button onClick={() => handleLock(lockedEvent.group,lockedEvent.event)} className={lockedEvent.lock === "false" ? `bg-blue-200 font-bold p-2 rounded-xl hover:bg-blue-400 hover:cursor-pointer transition duration-300 ease-in-out` : `bg-red-200 font-bold p-2 rounded-xl hover:bg-red-400 hover:cursor-pointer transition duration-300 ease-in-out`}>{lockedEvent.lock === "false" ? "Lock" : "Unlock"}</button></td>
                                             </tr>
                                         ))
                                     }

@@ -852,42 +852,6 @@ export default function Judging(){
         setClicked(false);
     }
 
-    async function handleLock(){
-        const confirmed = window.confirm("Sairam! Once you lock, you won't be able to edit the marks");
-        if(confirmed)
-        {
-            if (judgeEmail)
-            {
-                let q;
-                if (judgeEmail.slice(7,9) === "ge")
-                {
-                    q = query(
-                        collection(db,"studentMarks"),
-                        where("group","in",["Group 2","Group 3"]),
-                        where("event","==",lockMap[judgeEmail.slice(7)][1])
-                    );
-                }
-                else
-                {
-                    q = query(
-                        collection(db,"studentMarks"),
-                        where("group","==",lockMap[judgeEmail.slice(7)][0]),
-                        where("event","==",lockMap[judgeEmail.slice(7)][1])
-                    );
-                }
-                
-                const querySnapshot = await getDocs(q);
-                querySnapshot.forEach(async (document) => {
-                    const docRef = doc(db,"studentMarks",document.id);
-                    await updateDoc(docRef,{
-                            lock : "true"
-                        });
-                    });
-                window.location.reload();
-            }
-        }
-    }
-
     useEffect(() => {
         async function fetchLock(){
             if (judgeEmail)
@@ -896,7 +860,7 @@ export default function Judging(){
                 if (judgeEmail.slice(7,9) === "ge")
                 {
                     q = query(
-                        collection(db,"studentMarks"),
+                        collection(db,"eventLock"),
                         where("group","in",["Group 2","Group 3"]),
                         where("event","==",lockMap[judgeEmail.slice(7)][1])
                     );
@@ -904,20 +868,21 @@ export default function Judging(){
                 else
                 {
                     q = query(
-                        collection(db,"studentMarks"),
+                        collection(db,"eventLock"),
                         where("group","==",lockMap[judgeEmail.slice(7)][0]),
                         where("event","==",lockMap[judgeEmail.slice(7)][1])
                     );
                 }
                 const querySnapshot = await getDocs(q);
                 const data = querySnapshot.docs.map((doc) => doc.data());
+                console.log(data);
                 if (data.length !== 0)
                 {
                     if (data[0].lock === "true")
                     {
                         setDisabled(true);
                     }
-                }
+                }           
             }
         }
         fetchLock();
@@ -933,9 +898,6 @@ export default function Judging(){
                             <h1 className="font-sans text-sm md:text-xl px-3">{judgeEmail}</h1>
                         </div>
                         <div className="flex flex-col md:flex md:flex-row md:justify-end">
-                            {judgeEmail.startsWith("judge01") &&
-                                <button onClick={handleLock} className={!disabled ? `font-sans font-semibold text-md md:text-xl rounded-lg bg-indigo-100 px-2 md:rounded-xl h-8 mt-2 mr-1 md:h-15 md:mx-2 md:my-2 hover:bg-indigo-500 hover:text-white hover:cursor-pointer transition duration-300 ease-in-out` : `font-sans font-semibold text-md md:text-xl rounded-lg bg-indigo-100 px-2 md:rounded-xl h-8 mt-2 mr-1 md:h-15 md:mx-2 md:my-2 hover:cursor-not-allowed transition duration-300 ease-in-out`}>Lock Evaluation</button>
-                            }
                             <button onClick={handleEventsClick} className="font-sans font-semibold text-md md:text-xl rounded-lg bg-yellow-100 px-2 md:rounded-xl h-8 mt-2 mr-1 md:h-15 md:mx-2 md:my-2 hover:bg-yellow-500 hover:cursor-pointer transition duration-300 ease-in-out">Leaderboard</button>
                             <button onClick={handleLogout} className="font-sans font-semibold text-sm md:text-xl rounded-lg bg-red-200 px-2 md:rounded-xl mx-2 h-8 mt-3 md:h-15 md:mx-2 md:my-2 hover:bg-red-500 hover:cursor-pointer hover:text-white transition duration-300 ease-in-out">Logout</button>
                         </div>

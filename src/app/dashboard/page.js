@@ -134,7 +134,7 @@ export default function Dashboard(){
     }
 
     function handleEClick(){
-        router.push("/evaluation")
+        router.push("/register")
     }
 
     useEffect(() => {
@@ -173,7 +173,7 @@ export default function Dashboard(){
                             <h1 className="font-sans text-sm md:text-xl px-3">{adminEmail}</h1>
                         </div>
                         <div className="flex flex-col md:flex md:flex-row md:justify-end">
-                            <button onClick={handleEClick} className="font-sans font-semibold text-md md:text-xl rounded-lg bg-purple-200 px-2 md:rounded-xl mt-1 mb-2 mx-2 md:h-15 md:mx-2 md:my-2 hover:text-black hover:bg-purple-500 hover:cursor-pointer transition duration-300 ease-in-out">Events</button>
+                            <button onClick={handleEClick} className="font-sans font-semibold text-md md:text-xl rounded-lg bg-purple-200 px-2 md:rounded-xl mt-1 mb-2 mx-2 md:h-15 md:mx-2 md:my-2 hover:text-black hover:bg-purple-500 hover:cursor-pointer transition duration-300 ease-in-out">Registration Form</button>
                             <button onClick={handleEventsClick} className="font-sans font-semibold text-md md:text-xl rounded-lg bg-yellow-100 px-2 md:rounded-xl mb-2 mx-2 md:h-15 md:mx-2 md:my-2 hover:bg-yellow-500 hover:cursor-pointer transition duration-300 ease-in-out">Leaderboard</button>
                             <button onClick={handleLogout} className="font-sans font-semibold text-sm md:text-xl rounded-lg bg-red-200 px-2 md:rounded-xl mx-2 mb-1 md:h-15 md:mx-2 md:my-2 hover:bg-red-500 hover:cursor-pointer hover:text-white transition duration-300 ease-in-out">Logout</button>
                         </div>

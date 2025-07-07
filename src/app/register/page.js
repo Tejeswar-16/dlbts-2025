@@ -212,7 +212,8 @@ export default function Register(){
                             event2 : event2,
                             groupEvent : groupEvent,
                             attendance : "A",
-                            timestamp : new Date()
+                            timestamp : new Date(),
+                            email : email
                         });
                         alert("Sairam! Registered Successfully. Kindly refresh the screen to get the updated data");
                     }
@@ -233,7 +234,8 @@ export default function Register(){
                                 event2 : event2,
                                 groupEvent : groupEvent,
                                 attendance : "A",
-                                timestamp : new Date()
+                                timestamp : new Date(),
+                                email : email
                             });
                         });
                         alert("Sairam! Updated Successfully. Kindly refresh the screen to view the update");
@@ -316,7 +318,11 @@ export default function Register(){
             );
             const querySnapshot = await getDocs(q);
             const data = querySnapshot.docs.map((doc) => doc.data());
-            let filteredData = data.filter((fd) => fd.samithi === samithiMap[email]);
+            let filteredData;
+            if (email === "admin@dlbts.ks")
+                filteredData = data.filter((fd) => fd.email === email);
+            else
+                filteredData = data.filter((fd) => fd.samithi === samithiMap[email]);
             filteredData = filteredData.sort((x,y) => x.group.localeCompare(y.group));
             setStudentData(filteredData);
             setLoading(false);
@@ -504,7 +510,30 @@ export default function Register(){
                                         Samithi Name
                                     </div>
                                     <div>
-                                        <input disabled defaultValue={samithiMap[email]} onChange={(e)=>{setSamithi(e.target.value)}} required className="p-3 mb-4 ml-2 w-68 font-sans text-lg md:w-180 lg:mx-4 lg:mb-0 lg:w-210 rounded-xl border" type="text"/>
+                                        {
+                                            (email === "admin@dlbts.ks") ? 
+                                                <select value={samithi} onChange={(e) => {setSamithi(e.target.value)}} name="samithi" required className="p-3 mb-4 mx-2 font-sans w-68 text-lg md:w-180 lg:mx-4 lg:mb-0 lg:w-210 rounded-xl border">
+                                                    <option value="">Select a Samithi</option>
+                                                    <option>Chengalpet</option>
+                                                    <option>Collectorate</option>
+                                                    <option>Guduvancheri</option>
+                                                    <option>Indra Nagar</option>
+                                                    <option>Irumbuliyur</option>
+                                                    <option>Little Kancheepuram</option>
+                                                    <option>Madambakkam</option>
+                                                    <option>Main Kancheepuram</option>
+                                                    <option>Mannivakkam</option>
+                                                    <option>Maraimalai Nagar</option>
+                                                    <option>Parvathi Nagar</option>
+                                                    <option>Perungalathur</option>
+                                                    <option>Poondi Bazar</option>
+                                                    <option>Sothupakkam</option>
+                                                    <option>Sriperumpudur</option>
+                                                    <option>Tambaram</option>
+                                                </select>
+                                            :
+                                                <input disabled defaultValue={samithiMap[email]} onChange={(e)=>{setSamithi(e.target.value)}} required className="p-3 mb-4 ml-2 w-68 font-sans text-lg md:w-180 lg:mx-4 lg:mb-0 lg:w-210 rounded-xl border" type="text"/>
+                                        }
                                     </div>
                                 </div>
 

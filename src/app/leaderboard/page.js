@@ -322,7 +322,7 @@ export default function Leadboard(){
                                 <tbody>
                                     {
                                         lockedEvents.map((lockedEvent,index) => (
-                                            <tr key={index} className="hover:bg-gray-200 transition duration-300 ease-in-out">
+                                            <tr key={index} className={(lockedEvent.group === "Group 1") ? "bg-violet-100 hover:bg-gray-200 transition duration-300 ease-in-out" : (lockedEvent.group === "Group 2") ? "bg-fuchsia-100 hover:bg-gray-200 transition duration-300 ease-in-out" : (lockedEvent.group === "Group 3") ? "bg-pink-100 hover:bg-gray-200 transition duration-300 ease-in-out" : "bg-purple-100 hover:bg-gray-200 transition duration-300 ease-in-out"}>
                                                 <td className="font-sans text-lg px-4 py-2 border border-black">{lockedEvent.group}</td>
                                                 <td className="font-sans text-lg px-4 py-2 border border-black">{lockedEvent.event}</td>
                                                 <td className="font-sans text-lg px-4 py-2 border border-black"><button onClick={() => handleLock(lockedEvent.group,lockedEvent.event)} className={lockedEvent.lock === "false" ? `bg-blue-200 font-bold p-2 rounded-xl hover:bg-blue-400 hover:cursor-pointer transition duration-300 ease-in-out` : `bg-red-200 font-bold p-2 rounded-xl hover:bg-red-400 hover:cursor-pointer transition duration-300 ease-in-out`}>{lockedEvent.lock === "false" ? "Lock" : "Unlock"}</button></td>

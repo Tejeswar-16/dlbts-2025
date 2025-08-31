@@ -861,7 +861,7 @@ export default function Judging(){
                 {
                     q = query(
                         collection(db,"eventLock"),
-                        where("group","in",["Group 2","Group 3"]),
+                        where("group","==","Group 2 & Group 3 - Group Events"),
                         where("event","==",lockMap[judgeEmail.slice(7)][1])
                     );
                 }
@@ -875,7 +875,6 @@ export default function Judging(){
                 }
                 const querySnapshot = await getDocs(q);
                 const data = querySnapshot.docs.map((doc) => doc.data());
-                console.log(data);
                 if (data.length !== 0)
                 {
                     if (data[0].lock === "true")

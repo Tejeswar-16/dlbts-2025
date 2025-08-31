@@ -96,7 +96,8 @@ export default function Evaluation(){
         "adb" : "Altar Decoration - Boys",
         "adg" : "Altar Decoration - Girls",
         "ncb" : "Rudram Namakam Chanting - Boys",
-        "ncg" : "Rudram Namakam Chanting - Girls"
+        "ncg" : "Rudram Namakam Chanting - Girls",
+        "qu" : "Quiz"
     }
 
     function handleOnClick(e){  

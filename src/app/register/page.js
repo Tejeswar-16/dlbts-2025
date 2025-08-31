@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { collection, addDoc, where, query, getDocs, updateDoc, doc } from "firebase/firestore";
+import { collection, addDoc, where, query, getDocs, updateDoc, doc, deleteDoc } from "firebase/firestore";
 import { auth, db } from "@/app/_util/config";
 import Image from "next/image";
 import { signOut } from "firebase/auth";
@@ -358,6 +358,22 @@ export default function Register(){
         setGroupEvent(grpEventValue);
     }
 
+    async function handleDeleteStudent(nameVal,dobVal)
+    {
+        const confirmDelete = window.confirm(`Sairam! Are you sure to delete this student (${nameVal})`)
+        if (!confirmDelete)
+            return;
+        const id = cleanName(nameVal)+dobVal;
+        const q = query(
+            collection(db,"studentDetails"),
+            where("id","==",id)
+        );
+        const querySnapshot = await getDocs(q);
+        const student = querySnapshot.docs[0];
+        await deleteDoc((doc(db,"studentDetails",student.id)));
+        alert("Deleted sucessfully");
+    }
+
     function handleFormClose(){
         setClicked(false);
     }
@@ -398,6 +414,7 @@ export default function Register(){
                                             <th className="font-sans p-2 font-semibold border border-gray-400">Event 1</th>
                                             <th className="font-sans p-2 font-semibold border border-gray-400">Event 2</th>
                                             <th className="font-sans p-2 font-semibold border border-gray-400">Group Event</th>
+                                            <th className="font-sans p-2 font-semibold border border-gray-400">Delete</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -415,6 +432,7 @@ export default function Register(){
                                                     <td className="font-sans text-lg p-2 border border-black">{student.event1}</td>
                                                     <td className="font-sans text-lg p-2 border border-black">{student.event2}</td>
                                                     <td className="font-sans text-lg p-2 border border-black">{student.groupEvent}</td>
+                                                    <td className="font-sans text-lg p-2 border border-black"><Image onClick={() => handleDeleteStudent(student.name,student.dob)} className="mx-auto hover:cursor-pointer" src="/delete.png" width={30} height={30} alt="Delete Image"></Image></td>
                                                 </tr>
                                             ))
                                         }

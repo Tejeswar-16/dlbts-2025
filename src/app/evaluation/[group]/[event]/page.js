@@ -33,6 +33,7 @@ export default function Judging(){
         "altardecorationgirls" : "Altar Decoration - Girls",
         "rudramnamakamchantingboys" : "Rudram Namakam Chanting - Boys",
         "rudramnamakamchantinggirls" : "Rudram Namakam Chanting - Girls",
+        "quiz" : "Quiz"
     }
 
     const lockMap = {
@@ -1147,6 +1148,38 @@ export default function Judging(){
                                 </tr>
                                 <tr>
                                     <td className="font-sans px-2 py-2 font-semibold border border-black">Teamwork</td>
+                                    <td className="font-sans px-2 py-2 font-semibold border border-black">10</td>
+                                </tr>
+                                <tr>
+                                    <td className="font-sans px-2 py-2 font-semibold border bg-gray-200 border-black">TOTAL</td>
+                                    <td className="font-sans px-2 py-2 font-semibold border bg-gray-200 border-black">30 marks</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </>
+                    }
+
+                    {(event === "Quiz") && 
+                    <>
+                        <h1 className="flex justify-center font-sans font-bold text-md md:text-xl lg:text-xl p-2">Evaluation Criteria</h1>
+                        <table className="mx-auto text-center w-70 md:w-150 lg:w-150">
+                            <thead className="bg-blue-950 text-white">
+                                <tr>
+                                    <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Criteria</th>
+                                    <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Marks</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td className="font-sans px-2 py-2 font-semibold border border-black">XXX</td>
+                                    <td className="font-sans px-2 py-2 font-semibold border border-black">10</td>
+                                </tr>
+                                <tr>
+                                    <td className="font-sans px-2 py-2 font-semibold border border-black">YYY</td>
+                                    <td className="font-sans px-2 py-2 font-semibold border border-black">10</td>
+                                </tr>
+                                <tr>
+                                    <td className="font-sans px-2 py-2 font-semibold border border-black">ZZZ</td>
                                     <td className="font-sans px-2 py-2 font-semibold border border-black">10</td>
                                 </tr>
                                 <tr>

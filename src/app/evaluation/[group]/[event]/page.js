@@ -70,6 +70,9 @@ export default function Judging(){
         "g3ee@dlbts.ks" : ["Group 3","Elocution (English)"],
         "g3et@dlbts.ks" : ["Group 3","Elocution (Tamil)"],
         "g3dw@dlbts.ks" : ["Group 3","Drawing"],
+        "g3qu@dlbts.ks" : ["Group 3","Quiz"],
+
+        "g4qu@dlbts.ks" : ["Group 4","Quiz"],
 
         "geadb@dlbts.ks" : ["Group 2 & 3","Altar Decoration - Boys"],
         "geadg@dlbts.ks" : ["Group 2 & 3","Altar Decoration - Girls"],
@@ -129,6 +132,7 @@ export default function Judging(){
     const [adRM,setAdRM] = useState(0);
     const [adTeamwork,setAdTeamwork] = useState(0);
     const [adTotal,setAdTotal] = useState(0);
+    const [qMark,setQMark] = useState(0);
     const [disabled,setDisabled] = useState(false);
 
     function uncut(a)
@@ -494,6 +498,26 @@ export default function Judging(){
                 setAdRM(mark.resource_management);
                 setAdTeamwork(mark.teamwork);
             }
+            else if ((event === "Quiz"))
+            {
+                if (filteredData.length === 0)
+                {
+                    filteredData = [{
+                        id : "",
+                        totalMarks : 0,
+                        dob : "",
+                        event : "",
+                        gender : "",
+                        group : "",
+                        name : "",
+                        samithi : "",
+                        judge : "",
+                        lock : ""
+                    }]
+                }
+                const mark = filteredData[0];
+                setQMark(mark.totalMarks);
+            }
 
             setMarks(filteredData);
             setLoading(false);
@@ -828,7 +852,43 @@ export default function Judging(){
                 alert("Sairam! Marks added successfully!");
             }
         }
-        
+        else if ((event === "Quiz"))
+        {
+            if (!querySnapshot.empty)
+            {
+                querySnapshot.forEach(async (document) => {
+                const docRef = doc(db,"studentMarks",document.id);
+                await updateDoc(docRef,{
+                        id : id,
+                        name : amName,
+                        dob : amDoB,
+                        group : amGroup,
+                        samithi : amSamithi,
+                        gender : amGender,
+                        event : event,
+                        totalMarks : qMark,
+                        judge : judgeEmail
+                    });
+                });
+                alert("Sairam! Marks updated successfully!");
+            }
+            else
+            {
+                await addDoc(collection(db,"studentMarks"),{
+                        id : id,
+                        name : amName,
+                        dob : amDoB,
+                        group : amGroup,
+                        samithi : amSamithi,
+                        gender : amGender,
+                        event : event,
+                        totalMarks : qMark,
+                        judge : judgeEmail,
+                        lock : ""
+                });
+                alert("Sairam! Marks added successfully!");
+            }
+        }
         setLoading(false);
     }
 
@@ -1148,38 +1208,6 @@ export default function Judging(){
                                 </tr>
                                 <tr>
                                     <td className="font-sans px-2 py-2 font-semibold border border-black">Teamwork</td>
-                                    <td className="font-sans px-2 py-2 font-semibold border border-black">10</td>
-                                </tr>
-                                <tr>
-                                    <td className="font-sans px-2 py-2 font-semibold border bg-gray-200 border-black">TOTAL</td>
-                                    <td className="font-sans px-2 py-2 font-semibold border bg-gray-200 border-black">30 marks</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </>
-                    }
-
-                    {(event === "Quiz") && 
-                    <>
-                        <h1 className="flex justify-center font-sans font-bold text-md md:text-xl lg:text-xl p-2">Evaluation Criteria</h1>
-                        <table className="mx-auto text-center w-70 md:w-150 lg:w-150">
-                            <thead className="bg-blue-950 text-white">
-                                <tr>
-                                    <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Criteria</th>
-                                    <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Marks</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td className="font-sans px-2 py-2 font-semibold border border-black">XXX</td>
-                                    <td className="font-sans px-2 py-2 font-semibold border border-black">10</td>
-                                </tr>
-                                <tr>
-                                    <td className="font-sans px-2 py-2 font-semibold border border-black">YYY</td>
-                                    <td className="font-sans px-2 py-2 font-semibold border border-black">10</td>
-                                </tr>
-                                <tr>
-                                    <td className="font-sans px-2 py-2 font-semibold border border-black">ZZZ</td>
                                     <td className="font-sans px-2 py-2 font-semibold border border-black">10</td>
                                 </tr>
                                 <tr>
@@ -1961,6 +1989,24 @@ export default function Judging(){
                             </table>
                             <div className="flex justify-center">
                                 <button onClick={() => {updateMarks()}} className="flex justify-center font-sans bg-green-200 rounded-xl hover:cursor-pointer font-semibold text-lg p-2 mb-2">Update Marks</button>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                {clicked && (event === "Quiz") && 
+                    <div className="fixed inset-0 flex flex-col justify-center backdrop-blur-sm items-center">
+                        <div className="bg-white w-75 md:w-125 rounded-xl shadow-xl">
+                            <div className="flex justify-end pt-2 pr-2">
+                                <button onClick={handleClose} className="rounded-md p-1 font-sans bg-red-500 text-sm hover:cursor-pointer text-gray-100">X</button>
+                            </div>
+                            <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Award Marks</h1>
+                            <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Student Name: {amName}</h1>
+                            <div className="flex justify-center">
+                                <input value={qMark} onChange={(e) => setQMark(e.target.value)} className="font-sans rounded-xl border p-2 w-50 mx-4 my-4" type="number" placeholder="Enter the marks here..."></input>
+                            </div>
+                            <div className="flex justify-center">
+                                <button onClick={() => {updateMarks()}} className="font-sans bg-green-200 rounded-xl hover:cursor-pointer font-semibold text-lg p-2 mb-2">Update Marks</button>
                             </div>
                         </div>
                     </div>

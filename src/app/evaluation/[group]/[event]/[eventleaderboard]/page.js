@@ -18,6 +18,7 @@ export default function EventLeaderboard(){
         "storytellingenglish" : "Story Telling (English)",
         "storytellingtamil" : "Story Telling (Tamil)",
         "drawing" : "Drawing",
+        "quiz" : "Quiz",
         "devotionalsingingboys" : "Devotional Singing - Boys",
         "devotionalsinginggirls" : "Devotional Singing - Girls",
         "bhajansboys" : "Bhajans - Boys",
@@ -40,6 +41,7 @@ export default function EventLeaderboard(){
         "group1" : "Group 1",
         "group2" : "Group 2",
         "group3" : "Group 3",
+        "group4" : "Group 4",
         "group2%26group3groupevents" : "Group Events - Group 2 & 3"
     }
 
@@ -199,7 +201,7 @@ export default function EventLeaderboard(){
             }
 
             for (const student of mergedData) {
-                student.totalMarks = (student.judge1 || 0) + (student.judge2 || 0) + (student.judge3 || 0);
+                student.totalMarks = Number(student.judge1 || 0) + Number(student.judge2 || 0) + Number(student.judge3 || 0);
             }
 
             mergedData = mergedData.sort((y,x) => x.totalMarks - y.totalMarks);

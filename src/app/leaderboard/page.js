@@ -81,14 +81,16 @@ export default function Leadboard(){
             const data = querySnapshot.docs.map((doc) => doc.data());
 
             let filteredData = data;
+            
+            //Total Mark Calculation
             for (let i=0;i<filteredData.length;i++)
             {
-                let sum = filteredData[i].totalMarks;
+                let sum = Number(filteredData[i].totalMarks);
                 for (let j=i+1;j<filteredData.length;j++)
                 {
                     if (filteredData[i].name === filteredData[j].name && filteredData[i].dob === filteredData[j].dob && filteredData[i].samithi === filteredData[j].samithi && filteredData[i].event === filteredData[j].event)
                     {
-                        sum += filteredData[j].totalMarks;
+                        sum += Number(filteredData[j].totalMarks);
                         filteredData.splice(j,1);
                         j--;
                     }
@@ -138,7 +140,6 @@ export default function Leadboard(){
                     filteredData = filteredData.filter((fd) => fd.event === event)
                 }
             }
-            
 
             filteredData = filteredData.sort((y,x) => x.totalMarks - y.totalMarks)
             const maleData = filteredData.filter((md) => md.gender === "Male");
@@ -327,7 +328,7 @@ export default function Leadboard(){
                                 <option>Group 1</option>
                                 <option>Group 2</option>
                                 <option>Group 3</option>
-                                <option>Group 4</option>
+                                <option>Group 4</option>    
                                 <option>Group 2 & Group 3 - Group Events</option>
                             </select>
                         </div>

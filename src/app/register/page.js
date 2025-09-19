@@ -6,6 +6,7 @@ import { auth, db } from "@/app/_util/config";
 import Image from "next/image";
 import { signOut } from "firebase/auth";
 import { useRouter } from "next/navigation";
+import * as XLSX from "xlsx";
 
 export default function Register(){
 
@@ -358,6 +359,14 @@ export default function Register(){
         setGroupEvent(grpEventValue);
     }
 
+    function handleDownload(){
+        const worksheet = XLSX.utils.json_to_sheet(studentData);
+        const workbook = XLSX.utils.book_new();
+        let samithi = samithiMap[email];
+        XLSX.utils.book_append_sheet(workbook,worksheet,"Students");
+        XLSX.writeFile(workbook,samithi.toLowerCase()+".xlsx");
+    }
+
     async function handleDeleteStudent(nameVal,dobVal)
     {
         const confirmDelete = window.confirm(`Sairam! Are you sure to delete this student (${nameVal})`)
@@ -392,6 +401,7 @@ export default function Register(){
                                 </div>
                                 <div className="flex flex-col md:flex md:flex-row md:justify-end">
                                     <button onClick={handleAddStudent} className="font-sans font-semibold text-sm md:text-xl rounded-lg bg-yellow-100 px-2 md:rounded-xl mt-1 mb-1 mx-2 md:h-15 md:mx-2 md:my-2 hover:bg-yellow-500 hover:cursor-pointer transition duration-300 ease-in-out">Add Student</button>
+                                    <button onClick={handleDownload} className="font-sans font-semibold text-sm md:text-xl rounded-lg bg-fuchsia-200 px-2 md:rounded-xl mt-1 mb-1 mx-2 md:h-15 md:mx-2 md:my-2 hover:bg-fuchsia-500 hover:cursor-pointer transition duration-300 ease-in-out">Download</button>
                                     <button onClick={handleLogout} className="font-sans font-semibold text-sm md:text-xl rounded-lg bg-red-200 px-2 md:rounded-xl ml-2 p-1 w-21 md:h-15 md:mx-2 md:my-2 hover:bg-red-500 hover:cursor-pointer hover:text-white transition duration-300 ease-in-out">Logout</button>
                                 </div>
                             </div>

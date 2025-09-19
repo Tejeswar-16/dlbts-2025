@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { query, getDocs, collection, doc, where, updateDoc, addDoc } from "firebase/firestore";
 import Image from "next/image";
 import { signOut } from "firebase/auth";
+import * as XLSX from "xlsx";
 
 export default function Judging(){
     
@@ -947,6 +948,45 @@ export default function Judging(){
         }
         fetchLock();
     },[judgeEmail]);
+
+    function handleDownload(){
+        let event = eventMap[params.event];
+        let group = uncut(params.group);
+        let criteria = []
+        if (event === "Bhajans" || event === "Bhajans - Boys" || event === "Bhajans - Girls"){
+            criteria.push({"Criteria":"Shruthi","Marks":"10"},{"Criteria":"Bhavam","Marks":"10"},{"Criteria":"Ragam","Marks":"10"},{"Criteria":"Talam","Marks":"10"},{"Criteria":"Memory & Pronunciation","Marks":10});
+        }
+        else if ((event === "Slokas") || (event === "Slokas - Boys") || (event === "Slokas - Girls") || (event === "Tamizh Chants") || (event === "Tamizh chants - Boys") || (event === "Tamizh chants - Girls")){
+            criteria.push({"Criteria":"Bhavam","Marks":"5"},{"Criteria":"Tune","Marks":"5"},{"Criteria":"Pronunciation","Marks":"10"},{"Criteria":"Memory","Marks":"10"});
+        }
+        else if ((event === "Vedam") || (event === "Vedam - Boys") || (event === "Vedam - Girls") || (event === "Rudram Namakam Chanting - Boys") || (event === "Rudram Namakam Chanting - Girls")){
+            criteria.push({"Criteria":"Pronunciation","Marks":"15"},{"Criteria":"Bhavam","Marks":"5"},{"Criteria":"Intonation","Marks":"15"},{"Criteria":"Memory","Marks":"15"});
+        }
+        else if ((event === "Story Telling (English)") || (event === "Story Telling (Tamil)") || (event === "Elocution (English)") || (event === "Elocution (Tamil)")){
+            criteria.push({"Criteria":"Presentation","Marks":"10"},{"Criteria":"Content","Marks":"10"},{"Criteria":"Language","Marks":"10"});
+        }
+        else if (event === "Drawing"){
+            criteria.push({"Criteria":"Theme","Marks":"10"},{"Criteria":"Colour Coordination","Marks":"10"},{"Criteria":"Layout","Marks":"10"});
+        }
+        else if ((event === "Devotional Singing - Boys") || (event === "Devotional Singing - Girls")){
+            criteria.push({"Criteria":"Shruthi","Marks":"10"},{"Criteria":"Bhavam","Marks":"10"},{"Criteria":"Ragam","Marks":"10"},{"Criteria":"Talam","Marks":"10"},{"Criteria":"Memory & Pronunciation","Marks":10},{"Criteria":"Harmony","Marks":10});
+        }
+        else if ((event === "Altar Decoration - Boys") || (event === "Altar Decoration - Girls")){
+            criteria.push({"Criteria":"Aesthetics","Marks":"10"},{"Criteria":"Resource Management","Marks":"10"},{"Criteria":"Teamwork","Marks":"10"});
+        }
+
+        const filteredStudentData = studentData.map((student) => ({
+            "Name" : student.name,
+            "Group" : student.group,
+            "Gender" : student.gender,
+            "DOB" : student.dob
+        }));
+        const final = [...criteria,{},...filteredStudentData];
+        const worksheet = XLSX.utils.json_to_sheet(final,{skipHeader:true});
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook,worksheet,"Students");
+        XLSX.writeFile(workbook,group.toLowerCase()+"-"+event.toLowerCase()+".xlsx");
+    }
     
     return(
         <>
@@ -958,6 +998,7 @@ export default function Judging(){
                             <h1 className="font-sans text-sm md:text-xl px-3">{judgeEmail}</h1>
                         </div>
                         <div className="flex flex-col md:flex md:flex-row md:justify-end">
+                            <button onClick={handleDownload} className="font-sans font-semibold text-md md:text-xl rounded-lg bg-fuchsia-200 px-2 md:rounded-xl h-8 mt-2 mr-1 md:h-15 md:mx-2 md:my-2 hover:bg-fuchsia-500 hover:cursor-pointer transition duration-300 ease-in-out">Download</button>
                             <button onClick={handleEventsClick} className="font-sans font-semibold text-md md:text-xl rounded-lg bg-yellow-100 px-2 md:rounded-xl h-8 mt-2 mr-1 md:h-15 md:mx-2 md:my-2 hover:bg-yellow-500 hover:cursor-pointer transition duration-300 ease-in-out">Leaderboard</button>
                             <button onClick={handleLogout} className="font-sans font-semibold text-sm md:text-xl rounded-lg bg-red-200 px-2 md:rounded-xl mx-2 h-8 mt-3 md:h-15 md:mx-2 md:my-2 hover:bg-red-500 hover:cursor-pointer hover:text-white transition duration-300 ease-in-out">Logout</button>
                         </div>

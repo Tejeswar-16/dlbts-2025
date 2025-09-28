@@ -182,9 +182,11 @@ export default function EventLeaderboard(){
                 );
 
                 const marks = Number(current.totalMarks) || 0;
+                const remarks = current.remarks || "No remarks"
 
                 if (existing) {
                     existing[`judge${judgeNumber}`] = marks;
+                    existing[`judge${judgeNumber}Remarks`] = remarks;
                 } else {
                     const newStudent = {
                         name: current.name,
@@ -194,8 +196,12 @@ export default function EventLeaderboard(){
                         judge1: 0,
                         judge2: 0,
                         judge3: 0,
+                        judge1Remarks: "",
+                        judge2Remarks: "",
+                        judge3Remarks: "",
                     };
                     newStudent[`judge${judgeNumber}`] = marks;
+                    newStudent[`judge${judgeNumber}Remarks`] = remarks;
                     mergedData.push(newStudent);
                 }
             }
@@ -290,11 +296,11 @@ export default function EventLeaderboard(){
                                         <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Name</td>
                                         <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">DOB</td>
                                         <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Gender</td>
-                                        <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Samithi</td>
                                         <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Judge 1</td>
                                         <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Judge 2</td>
                                         <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Judge 3</td>
                                         <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Total Marks</td>
+                                        <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Remarks</td>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -304,11 +310,14 @@ export default function EventLeaderboard(){
                                                 <td className="font-sans text-lg px-4 py-2 border border-black">{student.name}</td>
                                                 <td className="font-sans text-lg px-4 py-2 border border-black">{student.dob}</td>
                                                 <td className="font-sans text-lg px-4 py-2 border border-black">{student.gender}</td>
-                                                <td className="font-sans text-lg px-4 py-2 border border-black">{student.samithi}</td>
                                                 <td className="font-sans text-lg px-4 py-2 border border-black">{student.judge1}</td>
                                                 <td className="font-sans text-lg px-4 py-2 border border-black">{student.judge2}</td>
                                                 <td className="font-sans text-lg px-4 py-2 border border-black">{student.judge3}</td>
                                                 <td className="font-sans text-lg px-4 py-2 border border-black">{student.totalMarks ?? 0}</td>
+                                                <td  style={{ whiteSpace: "pre-line" }} className="font-sans text-lg px-4 py-2 border border-black">{[student.judge1Remarks ? `Judge 1: ${student.judge1Remarks}` : "",
+                                                                                                                  student.judge2Remarks ? `Judge 2: ${student.judge2Remarks}` : "",
+                                                                                                                  student.judge3Remarks ? `Judge 3: ${student.judge3Remarks}` : "",
+                                                                                                                 ].filter(Boolean).join("\n") || "No remarks"}</td>
                                             </tr>
                                         ))
                                     }

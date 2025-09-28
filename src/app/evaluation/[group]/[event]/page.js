@@ -102,6 +102,7 @@ export default function Judging(){
     const [stcTune,setStcTune] = useState(0);
     const [stcPronunciation,setStcPronunciation] = useState(0);
     const [stcMemory,setStcMemory] = useState(0);
+    const [stcRemarks,setStcRemarks] = useState("");
     const [total,setTotal] = useState(0);
     const [bgbBhaavam,setBgbBhaavam] = useState(0);
     const [bgbShruthi,setBgbShruthi] = useState(0);
@@ -109,19 +110,23 @@ export default function Judging(){
     const [bgbTalam,setBgbTalam] = useState(0);
     const [bgbMP,setBgbMP] = useState(0);
     const [bgbTotal,setBgbTotal] = useState(0);
+    const [bgbRemarks,setBgbRemarks] = useState("");
     const [vPronunciation,setvPronunciation] = useState(0);
     const [vBhaavam,setvBhaavam] = useState(0);
     const [vIntonation,setvIntonation] = useState(0);
     const [vMemory,setvMemory] = useState(0);
     const [vTotal,setvTotal] = useState(0);
+    const [vRemarks,setVRemarks] = useState("");
     const [sPresentation,setsPresentation] = useState(0);
     const [sContent,setsContent] = useState(0);
     const [sLanguage,setsLanguage] = useState(0);
     const [sTotal,setsTotal] = useState(0);
+    const [sRemarks,setSRemarks] = useState("");
     const [dTheme,setdTheme] = useState(0);
     const [dCC,setdCC] = useState(0);
     const [dLayout,setdLayout] = useState(0);
     const [dTotal,setDTotal] = useState(0);
+    const [dRemarks,setDRemarks] = useState("");
     const [dsShruthi,setDsShruthi] = useState(0);
     const [dsBhaavam,setDsBhaavam] = useState(0);
     const [dsRagam,setDsRagam] = useState(0);
@@ -129,11 +134,14 @@ export default function Judging(){
     const [dsMP,setDsMP] = useState(0);
     const [dsHarmony,setDsHarmony] = useState(0);
     const [dsTotal,setDsTotal] = useState(0);
+    const [dsRemarks,setDsRemarks] = useState("");
     const [adAsthetics,setAdAesthetics] = useState(0);
     const [adRM,setAdRM] = useState(0);
     const [adTeamwork,setAdTeamwork] = useState(0);
     const [adTotal,setAdTotal] = useState(0);
+    const [adRemarks,setAdRemarks] = useState("");
     const [qMark,setQMark] = useState(0);
+    const [qRemarks,setQRemarks] = useState("");
     const [disabled,setDisabled] = useState(false);
 
     function uncut(a)
@@ -321,6 +329,7 @@ export default function Judging(){
                         pronunciation : 0,
                         memory : 0,
                         totalMarks : 0,
+                        remarks: "",
                         dob : "",
                         event : "",
                         gender : "",
@@ -336,6 +345,7 @@ export default function Judging(){
                 setStcTune(mark.tune);
                 setStcPronunciation(mark.pronunciation);
                 setStcMemory(mark.memory);
+                setStcRemarks(mark.remarks);
             }
             else if ((event === "Bhajans") || (event === "Bhajans - Boys") || (event === "Bhajans - Girls"))
             {
@@ -349,6 +359,7 @@ export default function Judging(){
                         ragam : 0,
                         talam : 0,
                         totalMarks : 0,
+                        remarks: "",
                         dob : "",
                         event : "",
                         gender : "",
@@ -365,6 +376,7 @@ export default function Judging(){
                 setBgbRagam(mark.ragam);
                 setBgbTalam(mark.talam);
                 setBgbMP(mark.memory_pronunciation);
+                setBgbRemarks(mark.remarks);
             }
             else if ((event === "Vedam") || (event === "Vedam - Boys") || (event === "Vedam - Girls") || (event === "Rudram Namakam Chanting - Boys") || (event === "Rudram Namakam Chanting - Girls"))
             {
@@ -377,6 +389,7 @@ export default function Judging(){
                         pronunciation : 0,
                         memory : 0,
                         totalMarks : 0,
+                        remarks: "",
                         dob : "",
                         event : "",
                         gender : "",
@@ -392,6 +405,7 @@ export default function Judging(){
                 setvPronunciation(mark.pronunciation);
                 setvIntonation(mark.intonation);
                 setvMemory(mark.memory);
+                setVRemarks(mark.remarks);
             }
             else if ((event === "Story Telling (English)") || (event === "Story Telling (Tamil)") || (event === "Elocution (English)") || (event === "Elocution (Tamil)"))
             {
@@ -403,6 +417,7 @@ export default function Judging(){
                         content : 0,
                         language : 0,
                         totalMarks : 0,
+                        remarks: "",
                         dob : "",
                         event : "",
                         gender : "",
@@ -417,6 +432,7 @@ export default function Judging(){
                 setsPresentation(mark.presentation);
                 setsContent(mark.content);
                 setsLanguage(mark.language);
+                setSRemarks(mark.remarks);
             }
             else if ((event === "Drawing"))
             {
@@ -428,6 +444,7 @@ export default function Judging(){
                         colour_coordination : 0,
                         layout : 0,
                         totalMarks : 0,
+                        remarks: "",
                         dob : "",
                         event : "",
                         gender : "",
@@ -442,6 +459,7 @@ export default function Judging(){
                 setdTheme(mark.theme);
                 setdCC(mark.colour_coordination);
                 setdLayout(mark.layout);
+                setDRemarks(mark.remarks);
             }
             else if ((event === "Devotional Singing - Boys") || (event === "Devotional Singing - Girls"))
             {
@@ -456,6 +474,7 @@ export default function Judging(){
                         bhaavam : 0,
                         harmony : 0,
                         totalMarks : 0,
+                        remarks: "",
                         dob : "",
                         event : "",
                         gender : "",
@@ -473,6 +492,7 @@ export default function Judging(){
                 setDsTalam(mark.talam);
                 setDsMP(mark.memory_pronunciation);
                 setDsHarmony(mark.harmony);
+                setDsRemarks(mark.remarks);
             }
             else if ((event === "Altar Decoration - Boys") || (event === "Altar Decoration - Girls"))
             {
@@ -484,6 +504,7 @@ export default function Judging(){
                         resource_management : 0,
                         teamwork : 0,
                         totalMarks : 0,
+                        remarks: "",
                         dob : "",
                         event : "",
                         gender : "",
@@ -498,6 +519,7 @@ export default function Judging(){
                 setAdAesthetics(mark.asthetics);
                 setAdRM(mark.resource_management);
                 setAdTeamwork(mark.teamwork);
+                setAdRemarks(mark.remarks);
             }
             else if ((event === "Quiz"))
             {
@@ -506,6 +528,7 @@ export default function Judging(){
                     filteredData = [{
                         id : "",
                         totalMarks : 0,
+                        remarks: "",
                         dob : "",
                         event : "",
                         gender : "",
@@ -518,6 +541,7 @@ export default function Judging(){
                 }
                 const mark = filteredData[0];
                 setQMark(mark.totalMarks);
+                setQRemarks(mark.remarks);
             }
 
             setMarks(filteredData);
@@ -557,6 +581,7 @@ export default function Judging(){
                         pronunciation : stcPronunciation,
                         memory : stcMemory,
                         totalMarks : total,
+                        remarks: stcRemarks,
                         judge : judgeEmail
                     });
                 });
@@ -577,6 +602,7 @@ export default function Judging(){
                         pronunciation : stcPronunciation,
                         memory : stcMemory,
                         totalMarks : total,
+                        remarks: stcRemarks,
                         judge : judgeEmail,
                         lock : ""  
                 });
@@ -603,6 +629,7 @@ export default function Judging(){
                         talam : bgbTalam,
                         memory_pronunciation : bgbMP,
                         totalMarks : bgbTotal,
+                        remarks: bgbRemarks,
                         judge : judgeEmail
                     });
                 });
@@ -624,6 +651,7 @@ export default function Judging(){
                         talam : bgbTalam,
                         memory_pronunciation : bgbMP,
                         totalMarks : bgbTotal,
+                        remarks: bgbRemarks,
                         judge : judgeEmail,
                         lock : ""  
                 });
@@ -649,6 +677,7 @@ export default function Judging(){
                         intonation : vIntonation,
                         memory : vMemory,
                         totalMarks : vTotal,
+                        remarks: vRemarks,
                         judge : judgeEmail
                     });
                 });
@@ -669,6 +698,7 @@ export default function Judging(){
                         intonation : vIntonation,
                         memory : vMemory,
                         totalMarks : vTotal,
+                        remarks: vRemarks,
                         judge : judgeEmail,
                         lock : "" 
                 });
@@ -693,6 +723,7 @@ export default function Judging(){
                         content : sContent,
                         language : sLanguage,
                         totalMarks : sTotal,
+                        remarks: sRemarks,
                         judge : judgeEmail
                     });
                 });
@@ -712,6 +743,7 @@ export default function Judging(){
                         content : sContent,
                         language : sLanguage,
                         totalMarks : sTotal,
+                        remarks: sRemarks,
                         judge : judgeEmail,
                         lock : ""
                 });
@@ -736,6 +768,7 @@ export default function Judging(){
                         colour_coordination : dCC,
                         layout : dLayout,
                         totalMarks : dTotal,
+                        remarks: dRemarks,
                         judge : judgeEmail
                     });
                 });
@@ -755,6 +788,7 @@ export default function Judging(){
                         colour_coordination : dCC,
                         layout : dLayout,
                         totalMarks : dTotal,
+                        remarks: dRemarks,
                         judge : judgeEmail,
                         lock : ""
                 });
@@ -782,6 +816,7 @@ export default function Judging(){
                         memory_pronunciation : dsMP,
                         harmony : dsHarmony,
                         totalMarks : dsTotal,
+                        remarks: dsRemarks,
                         judge : judgeEmail
                     });
                 });
@@ -804,6 +839,7 @@ export default function Judging(){
                         memory_pronunciation : dsMP,
                         harmony : dsHarmony,
                         totalMarks : dsTotal,
+                        remarks: dsRemarks,
                         judge : judgeEmail,
                         lock : ""
                 });
@@ -828,6 +864,7 @@ export default function Judging(){
                         resource_management : adRM,
                         teamwork : adTeamwork,
                         totalMarks : adTotal,
+                        remarks: adRemarks,
                         judge : judgeEmail
                     });
                 });
@@ -847,6 +884,7 @@ export default function Judging(){
                         resource_management : adRM,
                         teamwork : adTeamwork,
                         totalMarks : adTotal,
+                        remarks: adRemarks,
                         judge : judgeEmail,
                         lock : ""
                 });
@@ -868,6 +906,7 @@ export default function Judging(){
                         gender : amGender,
                         event : event,
                         totalMarks : qMark,
+                        remarks: qRemarks,
                         judge : judgeEmail
                     });
                 });
@@ -884,6 +923,7 @@ export default function Judging(){
                         gender : amGender,
                         event : event,
                         totalMarks : qMark,
+                        remarks: qRemarks,
                         judge : judgeEmail,
                         lock : ""
                 });
@@ -1274,43 +1314,45 @@ export default function Judging(){
 
                 <div className="mx-auto bg-white rounded-xl shadow-xl mt-5 pb-5 w-75 md:w-180 lg:w-250">
                         <h1 className="flex justify-center font-sans font-bold pt-4 pb-4 p-4 text-md md:text-xl">Students Registered for {group}: {event}</h1>
-                        <table className="mx-auto text-center w-70 md:w-150 lg:w-150 pb-2">
-                            <thead className="bg-blue-950 text-white">
-                                <tr>
-                                    <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Student Details</th>
-                                    <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Action</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {
-                                    studentData.map((student) => (
-                                        <tr key={student.id}>
-                                            <td className="font-sans px-2 py-4 font-semibold border border-black">
-                                                <div className="md:flex md:flex-row md:justify-between md:items-center">
-                                                    <div>
-                                                        <h1 className="font-sans font-bold text-lg lg:text-2xl">{student.name}</h1>
-                                                    </div>
-                                                    <div className="flex flex-col justify-between items-center mt-2 mb-2 lg:mt-0 lg:mb-0">
-                                                        <h1 className="font-sans text-sm lg:text-md">Group: {student.group}</h1>
-                                                        <h1 className="font-sans text-sm lg:text-md">Gender: {student.gender}</h1>
-                                                        <h1 className="font-sans text-sm lg:text-md">DOB: {student.dob}</h1>
-                                                    </div>
-                                                    
-                                                </div>
-                                                {
-                                                    (student.event2 !== "Select an event" || student.groupEvent !== "Select an event") && (
-                                                        <div className="mt-3 lg:mt-1">
-                                                            <h1 className="mx-auto bg-red-100 p-1 rounded-lg text-sm lg:text-md w-40 md:w-100">Participating in two events. Kindly prioritize evaluation</h1>
+                        <div className="overflow-hidden overflow-x-auto">
+                            <table className="mx-auto text-center w-70 md:w-150 lg:w-150 pb-2">
+                                <thead className="bg-blue-950 text-white">
+                                    <tr>
+                                        <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Student Details</th>
+                                        <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {
+                                        studentData.map((student) => (
+                                            <tr key={student.id}>
+                                                <td className="font-sans px-2 py-4 font-semibold border border-black">
+                                                    <div className="md:flex md:flex-row md:justify-between md:items-center">
+                                                        <div>
+                                                            <h1 className="font-sans font-bold text-lg lg:text-2xl">{student.name}</h1>
                                                         </div>
-                                                    )
-                                                }
-                                            </td>
-                                            <td className="font-sans px-2 py-2 border border-black"><button disabled={disabled} onClick={() => {handleAwardMarks(student.name,student.dob,student.group,student.gender,student.samithi)}} className={!disabled ? `bg-yellow-200 p-2 rounded-xl font-semibold shadow-xl hover:cursor-pointer` : `bg-gray-200 p-2 rounded-xl shadow-xl hover:cursor-not-allowed`}>Award Marks</button></td>
-                                        </tr>
-                                    ))
-                                }
-                            </tbody>
-                        </table>
+                                                        <div className="flex flex-col justify-between items-center mt-2 mb-2 lg:mt-0 lg:mb-0">
+                                                            <h1 className="font-sans text-sm lg:text-md">Group: {student.group}</h1>
+                                                            <h1 className="font-sans text-sm lg:text-md">Gender: {student.gender}</h1>
+                                                            <h1 className="font-sans text-sm lg:text-md">DOB: {student.dob}</h1>
+                                                        </div>
+                                                        
+                                                    </div>
+                                                    {
+                                                        (student.event2 !== "Select an event" || student.groupEvent !== "Select an event") && (
+                                                            <div className="mt-3 lg:mt-1">
+                                                                <h1 className="mx-auto bg-red-100 p-1 rounded-lg text-sm lg:text-md w-40 md:w-100">Participating in two events. Kindly prioritize evaluation</h1>
+                                                            </div>
+                                                        )
+                                                    }
+                                                </td>
+                                                <td className="font-sans px-2 py-2 border border-black"><button disabled={disabled} onClick={() => {handleAwardMarks(student.name,student.dob,student.group,student.gender,student.samithi)}} className={!disabled ? `bg-yellow-200 p-2 rounded-xl font-semibold shadow-xl hover:cursor-pointer` : `bg-gray-200 p-2 rounded-xl shadow-xl hover:cursor-not-allowed`}>Award Marks</button></td>
+                                            </tr>
+                                        ))
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
                 </div>
 
                 {
@@ -1400,6 +1442,9 @@ export default function Judging(){
                                     </tbody>
                                 ))}
                             </table>
+                            <div className="flex justify-center">
+                                <textarea value={stcRemarks} onChange={(e)=>{setStcRemarks(e.target.value)}} type="text" maxLength={100} placeholder="Enter your remarks here (max 100 characters)" className="resize-none font-sans p-2 mb-2 rounded-xl w-70 h-30 md:w-100 md:h-20 border"></textarea>
+                            </div>
                             <div className="flex justify-center">
                                 <button onClick={() => {updateMarks()}} className="flex justify-center font-sans bg-green-200 rounded-xl hover:cursor-pointer font-semibold text-lg p-2 mb-2">Update Marks</button>
                             </div>
@@ -1522,6 +1567,9 @@ export default function Judging(){
                                 ))}
                             </table>
                             <div className="flex justify-center">
+                                <textarea value={bgbRemarks} onChange={(e)=>{setBgbRemarks(e.target.value)}} type="text" maxLength={100} placeholder="Enter your remarks here (max 100 characters)" className="resize-none font-sans p-2 mb-2 rounded-xl w-70 h-30 md:w-100 md:h-20 border"></textarea>
+                            </div>
+                            <div className="flex justify-center">
                                 <button onClick={() => {updateMarks()}} className="flex justify-center font-sans bg-green-200 rounded-xl hover:cursor-pointer font-semibold text-lg p-2 mb-2">Update Marks</button>
                             </div>
                         </div>
@@ -1635,6 +1683,9 @@ export default function Judging(){
                                 ))}
                             </table>
                             <div className="flex justify-center">
+                                <textarea value={vRemarks} onChange={(e)=>{setVRemarks(e.target.value)}} type="text" maxLength={100} placeholder="Enter your remarks here (max 100 characters)" className="resize-none font-sans p-2 mb-2 rounded-xl w-70 h-30 md:w-100 md:h-20 border"></textarea>
+                            </div>
+                            <div className="flex justify-center">
                                 <button onClick={() => {updateMarks()}} className="flex justify-center font-sans bg-green-200 rounded-xl hover:cursor-pointer font-semibold text-lg p-2 mb-2">Update Marks</button>
                             </div>
                         </div>
@@ -1720,6 +1771,9 @@ export default function Judging(){
                                 ))}
                             </table>
                             <div className="flex justify-center">
+                                <textarea value={sRemarks} onChange={(e)=>{setSRemarks(e.target.value)}} type="text" maxLength={100} placeholder="Enter your remarks here (max 100 characters)" className="resize-none font-sans p-2 mb-2 rounded-xl w-70 h-30 md:w-100 md:h-20 border"></textarea>
+                            </div>
+                            <div className="flex justify-center">
                                 <button onClick={() => {updateMarks()}} className="flex justify-center font-sans bg-green-200 rounded-xl hover:cursor-pointer font-semibold text-lg p-2 mb-2">Update Marks</button>
                             </div>
                         </div>
@@ -1804,6 +1858,9 @@ export default function Judging(){
                                     </tbody>
                                 ))}
                             </table>
+                            <div className="flex justify-center">
+                                <textarea value={dRemarks} onChange={(e)=>{setDRemarks(e.target.value)}} type="text" maxLength={100} placeholder="Enter your remarks here (max 100 characters)" className="resize-none font-sans p-2 mb-2 rounded-xl w-70 h-30 md:w-100 md:h-20 border"></textarea>
+                            </div>
                             <div className="flex justify-center">
                                 <button onClick={() => {updateMarks()}} className="flex justify-center font-sans bg-green-200 rounded-xl hover:cursor-pointer font-semibold text-lg p-2 mb-2">Update Marks</button>
                             </div>
@@ -1944,6 +2001,9 @@ export default function Judging(){
                                 ))}
                             </table>
                             <div className="flex justify-center">
+                                <textarea value={dsRemarks} onChange={(e)=>{setDsRemarks(e.target.value)}} type="text" maxLength={100} placeholder="Enter your remarks here (max 100 characters)" className="resize-none font-sans p-2 mb-2 rounded-xl w-70 h-30 md:w-100 md:h-20 border"></textarea>
+                            </div>
+                            <div className="flex justify-center">
                                 <button onClick={() => {updateMarks()}} className="flex justify-center font-sans bg-green-200 rounded-xl hover:cursor-pointer font-semibold text-lg p-2 mb-2">Update Marks</button>
                             </div>
                         </div>
@@ -2029,6 +2089,9 @@ export default function Judging(){
                                 ))}
                             </table>
                             <div className="flex justify-center">
+                                <textarea value={adRemarks} onChange={(e)=>{setAdRemarks(e.target.value)}} type="text" maxLength={100} placeholder="Enter your remarks here (max 100 characters)" className="resize-none font-sans p-2 mb-2 rounded-xl w-70 h-30 md:w-100 md:h-20 border"></textarea>
+                            </div>
+                            <div className="flex justify-center">
                                 <button onClick={() => {updateMarks()}} className="flex justify-center font-sans bg-green-200 rounded-xl hover:cursor-pointer font-semibold text-lg p-2 mb-2">Update Marks</button>
                             </div>
                         </div>
@@ -2045,6 +2108,9 @@ export default function Judging(){
                             <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Student Name: {amName}</h1>
                             <div className="flex justify-center">
                                 <input value={qMark} onChange={(e) => setQMark(e.target.value)} className="font-sans rounded-xl border p-2 w-50 mx-4 my-4" type="number" placeholder="Enter the marks here..."></input>
+                            </div>
+                            <div className="flex justify-center">
+                                <textarea value={qRemarks} onChange={(e)=>{setQRemarks(e.target.value)}} type="text" maxLength={100} placeholder="Enter your remarks here (max 100 characters)" className="resize-none font-sans p-2 mb-2 rounded-xl w-70 h-30 md:w-100 md:h-20 border"></textarea>
                             </div>
                             <div className="flex justify-center">
                                 <button onClick={() => {updateMarks()}} className="font-sans bg-green-200 rounded-xl hover:cursor-pointer font-semibold text-lg p-2 mb-2">Update Marks</button>

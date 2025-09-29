@@ -82,20 +82,25 @@ export default function Leadboard(){
 
             let filteredData = data;
             
-            //Total Mark Calculation
+            //Total Mark Calculation && Cumulative Remarks
             for (let i=0;i<filteredData.length;i++)
             {
+                let judge = (filteredData[i].judge.startsWith("judge01")) ? "Judge 1" : (filteredData[i].judge.startsWith("judge02")) ? "Judge 2" : "Judge 3"
                 let sum = Number(filteredData[i].totalMarks);
+                let remarks = (filteredData[i].remarks != undefined) ? judge+": "+filteredData[i].remarks+"\n" : "No remarks";
                 for (let j=i+1;j<filteredData.length;j++)
                 {
                     if (filteredData[i].name === filteredData[j].name && filteredData[i].dob === filteredData[j].dob && filteredData[i].samithi === filteredData[j].samithi && filteredData[i].event === filteredData[j].event)
                     {
                         sum += Number(filteredData[j].totalMarks);
+                        let judge = (filteredData[j].judge.startsWith("judge01")) ? "Judge 1" : (filteredData[j].judge.startsWith("judge02")) ? "Judge 2" : "Judge 3"
+                        remarks += (filteredData[j].remarks != undefined) ? judge+": "+filteredData[j].remarks+"\n" : "No remarks";
                         filteredData.splice(j,1);
                         j--;
                     }
                 }
                 filteredData[i].totalMarks = sum;
+                filteredData[i].remarks = remarks;
             }
             if (group === "Group 2 & Group 3 - Group Events")
             {
@@ -476,6 +481,7 @@ export default function Leadboard(){
                                         <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Group</td>
                                         <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Event</td>
                                         <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Total Marks</td>
+                                        <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Remarks</td>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -487,6 +493,7 @@ export default function Leadboard(){
                                                 <td className="font-sans text-lg px-4 py-2 border border-black">{student.group}</td>
                                                 <td className="font-sans text-lg px-4 py-2 border border-black">{student.event}</td>
                                                 <td className="font-sans text-lg px-4 py-2 border border-black">{student.totalMarks}</td>
+                                                <td className="font-sans text-lg px-4 py-2 border border-black whitespace-pre-line">{student.remarks}</td>
                                             </tr>
                                         ))
                                     }

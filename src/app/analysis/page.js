@@ -1,47 +1,27 @@
-"use client";
+"use client"
 
-import Image from "next/image";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { auth, db } from "../_util/config";
 import { useRouter } from "next/navigation";
-import { collection, doc, getDocs, onSnapshot, query, updateDoc, where } from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import Image from "next/image";
 import { signOut } from "firebase/auth";
+import * as XLSX from "xlsx";
 
-export default function Leadboard(){
-    
+export default function Home(){
+
     const [name,setName] = useState("");
     const [email,setEmail] = useState("");
     const [group,setGroup] = useState("All");
     const [samithi,setSamithi] = useState("All");
     const [event,setEvent] = useState("All");
-    const [studentData,setStudentData] = useState([]);
-    const [loading,setLoading] = useState(false);
     const [maleCount,setMaleCount] = useState(0);
     const [femaleCount,setFemaleCount] = useState(0);
     const [totalCount,setTotalCount] = useState(0);
-    const [index,setIndex] = useState(0);
-    const [heading,setHeading] = useState("Search by Group, Samithi or Event");
-    const [lock,setLock] = useState("");
-    const [clicked,setClicked] = useState(false);
-    const [lockedEvents,setLockedEvents] = useState([]);
+    const [loading,setLoading]  = useState(false);
+    const [studentData,setStudentData] = useState([]);
 
-    let judgeName = "";
-    function cut(a)
-    {
-        judgeName = "";
-        for (let i=0;i<a.length;i++)
-        {
-            if (a[i] !== '@')
-            {
-                judgeName += a[i];
-            }
-            else
-            {
-                break;
-            }
-        }
-        return judgeName;
-    }
+    const router = useRouter();
 
     useEffect(() => {
         auth.onAuthStateChanged((user) => {
@@ -55,33 +35,22 @@ export default function Leadboard(){
             if (user)
             {
                 setEmail(user.email);
-                if (user.email === "admin@dlbts.ks")
-                    setName("Admin");
-                else    
-                    setName(cut(user.email).toUpperCase());
+                setName("Admin");
             }
         })
-    },[cut]);
-
-    const router = useRouter();
-    function handleEventsClick(){
-        if (email === "admin@dlbts.ks")
-            router.push("/dashboard");
-        else
-            alert("Sairam! You do not have access to visit Dashboard page");
-    }
+    })
 
     useEffect(() => {
-        async function getWinners(){
+        async function fetchData(){
             setLoading(true);
             const q = query(
                 collection(db,"studentMarks")
             );
             const querySnapshot = await getDocs(q);
             const data = querySnapshot.docs.map((doc) => doc.data());
-
-            let filteredData = data;
             
+            let filteredData = data;
+
             //Total Mark Calculation && Cumulative Remarks
             for (let i=0;i<filteredData.length;i++)
             {
@@ -103,11 +72,41 @@ export default function Leadboard(){
                 filteredData[i].remarks = remarks;
             }
             
+            let groups = ["Group 1","Group 1","Group 1","Group 1","Group 1","Group 1","Group 1","Group 1","Group 1",
+                          "Group 2","Group 2","Group 2","Group 2","Group 2","Group 2","Group 2","Group 2","Group 2","Group 2","Group 2",
+                          "Group 3","Group 3","Group 3","Group 3","Group 3","Group 3","Group 3","Group 3","Group 3","Group 3","Group 3",
+                          "Group 4"]
+        
+            let events = ["Bhajans","Slokas","Vedam","Tamizh Chants","Story Telling (English)","Story Telling (Tamil)",
+                          "Drawing","Devotional Singing - Boys","Devotional Singing - Girls","Bhajans - Boys",
+                          "Bhajans - Girls", "Slokas - Boys", "Slokas - Girls","Vedam - Boys","Vedam - Girls",
+                          "Tamizh chants - Boys", "Tamizh chants - Girls", "Elocution (English)","Elocution (Tamil)","Drawing",
+                          "Bhajans - Boys","Bhajans - Girls", "Slokas - Boys", "Slokas - Girls","Vedam - Boys","Vedam - Girls",
+                          "Tamizh chants - Boys", "Tamizh chants - Girls", "Elocution (English)","Elocution (Tamil)","Drawing","Quiz","Quiz"]
+                          
+            let groupEvents = ["Altar Decoration - Boys","Altar Decoration - Girls","Rudram Namakam Chanting - Boys","Rudram Namakam Chanting - Girls","Devotional Singing - Boys","Devotional Singing - Girls"]
+
+            let grpEvent = []
+            for (let i=0;i<groups.length;i++){
+                let ge = filteredData.filter((fd) => fd.group === groups[i] && fd.event === events[i]);
+                ge = ge.sort((x,y) => y.totalMarks - x.totalMarks);
+                ge = ge.slice(0,3);
+                grpEvent = [...grpEvent,...ge];
+            }
+            for (let i=0;i<groupEvents.length;i++){
+                let ge = filteredData.filter((fd) => (fd.group === "Group 2" || fd.group === "Group 3") && fd.event === groupEvents[i])
+                ge = ge.sort((x,y) => y.totalMarks - x.totalMarks);
+                ge = ge.slice(0,3);
+                grpEvent = [...grpEvent,...ge];
+            }
+            
+            filteredData = grpEvent;
+
             if (group === "Group 2 & Group 3 - Group Events")
             {
                 if (event === "Altar Decoration - Boys")
                 {
-                    filteredData = filteredData.filter((fd) => (fd.group === "Group 2" || fd.group === "Group 3") && fd.event === "Altar Decoration - Boys") 
+                    filteredData = filteredData.filter((fd) => (fd.group === "Group 2" || fd.group === "Group 3") && fd.event === "Altar Decoration - Boys")
                 }
                 else if (event === "Altar Decoration - Girls")
                 {
@@ -129,155 +128,62 @@ export default function Leadboard(){
                 {
                     filteredData = filteredData.filter((fd) => (fd.group === "Group 2" || fd.group === "Group 3") && fd.event === "Rudram Namakam Chanting - Girls") 
                 }
-
             }
             else
             {
                 if (group !== "All")
                 {
-                    filteredData = filteredData.filter((fd) => fd.group === group)
+                    filteredData = filteredData.filter((fd) => fd.group === group);
                 }
                 if (samithi !== "All")
                 {
-                    filteredData = filteredData.filter((fd) => fd.samithi === samithi)
+                    filteredData = filteredData.filter((fd) => fd.samithi === samithi);
                 }
                 if (event !== "All")
                 {
-                    filteredData = filteredData.filter((fd) => fd.event === event)
+                    filteredData = filteredData.filter((fd) => fd.event === event);
                 }
             }
-
-            filteredData = filteredData.sort((y,x) => x.totalMarks - y.totalMarks)
-            const maleData = filteredData.filter((md) => md.gender === "Male");
+            const maleData = filteredData.filter((fd) => fd.gender === "Male");
             const femaleData = filteredData.filter((fd) => fd.gender === "Female");
             setMaleCount(maleData.length);
             setFemaleCount(femaleData.length);
             setTotalCount(filteredData.length);
             setStudentData(filteredData);
-
-            let headingParts = [];
-
-            if (group !== "All") headingParts.push(`Group: ${group}`);
-            if (samithi !== "All") headingParts.push(`Samithi: ${samithi}`);
-            if (event !== "All") headingParts.push(`Event: ${event}`);
-            if (headingParts.length === 0)
-                setHeading("Search by Group, Samithi or Event");
-            else
-                setHeading(headingParts.join(", "));
             setLoading(false);
-        }   
-        getWinners();
+        }
+        fetchData();
     },[group,samithi,event]);
 
-    function handlePrizeWinners(){
-        const top3 = studentData.slice(0,3);
-        const cutoff = top3[2].totalMarks;
-        const top = studentData.filter((fd) => fd.totalMarks >= cutoff)
-        const maleTop = top.filter((fd) => fd.gender === "Male");
-        const femaleTop = top.filter((fd) => fd.gender === "Female");
-        setMaleCount(maleTop.length);
-        setFemaleCount(femaleTop.length);
-        setTotalCount(top.length);
-        setStudentData(top);       
-        setHeading("Top Scorers -> "+heading);
+    function handleLeaderboard(){
+        router.push("/leaderboard")
     }
 
     function handleLogout(){
         signOut(auth)
-            .then(() => {
-                alert("Sairam! Signed out successfully");
-                router.push("/");
-            })
-            .catch((error) => {
-                console.log(error.message);
-            })
+        .then(() => {
+            alert("Sairam! Signed out successfully");
+            router.push("/");
+        })
+        .catch((error) => {
+            console.log(error.message);
+        })
     }
 
-    const colors = [
-        "bg-blue-200",
-        "bg-green-200",
-        "bg-yellow-200",
-        "bg-purple-200",
-        "bg-indigo-200",
-        "bg-red-200",
-        "bg-fuchsia-200"
-    ];
+    function handleDownload(){
+        
+        const resultData = studentData.map((student) => ({
+            name: student.name,
+            group: student.group,
+            samithi: student.samithi,
+            event: student.event,
+            gender: student.gender,
+        }));
 
-    useEffect(() => {
-        setInterval(() => {
-            setIndex((prev => (prev+1)%colors.length));
-        },1000);
-    },[]);
-
-    useEffect(() => {
-        async function fetchLock(){
-            const q = query(
-                collection(db,"eventLock"),
-                where("group","==",group),
-                where("event","==",event)
-            );
-            
-            const querySnapshot = await getDocs(q);
-            const data = querySnapshot.docs.map((doc) => doc.data());
-            if (data.length !== 0)
-                setLock(data[0].lock);
-            else    
-                setLock("false");
-        }
-        fetchLock();
-    },[group,event]);
-
-    function handleClose(){
-        setClicked(false);
-    }
-
-    function handleLockedEvents(){
-        setClicked(true);
-    }
-
-    useEffect(() => {
-        async function fetchLockedEvents(){
-            const q = query(
-                collection(db,"eventLock")
-            );
-            const querySnapshot = await getDocs(q);
-            const data = querySnapshot.docs.map((doc) => doc.data());
-            let sortedData = data.sort((x,y) => x.group.localeCompare(y.group));
-            setLockedEvents(sortedData);
-        }
-        fetchLockedEvents();
-    },[clicked]);
-
-    async function handleLock(groupValue,eventValue)
-    {
-        const q = query(
-            collection(db,"eventLock"),
-            where("group","==",groupValue),
-            where("event","==",eventValue)
-        );
-        const querySnapshot = await getDocs(q);
-        querySnapshot.forEach(async (document) => {
-            const docRef = doc(db,"eventLock",document.id);
-            let currentLock = document.data().lock;
-            await updateDoc(docRef,{
-                lock : (currentLock === "true") ? "false" : "true"
-            });
-        });
-    }
-
-    useEffect(() => {
-        onSnapshot(collection(db,"eventLock"), (snapshot) => {
-            let updatedData = snapshot.docs.map((doc) => ({
-                id : doc.id,
-                ...doc.data()
-            }));
-            let sortedData = updatedData.sort((x,y) => x.group.localeCompare(y.group));
-            setLockedEvents(sortedData);
-        });
-    },[]);
-    
-    function handleAnalysis(){
-        router.push("/analysis")
+        const worksheet = XLSX.utils.json_to_sheet(resultData);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook,worksheet,"Students");
+        XLSX.writeFile(workbook,"result.xlsx");
     }
 
     return (
@@ -290,44 +196,11 @@ export default function Leadboard(){
                             <h1 className="font-sans text-sm md:text-xl px-3">{email}</h1>
                         </div>
                         <div className="flex flex-col md:flex md:flex-row md:justify-end">
-                            <button onClick={handleAnalysis} className="font-sans font-semibold text-md md:text-xl h-8 rounded-lg bg-blue-200 px-2 md:rounded-xl mt-1 mb-2 mx-2 md:h-15 md:mx-2 md:my-2 hover:text-black hover:bg-blue-500 hover:text-white hover:cursor-pointer transition duration-300 ease-in-out">Analysis</button>
-                            <button onClick={handleLockedEvents} className="font-sans font-semibold text-md w-32 md:w-40 md:text-xl h-8 rounded-lg bg-purple-200 px-2 md:rounded-xl mt-1 mb-2 mx-2 md:h-15 md:mx-2 md:my-2 hover:text-black hover:bg-purple-500 hover:cursor-pointer transition duration-300 ease-in-out">Lock Events</button>
-                            <button onClick={handleEventsClick} className="font-sans font-semibold text-md md:text-xl rounded-lg bg-yellow-100 px-2 md:rounded-xl h-8 mx-2 md:h-15 md:mx-2 md:my-2 hover:bg-yellow-500 hover:cursor-pointer transition duration-300 ease-in-out">Dashboard</button>
+                            <button onClick={handleLeaderboard} className="font-sans font-semibold text-md md:text-xl rounded-lg bg-yellow-100 px-2 md:rounded-xl h-8 mt-2 mx-2 md:h-15 md:mx-2 md:my-2 hover:bg-yellow-500 hover:cursor-pointer transition duration-300 ease-in-out">Leaderboard</button>
                             <button onClick={handleLogout} className="font-sans font-semibold text-sm md:text-xl rounded-lg bg-red-200 px-2 md:rounded-xl mx-2 h-8 mt-2 md:h-15 md:mx-2 md:my-2 hover:bg-red-500 hover:cursor-pointer hover:text-white transition duration-300 ease-in-out">Logout</button>
                         </div>
                     </div>
                 </nav>
-
-                {clicked && 
-                    <div className="mx-auto rounded-xl shadow-xl bg-white mt-5 w-75 md:w-180 lg:w-250">
-                        <div className="flex justify-end mr-2 pt-2">
-                            <h1 onClick={handleClose} className="select-none text-white bg-red-500 p-1 rounded-lg hover:cursor-pointer">X</h1>
-                        </div>
-                        <h1 className="flex justify-center font-sans font-bold text-xl md:text-2xl p-2">Lock Events</h1>
-                        <div className="overflow-x-auto w-70 md:w-175 lg:w-245 mt-2 mb-4 pb-4">
-                            <table className="mx-auto text-center">
-                                <thead className="bg-blue-950 text-white">
-                                    <tr>
-                                        <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Group</td>
-                                        <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Event</td>
-                                        <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Action</td>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {
-                                        lockedEvents.map((lockedEvent,index) => (
-                                            <tr key={index} className={(lockedEvent.group === "Group 1") ? "bg-violet-100 hover:bg-gray-200 transition duration-300 ease-in-out" : (lockedEvent.group === "Group 2") ? "bg-fuchsia-100 hover:bg-gray-200 transition duration-300 ease-in-out" : (lockedEvent.group === "Group 3") ? "bg-pink-100 hover:bg-gray-200 transition duration-300 ease-in-out" : "bg-purple-100 hover:bg-gray-200 transition duration-300 ease-in-out"}>
-                                                <td className="font-sans text-lg px-4 py-2 border border-black">{lockedEvent.group}</td>
-                                                <td className="font-sans text-lg px-4 py-2 border border-black">{lockedEvent.event}</td>
-                                                <td className="font-sans text-lg px-4 py-2 border border-black"><button onClick={() => handleLock(lockedEvent.group,lockedEvent.event)} className={lockedEvent.lock === "false" ? `bg-blue-200 font-bold p-2 rounded-xl hover:bg-blue-400 hover:cursor-pointer transition duration-300 ease-in-out` : `bg-red-200 font-bold p-2 rounded-xl hover:bg-red-400 hover:cursor-pointer transition duration-300 ease-in-out`}>{lockedEvent.lock === "false" ? "Lock" : "Unlock"}</button></td>
-                                            </tr>
-                                        ))
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                }   
 
                 <div className="mx-auto rounded-xl shadow-xl bg-white mt-5 w-75 md:w-180 lg:w-250">
                     <h1 className="flex justify-center font-sans font-bold text-xl md:text-2xl p-2">Leaderboard</h1>
@@ -433,21 +306,20 @@ export default function Leadboard(){
                 </div>
 
                 <div className="mx-auto rounded-xl shadow-xl bg-white w-75 md:w-100 mt-10">
-                    <h1 className="font-sans flex justify-center font-bold text-md p-2">{heading}</h1>
                     <div className="flex flex-row justify-between">
                         <div className="flex flex-col">
-                            <div className="flex flex-col justify-center w-30 md:w-50 bg-fuchsia-300 ml-5 lg:ml-4 mb-2 rounded-xl p-2">
+                            <div className="flex flex-col justify-center w-30 md:w-50 bg-fuchsia-300 ml-5 lg:ml-4 my-2 rounded-xl p-2">
                                 <h1 className="font-sans font-semibold mx-auto text-lg">Male</h1>
                                 <h1 className="font-sans font-semibold mx-auto text-lg">Students</h1>
                                 <h1 className="font-sans font-bold mx-auto text-3xl">{maleCount}</h1>
                             </div>
-                            <div className="flex flex-col justify-center w-30 md:w-50 bg-purple-300 ml-5 lg:ml-4 mb-2 rounded-xl p-2">
+                            <div className="flex flex-col justify-center w-30 md:w-50 bg-purple-300 ml-5 lg:ml-4 my-2 rounded-xl p-2">
                                 <h1 className="font-sans font-semibold mx-auto text-lg">Female</h1>
                                 <h1 className="font-sans font-semibold mx-auto text-lg">Students</h1>
                                 <h1 className="font-sans font-bold mx-auto text-3xl">{femaleCount}</h1>
                             </div>
                         </div>
-                        <div className="flex flex-col justify-center w-35 bg-pink-300 ml-2 mr-5 lg:mr-8 mb-2 rounded-xl p-2">
+                        <div className="flex flex-col justify-center w-35 bg-pink-300 ml-2 mr-5 lg:mr-5 my-2 rounded-xl p-2">
                             <h1 className="font-sans mx-auto font-semibold text-lg">Total</h1>
                             <h1 className="font-sans mx-auto font-semibold text-lg">Students</h1>
                             <h1 className="font-sans mx-auto font-bold mt-3 text-3xl">{totalCount}</h1>
@@ -468,16 +340,15 @@ export default function Leadboard(){
 
                 <div className="mx-auto bg-white rounded-xl shadow-xl w-75 md:w-180 lg:w-250 mt-5">
                     <div className="flex flex-col justify-center items-center">
-                        <h1 className="font-sans font-bold rounded-xl shadow-lg bg-gray-200 text-black text-2xl p-2 mt-4">Leaderboard</h1>
-                        {
-                           
-                            <h1 className={`font-sans font-bold rounded-xl shadow-lg transition-colors duration-700 ${colors[index]} text-black text-xl p-2 mt-4`}>
-                                {lock === "true" ? "Evaluation is Locked" : "Evaluation in Process"}
-                            </h1>
-                        }
-                        {(studentData.length > 3) && (
-                            <button onClick={handlePrizeWinners} className="font-sans font-bold rounded-xl shadow-lg bg-gray-200 text-black text-2xl p-2 mt-4 hover:cursor-pointer hover:text-white hover:bg-yellow-800 transition duration-300 ease-in-out">Get top 3 Scorers</button>
-                        )}
+                        <div className="flex flex-row justify-between">
+                            <div></div>
+                            <div className="flex justify-center font-sans font-bold mt-2 text-3xl">
+                                Results
+                            </div>
+                            <div className="flex justify-end">
+                                <Image onClick={handleDownload} className="mt-2 hover:cursor-pointer" src={"/download.jpg"} width={40} height={20} alt="download"></Image>
+                            </div>
+                        </div>
                         <div className="overflow-x-auto w-70 md:w-175 lg:w-245 mt-4 mb-4">
                             <table className="mx-auto text-center">
                                 <thead className="bg-blue-950 text-white">
@@ -508,7 +379,8 @@ export default function Leadboard(){
                         </div>
                     </div>
                 </div>
+
             </div>
         </>
-    );
+    )
 }

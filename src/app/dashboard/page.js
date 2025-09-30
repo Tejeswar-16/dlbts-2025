@@ -8,6 +8,7 @@ import { db } from "../_util/config";
 import { query, collection, getDocs, doc, updateDoc, where, onSnapshot } from "firebase/firestore";
 import { useRouter } from "next/navigation";
 import { signOut } from "firebase/auth";
+import * as XLSX from "xlsx";
 
 export default function Dashboard(){
 
@@ -22,6 +23,7 @@ export default function Dashboard(){
     const [filterHeading,setFilterHeading] = useState("Search by Name, Group, Samithi or Event");
     const [loading,setLoading] = useState(false);
     const [studentData,setStudentData] = useState([]);
+    const [fileName,setFileName] = useState("");
 
     const router = useRouter();
     function handleEventsClick(){
@@ -60,7 +62,7 @@ export default function Dashboard(){
                 setAdminEmail(user.email);
             }
         })
-    },[])
+    },[]);
 
     useEffect(() => {
         async function getData()
@@ -99,7 +101,6 @@ export default function Dashboard(){
 
             if (searchName !== "" || searchGroup !== "All" || searchEvent !== "All" || searchSamithi !== "All")
             {
-                
                 const maleContent = filteredContent.filter((fc) => fc.gender === "Male");
                 const femaleContent = filteredContent.filter((fc) => fc.gender === "Female");
                 setCountMale(maleContent.length);
@@ -108,15 +109,20 @@ export default function Dashboard(){
             }
 
             let headingParts = [];
+            let excelHeading = [];
 
-            if (searchName !== "") headingParts.push(`Name: ${searchName}`);
-            if (searchGroup !== "All") headingParts.push(`Group: ${searchGroup}`);
-            if (searchSamithi !== "All") headingParts.push(`Samithi: ${searchSamithi}`);
-            if (searchEvent !== "All") headingParts.push(`Event: ${searchEvent}`);
-            if (headingParts.length === 0)
+            if (searchName !== "") {headingParts.push(`Name: ${searchName}`); excelHeading.push(`Name: ${searchName}`); }
+            if (searchGroup !== "All") {headingParts.push(`Group: ${searchGroup}`); excelHeading.push(`Group: ${searchGroup}`);}
+            if (searchSamithi !== "All") {headingParts.push(`Samithi: ${searchSamithi}`); excelHeading.push(`Samithi: ${searchSamithi}`);}
+            if (searchEvent !== "All") {headingParts.push(`Event: ${searchEvent}`); excelHeading.push(`Event: ${searchEvent}`);}
+            if (headingParts.length === 0){
                 setFilterHeading("Search by Name, Group, Samithi or Event");
-            else
+                setFileName("all-students");
+            }
+            else{
                 setFilterHeading("Search by " + headingParts.join(", "));
+                setFileName(excelHeading.join("-"));
+            }
             setLoading(false);
         }
         getData();
@@ -165,6 +171,13 @@ export default function Dashboard(){
                 attendance : (currentAttendance === "P") ? "A" : "P"
             });
          });
+    }
+
+    function handleDownload(){
+        const worksheet = XLSX.utils.json_to_sheet(studentData);
+        const workbook = XLSX.utils.book_new();
+        XLSX.utils.book_append_sheet(workbook,worksheet,"Students");
+        XLSX.writeFile(workbook,fileName.toLowerCase()+".xlsx");
     }
 
     return (
@@ -456,8 +469,14 @@ export default function Dashboard(){
                 }
 
                 <div className="mx-auto bg-white rounded-xl shadow-xl w-75 mt-10 md:w-180 lg:w-250 p-5 ">
-                    <div className="flex justify-center pb-4 font-sans font-bold text-2xl">
-                        Details of Registered Students - DLBTS 2025
+                    <div className="flex md:flex-row flex-col justify-between pb-4 font-sans font-bold text-2xl">
+                        <div></div>
+                        <div className="flex justify-center md:ml-12">
+                            Details of Registered Students - DLBTS 2025
+                        </div>
+                        <div className="flex justify-end">
+                            <Image className="hover:cursor-pointer" onClick={handleDownload} src={"/download.jpg"} width={30} height={20} alt="download" />
+                        </div>
                     </div>
                     <div className="rounded-xl overflow-hidden border border-gray-300 mx-auto overflow-x-auto lg:w-240 border border-black">
                         <table className="text-center w-357">

@@ -32,6 +32,7 @@ export default function Register(){
     const [email,setEmail] = useState("");
     const [studentData,setStudentData] = useState([]);
     const [clicked,setClicked] = useState(false);
+    const [close,setClose] = useState("");
 
     function handleDojChange(groupValue,joiningDate,dobValue){
         let currentDOJ = new Date(joiningDate);
@@ -313,6 +314,7 @@ export default function Register(){
 
     useEffect(() => {
         async function fetchData(){
+            closeHelper();
             setLoading(true);
             const q = query(
                 collection(db,"studentDetails")
@@ -383,6 +385,39 @@ export default function Register(){
         alert("Deleted sucessfully");
     }
 
+    async function handleCloseRegistration(){
+        const q = query(
+            collection(db,"closeRegForm")
+        )
+        const querySnapshot = await getDocs(q);
+        const data = querySnapshot.docs.map((doc) => doc.data());
+
+        querySnapshot.forEach(async (document) => {
+            const docRef = doc(db,"closeRegForm",document.id);
+            await updateDoc(docRef,{
+                close: !data[0].close
+            });
+        });
+
+        closeHelper();
+    }
+
+    async function closeHelper(){
+        const q1 = query(
+            collection(db,"closeRegForm")
+        )
+        const querySnapshot1 = await getDocs(q1);
+        const data1 = querySnapshot1.docs.map((doc) => doc.data());
+
+        if (data1[0].close === true){
+            setClose(true);
+            alert("Sairam! Registration Form closed!");
+        }
+        else{
+            setClose(false);
+        }
+    }
+
     function handleFormClose(){
         setClicked(false);
     }
@@ -400,7 +435,13 @@ export default function Register(){
                                     <h1 className="font-sans text-xs md:text-xl px-3">{email}</h1>
                                 </div>
                                 <div className="flex flex-col md:flex md:flex-row md:justify-end">
-                                    <button onClick={handleAddStudent} className="font-sans font-semibold text-sm md:text-xl rounded-lg bg-yellow-100 px-2 md:rounded-xl mt-1 mb-1 mx-2 md:h-15 md:mx-2 md:my-2 hover:bg-yellow-500 hover:cursor-pointer transition duration-300 ease-in-out">Add Student</button>
+                                    { email === "admin@dlbts.ks" && <button onClick={handleCloseRegistration} className="font-sans font-semibold text-sm md:text-xl rounded-lg bg-blue-100 px-2 md:rounded-xl mt-1 mb-1 mx-2 md:h-15 md:mx-2 md:my-2 hover:bg-blue-500 hover:text-white hover:cursor-pointer transition duration-300 ease-in-out">Close Registration</button>}
+                                    {
+                                     (close && email !== "admin@dlbts.ks") ?
+                                        <button onClick={handleAddStudent} disabled className="font-sans font-semibold text-sm md:text-xl rounded-lg bg-gray-300 px-2 md:rounded-xl mt-1 mb-1 mx-2 md:h-15 md:mx-2 md:my-2 hover:cursor-not-allowed transition duration-300 ease-in-out">Add Student</button>
+                                       :
+                                        <button onClick={handleAddStudent} className="font-sans font-semibold text-sm md:text-xl rounded-lg bg-yellow-100 px-2 md:rounded-xl mt-1 mb-1 mx-2 md:h-15 md:mx-2 md:my-2 hover:bg-yellow-500 hover:cursor-pointer transition duration-300 ease-in-out">Add Student</button>
+                                    }
                                     <button onClick={handleDownload} className="font-sans font-semibold text-sm md:text-xl rounded-lg bg-fuchsia-200 px-2 md:rounded-xl mt-1 mb-1 mx-2 md:h-15 md:mx-2 md:my-2 hover:bg-fuchsia-500 hover:cursor-pointer transition duration-300 ease-in-out">Download</button>
                                     <button onClick={handleLogout} className="font-sans font-semibold text-sm md:text-xl rounded-lg bg-red-200 px-2 md:rounded-xl ml-2 p-1 w-21 md:h-15 md:mx-2 md:my-2 hover:bg-red-500 hover:cursor-pointer hover:text-white transition duration-300 ease-in-out">Logout</button>
                                 </div>

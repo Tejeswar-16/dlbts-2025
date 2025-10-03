@@ -64,67 +64,68 @@ export default function Dashboard(){
         })
     },[]);
 
-    useEffect(() => {
-        async function getData()
+    async function getData()
+    {
+        setLoading(true);
+        setCountMale(0);
+        setCountFemale(0);
+        setCount(0);
+        setFilterHeading("Search by Name, Group, Samithi or Event")
+
+        const q = query(
+            collection(db,"studentDetails")
+        );
+        const querySnapshot = await getDocs(q);
+        const data = querySnapshot.docs.map((doc) => doc.data());
+        
+        let filteredContent = data;
+        if (searchName !== "")
         {
-            setLoading(true);
-            setCountMale(0);
-            setCountFemale(0);
-            setCount(0);
-            setFilterHeading("Search by Name, Group, Samithi or Event")
-
-            const q = query(
-                collection(db,"studentDetails")
-            );
-            const querySnapshot = await getDocs(q);
-            const data = querySnapshot.docs.map((doc) => doc.data());
-            
-            let filteredContent = data;
-            if (searchName !== "")
-            {
-                filteredContent = filteredContent.filter((fc) => (fc.name).startsWith(searchName));
-            }
-            if (searchGroup !== "All")
-            {   
-                filteredContent = filteredContent.filter((fc) => fc.group === searchGroup);
-            }
-            if (searchEvent !== "All")
-            {
-                filteredContent = filteredContent.filter((fc) => fc.event1 === searchEvent || fc.event2 === searchEvent || fc.groupEvent === searchEvent);
-            }
-            if (searchSamithi !== "All")
-            {
-                filteredContent = filteredContent.filter((fc) => fc.samithi === searchSamithi);
-            }
-            filteredContent = filteredContent.sort((x,y) => x.name.localeCompare(y.name));
-            setStudentData(filteredContent);
-
-            if (searchName !== "" || searchGroup !== "All" || searchEvent !== "All" || searchSamithi !== "All")
-            {
-                const maleContent = filteredContent.filter((fc) => fc.gender === "Male");
-                const femaleContent = filteredContent.filter((fc) => fc.gender === "Female");
-                setCountMale(maleContent.length);
-                setCountFemale(femaleContent.length);
-                setCount(maleContent.length + femaleContent.length);
-            }
-
-            let headingParts = [];
-            let excelHeading = [];
-
-            if (searchName !== "") {headingParts.push(`Name: ${searchName}`); excelHeading.push(`Name: ${searchName}`); }
-            if (searchGroup !== "All") {headingParts.push(`Group: ${searchGroup}`); excelHeading.push(`Group: ${searchGroup}`);}
-            if (searchSamithi !== "All") {headingParts.push(`Samithi: ${searchSamithi}`); excelHeading.push(`Samithi: ${searchSamithi}`);}
-            if (searchEvent !== "All") {headingParts.push(`Event: ${searchEvent}`); excelHeading.push(`Event: ${searchEvent}`);}
-            if (headingParts.length === 0){
-                setFilterHeading("Search by Name, Group, Samithi or Event");
-                setFileName("all-students");
-            }
-            else{
-                setFilterHeading("Search by " + headingParts.join(", "));
-                setFileName(excelHeading.join("-"));
-            }
-            setLoading(false);
+            filteredContent = filteredContent.filter((fc) => (fc.name).startsWith(searchName));
         }
+        if (searchGroup !== "All")
+        {   
+            filteredContent = filteredContent.filter((fc) => fc.group === searchGroup);
+        }
+        if (searchEvent !== "All")
+        {
+            filteredContent = filteredContent.filter((fc) => fc.event1 === searchEvent || fc.event2 === searchEvent || fc.groupEvent === searchEvent);
+        }
+        if (searchSamithi !== "All")
+        {
+            filteredContent = filteredContent.filter((fc) => fc.samithi === searchSamithi);
+        }
+        filteredContent = filteredContent.sort((x,y) => x.name.localeCompare(y.name));
+        setStudentData(filteredContent);
+
+        if (searchName !== "" || searchGroup !== "All" || searchEvent !== "All" || searchSamithi !== "All")
+        {
+            const maleContent = filteredContent.filter((fc) => fc.gender === "Male");
+            const femaleContent = filteredContent.filter((fc) => fc.gender === "Female");
+            setCountMale(maleContent.length);
+            setCountFemale(femaleContent.length);
+            setCount(maleContent.length + femaleContent.length);
+        }
+
+        let headingParts = [];
+        let excelHeading = [];
+
+        if (searchName !== "") {headingParts.push(`Name: ${searchName}`); excelHeading.push(`Name: ${searchName}`); }
+        if (searchGroup !== "All") {headingParts.push(`Group: ${searchGroup}`); excelHeading.push(`Group: ${searchGroup}`);}
+        if (searchSamithi !== "All") {headingParts.push(`Samithi: ${searchSamithi}`); excelHeading.push(`Samithi: ${searchSamithi}`);}
+        if (searchEvent !== "All") {headingParts.push(`Event: ${searchEvent}`); excelHeading.push(`Event: ${searchEvent}`);}
+        if (headingParts.length === 0){
+            setFilterHeading("Search by Name, Group, Samithi or Event");
+            setFileName("all-students");
+        }
+        else{
+            setFilterHeading("Search by " + headingParts.join(", "));
+            setFileName(excelHeading.join("-"));
+        }
+        setLoading(false);
+    }
+
+    useEffect(() => {
         getData();
     },[searchName,searchGroup,searchEvent,searchSamithi]);
 
@@ -171,6 +172,8 @@ export default function Dashboard(){
                 attendance : (currentAttendance === "P") ? "A" : "P"
             });
          });
+
+         getData();
     }
 
     function handleDownload(){

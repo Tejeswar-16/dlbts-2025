@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { auth, db } from "../_util/config";
 import { useRouter } from "next/navigation";
-import { collection, getDocs, query } from "firebase/firestore";
+import { collection, getDocs, query, where } from "firebase/firestore";
 import Image from "next/image";
 import { signOut } from "firebase/auth";
 import * as XLSX from "xlsx";
@@ -44,7 +44,8 @@ export default function Home(){
         async function fetchData(){
             setLoading(true);
             const q = query(
-                collection(db,"studentMarks")
+                collection(db,"studentMarks"),
+                where("group","==","Group 1")
             );
             const querySnapshot = await getDocs(q);
             const data = querySnapshot.docs.map((doc) => doc.data());
@@ -74,7 +75,7 @@ export default function Home(){
             
             let groups = ["Group 1","Group 1","Group 1","Group 1","Group 1","Group 1","Group 1","Group 1","Group 1",
                           "Group 2","Group 2","Group 2","Group 2","Group 2","Group 2","Group 2","Group 2","Group 2","Group 2","Group 2",
-                          "Group 3","Group 3","Group 3","Group 3","Group 3","Group 3","Group 3","Group 3","Group 3","Group 3","Group 3",
+                          "Group 3","Group 3","Group 3","Group 3","Group 3","Group 3","Group 3","Group 3","Group 3","Group 3","Group 3","Group 3",
                           "Group 4"]
         
             let events = ["Bhajans","Slokas","Vedam","Tamizh Chants","Story Telling (English)","Story Telling (Tamil)",
@@ -89,14 +90,52 @@ export default function Home(){
             let grpEvent = []
             for (let i=0;i<groups.length;i++){
                 let ge = filteredData.filter((fd) => fd.group === groups[i] && fd.event === events[i]);
+                if (ge.length === 0)
+                    continue; 
                 ge = ge.sort((x,y) => y.totalMarks - x.totalMarks);
-                ge = ge.slice(0,3);
-                grpEvent = [...grpEvent,...ge];
+                let top3 = []
+                let count = 1;
+                top3.push(ge[0]);
+                for (let j=1;j<ge.length;j++){
+                    if (ge[j].totalMarks === ge[j-1].totalMarks){
+                        if (count <= 3)
+                            top3.push(ge[j]);
+                    }
+                    else{
+                        if (count < 3){
+                            top3.push(ge[j])
+                            count++;
+                        }
+                        else{
+                            break;
+                        }
+                    }
+                }
+                grpEvent = [...grpEvent,...top3];
             }
             for (let i=0;i<groupEvents.length;i++){
                 let ge = filteredData.filter((fd) => (fd.group === "Group 2" || fd.group === "Group 3") && fd.event === groupEvents[i])
+                if (ge.length === 0)
+                    continue;
                 ge = ge.sort((x,y) => y.totalMarks - x.totalMarks);
-                ge = ge.slice(0,3);
+                let top3 = []
+                let count = 1;
+                top3.push(ge[0]);
+                for (let j=1;j<ge.length;j++){
+                    if (ge[j].totalMarks === ge[j-1].totalMarks){
+                        if (count <= 3)
+                            top3.push(ge[j]);
+                    }
+                    else{
+                        if (count < 3){
+                            top3.push(ge[j])
+                            count++;
+                        }
+                        else{
+                            break;
+                        }
+                    }
+                }
                 grpEvent = [...grpEvent,...ge];
             }
             
@@ -144,8 +183,8 @@ export default function Home(){
                     filteredData = filteredData.filter((fd) => fd.event === event);
                 }
             }
-            const maleData = filteredData.filter((fd) => fd.gender === "Male");
-            const femaleData = filteredData.filter((fd) => fd.gender === "Female");
+            const maleData = filteredData.filter((fd) => fd !== undefined && fd.gender === "Male");
+            const femaleData = filteredData.filter((fd) => fd !== undefined && fd.gender === "Female");
             setMaleCount(maleData.length);
             setFemaleCount(femaleData.length);
             setTotalCount(filteredData.length);

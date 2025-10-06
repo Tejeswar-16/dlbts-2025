@@ -73,15 +73,17 @@ export default function Dashboard(){
         setFilterHeading("Search by Name, Group, Samithi or Event")
 
         const q = query(
-            collection(db,"studentDetails")
+            collection(db,"studentDetails"),
+            //modified for displaying only group 1 students
+            where("group","==","Group 1")
         );
         const querySnapshot = await getDocs(q);
         const data = querySnapshot.docs.map((doc) => doc.data());
-        
+
         let filteredContent = data;
         if (searchName !== "")
         {
-            filteredContent = filteredContent.filter((fc) => (fc.name).startsWith(searchName));
+            filteredContent = filteredContent.filter((fc) => (fc.name).includes(searchName));
         }
         if (searchGroup !== "All")
         {   
@@ -148,12 +150,14 @@ export default function Dashboard(){
         router.push("/evaluation")
     }
 
+    //Modified for displaying only Group 1 students
     useEffect(() => {
         onSnapshot(collection(db,"studentDetails"), (snapshot) => {
             let updatedData = snapshot.docs.map((doc) => ({
                 id : doc.id,
                 ...doc.data()
             }));
+            updatedData = updatedData.filter((fd) => fd.group === "Group 1") 
             updatedData = updatedData.sort((x,y) => x.name.localeCompare(y.name));
             setStudentData(updatedData);
         });

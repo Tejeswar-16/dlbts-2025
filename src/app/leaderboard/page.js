@@ -75,7 +75,9 @@ export default function Leadboard(){
         async function getWinners(){
             setLoading(true);
             const q = query(
-                collection(db,"studentMarks")
+                collection(db,"studentMarks"),
+                //Modified for group 1 students
+                where("group","==","Group 1")
             );
             const querySnapshot = await getDocs(q);
             const data = querySnapshot.docs.map((doc) => doc.data());

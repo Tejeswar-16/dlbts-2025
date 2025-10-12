@@ -44,8 +44,7 @@ export default function Home(){
         async function fetchData(){
             setLoading(true);
             const q = query(
-                collection(db,"studentMarks"),
-                where("group","==","Group 1")
+                collection(db,"studentMarks")
             );
             const querySnapshot = await getDocs(q);
             const data = querySnapshot.docs.map((doc) => doc.data());

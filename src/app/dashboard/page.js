@@ -73,9 +73,7 @@ export default function Dashboard(){
         setFilterHeading("Search by Name, Group, Samithi or Event")
 
         const q = query(
-            collection(db,"studentDetails"),
-            //modified for displaying only group 1 students
-            where("group","==","Group 1")
+            collection(db,"studentDetails")
         );
         const querySnapshot = await getDocs(q);
         const data = querySnapshot.docs.map((doc) => doc.data());

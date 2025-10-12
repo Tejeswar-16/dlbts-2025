@@ -156,8 +156,7 @@ export default function Dashboard(){
             let updatedData = snapshot.docs.map((doc) => ({
                 id : doc.id,
                 ...doc.data()
-            }));
-            updatedData = updatedData.filter((fd) => fd.group === "Group 1") 
+            })); 
             updatedData = updatedData.sort((x,y) => x.name.localeCompare(y.name));
             setStudentData(updatedData);
         });

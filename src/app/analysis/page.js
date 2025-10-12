@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { auth, db } from "../_util/config";
 import { useRouter } from "next/navigation";
-import { collection, getDocs, query, where } from "firebase/firestore";
+import { collection, getDocs, query } from "firebase/firestore";
 import Image from "next/image";
 import { signOut } from "firebase/auth";
 import * as XLSX from "xlsx";

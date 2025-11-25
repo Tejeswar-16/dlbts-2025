@@ -24,6 +24,7 @@ export default function Dashboard(){
     const [loading,setLoading] = useState(false);
     const [studentData,setStudentData] = useState([]);
     const [fileName,setFileName] = useState("");
+    const [backup,setBackup] = useState(false);
 
     const router = useRouter();
     function handleEventsClick(){
@@ -184,6 +185,10 @@ export default function Dashboard(){
         XLSX.writeFile(workbook,fileName.toLowerCase()+".xlsx");
     }
 
+    function handleBackup(){
+        setBackup(true);
+    }
+
     return (
         <>
             <div className="relative bg-gray-100 py-5 min-h-screen lg:bg-gray-100">
@@ -194,13 +199,33 @@ export default function Dashboard(){
                             <h1 className="font-sans text-sm md:text-xl px-3">{adminEmail}</h1>
                         </div>
                         <div className="flex flex-col md:flex md:flex-row md:justify-end">
-                            <button onClick={handleEventClick} className="font-sans font-semibold text-sm lg:text-xl rounded-lg bg-fuchsia-200 px-2 md:rounded-xl mt-1 mb-2 mx-2 md:h-15 md:mx-2 md:my-2 hover:text-black hover:bg-fuchsia-500 hover:cursor-pointer transition duration-300 ease-in-out">Events</button>
-                            <button onClick={handleEClick} className="font-sans font-semibold text-sm lg:text-xl rounded-lg bg-purple-200 px-2 md:rounded-xl mb-2 mx-2 md:h-15 md:mx-2 md:my-2 hover:text-black hover:bg-purple-500 hover:cursor-pointer transition duration-300 ease-in-out">Registration Form</button>
-                            <button onClick={handleEventsClick} className="font-sans font-semibold text-sm lg:text-xl rounded-lg bg-yellow-100 px-2 md:rounded-xl mb-2 mx-2 md:h-15 md:mx-2 md:my-2 hover:bg-yellow-500 hover:cursor-pointer transition duration-300 ease-in-out">Leaderboard</button>
-                            <button onClick={handleLogout} className="font-sans font-semibold text-sm lg:text-xl rounded-lg bg-red-200 px-2 md:rounded-xl mx-2 mb-1 md:h-15 md:mx-2 md:my-2 hover:bg-red-500 hover:cursor-pointer hover:text-white transition duration-300 ease-in-out">Logout</button>
+                            <div className="flex flex-col md:flex-row">
+                                <div className="flex flex-col">
+                                    <button onClick={handleBackup} className="font-sans font-semibold text-sm rounded-lg border border-blue-500 bg-blue-200 px-2 md:rounded-xl mt-1 mb-1 mx-2 md:mx-2 hover:text-black hover:bg-blue-500 hover:text-white hover:cursor-pointer transition duration-300 ease-in-out">Backup</button>
+                                    <button onClick={handleEventClick} className="font-sans font-semibold text-sm rounded-lg border border-fuchsia-500 bg-fuchsia-200 px-2 md:rounded-xl mb-1 mx-2 md:mx-2 hover:text-black hover:bg-fuchsia-500 hover:cursor-pointer transition duration-300 ease-in-out">Events</button>        
+                                    <button onClick={handleEventsClick} className="font-sans font-semibold text-sm rounded-lg border border-yellow-500 bg-yellow-100 px-2 md:rounded-xl mb-2 mx-1 md:mx-2 hover:bg-yellow-500 hover:cursor-pointer transition duration-300 ease-in-out">Leaderboard</button>
+                                </div>
+                                <div className="flex flex-col">
+                                    <button onClick={handleEClick} className="font-sans font-semibold text-sm rounded-lg border border-purple-500 bg-purple-200 px-2 md:rounded-xl mx-2 w-40 md:w-25 md:mx-2 md:mt-1 hover:text-black hover:bg-purple-500 hover:cursor-pointer transition duration-300 ease-in-out">Registration Form</button>
+                                    <button onClick={handleLogout} className="font-sans font-semibold text-sm rounded-lg border border-red-500 bg-red-200 px-2 md:rounded-xl mx-2 md:mx-2 hover:bg-red-500 mt-1 mb-1 md:mt-2 hover:cursor-pointer hover:text-white transition duration-300 ease-in-out">Logout</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </nav>
+
+                {
+                    backup && 
+                        <div className="fixed inset-0 flex flex-col justify-center backdrop-blur-sm items-center">
+                            <div className="flex flex-col justify-center select-none font-sans bg-white rounded-xl shadow-xl p-5 border w-75 md:w-98">
+                            <p className="text-lg">Sairam! Are you sure to backup the data?</p>
+                            <div className="flex flex-row justify-center gap-2">
+                                <div className="flex justify-center"><button className="bg-black text-white w-25 rounded-xl mt-2 p-2 hover:cursor-pointer">Backup</button></div>
+                                <div className="flex justify-center"><button onClick={()=>setBackup(false)} className="bg-black text-white w-25 rounded-xl mt-2 p-2 hover:cursor-pointer">Cancel</button></div>
+                            </div>
+                            </div>
+                        </div>
+                }
 
                 <LogisticsList/>
 

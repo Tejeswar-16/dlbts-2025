@@ -20,6 +20,8 @@ export default function Home(){
     const [totalCount,setTotalCount] = useState(0);
     const [loading,setLoading]  = useState(false);
     const [studentData,setStudentData] = useState([]);
+    const [click,setClick] = useState(false);
+    const [divData,setDivData] = useState([]);
 
     const router = useRouter();
 
@@ -187,7 +189,22 @@ export default function Home(){
             setMaleCount(maleData.length);
             setFemaleCount(femaleData.length);
             setTotalCount(filteredData.length);
-            setStudentData(filteredData);
+
+            let studentMap = new Map();
+            filteredData.map((student) => {
+                let key = `${student.group} : ${student.event}`
+                const entry = [student.group,student.event,student.name,student.samithi,student.remarks,student.totalMarks];
+                if (studentMap.has(key))
+                {
+                    studentMap.get(key).push(entry);
+                }
+                else
+                {
+                    studentMap.set(key,[entry]);
+                }
+            });
+
+            setStudentData(Array.from(studentMap.entries()));
             setLoading(false);
         }
         fetchData();
@@ -210,18 +227,26 @@ export default function Home(){
 
     function handleDownload(){
         
-        const resultData = studentData.map((student) => ({
-            name: student.name,
-            group: student.group,
-            samithi: student.samithi,
-            event: student.event,
-            gender: student.gender,
-        }));
+        const resultData = studentData.flatMap((students) => (
+            students[1].map((student) => ({
+                group: student[0],
+                event: student[1],
+                name: student[2],
+                samithi: student[3],
+                remarks: student[4],
+                totalMarks: student[5]
+            }))
+        ));
 
         const worksheet = XLSX.utils.json_to_sheet(resultData);
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook,worksheet,"Students");
         XLSX.writeFile(workbook,"result.xlsx");
+    }
+
+    function handleDivClick(students){
+        setClick(true);
+        setDivData(students);
     }
 
     return (
@@ -344,6 +369,9 @@ export default function Home(){
                 </div>
 
                 <div className="mx-auto rounded-xl shadow-xl bg-white w-75 md:w-100 mt-10">
+                    <div className="flex justify-end">
+                        <Image onClick={handleDownload} className="mt-2 hover:cursor-pointer" src={"/download.jpg"} width={40} height={20} alt="download"></Image>
+                    </div>
                     <div className="flex flex-row justify-between">
                         <div className="flex flex-col">
                             <div className="flex flex-col justify-center w-30 md:w-50 bg-fuchsia-300 ml-5 lg:ml-4 my-2 rounded-xl p-2">
@@ -376,48 +404,79 @@ export default function Home(){
                     </>
                 }
 
-                <div className="mx-auto bg-white rounded-xl shadow-xl w-75 md:w-180 lg:w-250 mt-5">
-                    <div className="flex flex-col justify-center items-center">
-                        <div className="flex flex-row justify-between">
-                            <div></div>
-                            <div className="flex justify-center font-sans font-bold mt-2 text-3xl">
-                                Results
-                            </div>
-                            <div className="flex justify-end">
-                                <Image onClick={handleDownload} className="mt-2 hover:cursor-pointer" src={"/download.jpg"} width={40} height={20} alt="download"></Image>
-                            </div>
-                        </div>
-                        <div className="overflow-x-auto w-70 md:w-175 lg:w-245 mt-4 mb-4">
-                            <table className="mx-auto text-center">
-                                <thead className="bg-blue-950 text-white">
-                                    <tr>
-                                        <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Name</td>
-                                        <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Samithi</td>
-                                        <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Group</td>
-                                        <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Event</td>
-                                        <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Total Marks</td>
-                                        <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Remarks</td>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {
-                                        studentData.map((student) => (
-                                            <tr key={student.id} className="hover:bg-gray-200 transition duration-300 ease-in-out">
-                                                <td className="font-sans text-lg px-4 py-2 border border-black">{student.name}</td>
-                                                <td className="font-sans text-lg px-4 py-2 border border-black">{student.samithi}</td>
-                                                <td className="font-sans text-lg px-4 py-2 border border-black">{student.group}</td>
-                                                <td className="font-sans text-lg px-4 py-2 border border-black">{student.event}</td>
-                                                <td className="font-sans text-lg px-4 py-2 border border-black">{student.totalMarks}</td>
-                                                <td className="font-sans text-lg px-4 py-2 border border-black whitespace-pre-line">{student.remarks}</td>
+                <div className="flex flex-col md:flex-row md:flex-wrap justify-center">
+                    {
+                        studentData.map((students,index) => (
+                            <div key={index} onClick={() => handleDivClick(students)} className="mx-auto select-none rounded-xl shadow-xl border-t border-blue-900 w-75 md:w-100 bg-white m-5 hover:cursor-pointer hover:scale-105 transition duration-300">
+                                <div className="rounded-t-xl p-3 shadow-xl bg-gradient-to-br from-blue-500 to-blue-900">
+                                    <div className="font-sans text-xl flex justify-center font-bold text-white">{students[0]}</div>
+                                </div>
+
+                                <div className="p-2">
+                                    <table className="mx-auto text-center">
+                                        <thead className="bg-blue-950 text-white">
+                                            <tr>
+                                                <td className="font-sans px-1 py-1 md:px-4 md:py-2 text-sm font-semibold border border-white">Name</td>
+                                                <td className="font-sans px-1 py-1 md:px-4 md:py-2 text-sm font-semibold border border-white">Samithi</td>
+                                                <td className="font-sans px-1 py-1 md:px-4 md:py-2 text-sm font-semibold border border-white">Total Marks</td>
                                             </tr>
-                                        ))
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
+                                        </thead>
+                                        <tbody>
+                                            {
+                                                students[1].map((student,index) => (
+                                                    <tr key={index} className="hover:bg-gray-200 transition duration-300 ease-in-out">
+                                                        <td className="font-sans text-sm px-1 py-1 md:px-4 md:py-2 border border-black">{student[2]}</td>
+                                                        <td className="font-sans text-sm px-1 py-1 md:px-4 md:py-2 border border-black">{student[3]}</td>
+                                                        <td className="font-sans text-sm px-1 py-1 md:px-4 md:py-2 border border-black">{student[5]}</td>
+                                                    </tr>
+                                                ))
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        ))
+                    } 
                 </div>
 
+                {
+                    click &&
+                    <div className="fixed inset-0 flex flex-col justify-center backdrop-blur-sm items-center"> 
+                        <div className="select-none rounded-xl shadow-xl border-t border-blue-900 w-75 md:w-150 h-120 bg-white m-5 hover:cursor-pointer hover:scale-105 transition duration-300">
+                            <div className="rounded-t-xl p-3 shadow-xl bg-gradient-to-br from-blue-500 to-blue-900">
+                                <div className="font-sans text-xl flex justify-center font-bold text-white">{divData[0]}</div>
+                            </div>
+
+                            <div className="p-2">
+                                <div className="overflow-y-auto h-93">
+                                    <table className="mx-auto text-center w-20">
+                                        <thead className="bg-blue-950 text-white">
+                                            <tr>
+                                                <td className="font-sans px-4 py-2 text-sm font-semibold border border-white">Name</td>
+                                                <td className="font-sans px-4 py-2 text-sm font-semibold border border-white">Samithi</td>
+                                                <td className="font-sans px-4 py-2 text-sm font-semibold border border-white">Total Marks</td>
+                                                <td className="font-sans px-4 py-2 text-sm font-semibold border border-white">Remarks</td>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {
+                                                divData[1].map((student,index) => (
+                                                    <tr key={index} className="hover:bg-gray-200 transition duration-300 ease-in-out">
+                                                        <td className="font-sans text-sm px-4 py-2 border border-black">{student[2]}</td>
+                                                        <td className="font-sans text-sm px-4 py-2 border border-black">{student[3]}</td>
+                                                        <td className="font-sans text-sm px-4 py-2 border border-black">{student[5]}</td>
+                                                        <td className="font-sans text-sm px-4 py-2 border border-black">{student[4]}</td>
+                                                    </tr>
+                                                ))
+                                            }
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div onClick={() => setClick(false)} className="mx-auto flex justify-center font-semibold p-1 my-2 rounded-lg shadow-xl font-sans w-20 text-bold bg-black text-white hover:cursor-pointer">Close</div>
+                            </div>
+                        </div>
+                    </div>
+                }
             </div>
         </>
     )

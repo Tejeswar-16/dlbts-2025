@@ -5,7 +5,7 @@ import { auth } from "../_util/config";
 import LogisticsList from "../LogisticsList";
 import Image from "next/image";
 import { db } from "../_util/config";
-import { query, collection, getDocs, doc, updateDoc, where, onSnapshot } from "firebase/firestore";
+import { query, collection, getDocs, doc, updateDoc, where, onSnapshot, addDoc, deleteDoc } from "firebase/firestore";
 import { useRouter } from "next/navigation";
 import { signOut } from "firebase/auth";
 import * as XLSX from "xlsx";
@@ -189,6 +189,44 @@ export default function Dashboard(){
         setBackup(true);
     }
 
+    async function handleBackupClick(){
+        setLoading(true);
+        //Fetching data from studentDetails
+        const q = query(
+            collection(db,"studentDetails") 
+        );
+        const querySnapshot = await getDocs(q);
+        const data = querySnapshot.docs.map((doc) => doc.data());
+
+        //Storing data into backup studentDetails
+        for(let i=0;i<data.length;i++)
+            await addDoc(collection(db,"backup","2025","studentDetails"),data[i]);
+
+        //Deleting the actual collection
+        for (let i=0;i<querySnapshot.docs.length;i++)
+            await deleteDoc(doc(db,"studentDetails",querySnapshot.docs[i].id))
+        
+
+        //Fetching data from studentMarks
+        const q1 = query(
+            collection(db,"studentMarks") 
+        );
+        const querySnapshot1 = await getDocs(q1);
+        const data1 = querySnapshot1.docs.map((doc) => doc.data());
+
+        //Storing data into backup studentDetails
+        for(let i=0;i<data1.length;i++)
+            await addDoc(collection(db,"backup","2025","studentMarks"),data1[i]);
+
+        //Deleting the actual collection
+        for (let i=0;i<querySnapshot1.docs.length;i++)
+            await deleteDoc(doc(db,"studentMarks",querySnapshot1.docs[i].id))
+
+        alert("Sairam! Backup was successful");
+        setBackup(false);
+        setLoading(false);
+    }
+
     return (
         <>
             <div className="relative bg-gray-100 py-5 min-h-screen lg:bg-gray-100">
@@ -218,10 +256,10 @@ export default function Dashboard(){
                     backup && 
                         <div className="fixed inset-0 flex flex-col justify-center backdrop-blur-sm items-center">
                             <div className="flex flex-col justify-center select-none font-sans bg-white rounded-xl shadow-xl p-5 border w-75 md:w-98">
-                            <p className="text-lg">Sairam! Are you sure to backup the data?</p>
+                            <p className="text-lg">Sairam! Are you sure to backup the data? This may take a while...</p>
                             <div className="flex flex-row justify-center gap-2">
-                                <div className="flex justify-center"><button className="bg-black text-white w-25 rounded-xl mt-2 p-2 hover:cursor-pointer">Backup</button></div>
-                                <div className="flex justify-center"><button onClick={()=>setBackup(false)} className="bg-black text-white w-25 rounded-xl mt-2 p-2 hover:cursor-pointer">Cancel</button></div>
+                                <div className="flex justify-center"><button onClick={handleBackupClick} className="bg-black text-white w-25 rounded-xl mt-2 p-2 hover:cursor-pointer">Backup</button></div>
+                                <div className="flex justify-center"><button onClick={() => setBackup(false)} className="bg-black text-white w-25 rounded-xl mt-2 p-2 hover:cursor-pointer">Cancel</button></div>
                             </div>
                             </div>
                         </div>

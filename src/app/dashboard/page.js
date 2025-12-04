@@ -539,7 +539,7 @@ export default function Dashboard(){
                     <div className="flex md:flex-row flex-col justify-between pb-4 font-sans font-bold text-2xl">
                         <div></div>
                         <div className="flex justify-center md:ml-12">
-                            Details of Registered Students - DLBTS 2025
+                            Details of Registered Students - DLBTS 2026
                         </div>
                         <div className="flex justify-end">
                             <Image className="hover:cursor-pointer" onClick={handleDownload} src={"/download.jpg"} width={30} height={20} alt="download" />

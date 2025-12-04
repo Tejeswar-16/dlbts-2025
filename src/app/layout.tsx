@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "DLBTS 2025",
+  title: "DLBTS 2026",
   icons : {
     icon : "/icon.png"
   }

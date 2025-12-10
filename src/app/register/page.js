@@ -500,7 +500,10 @@ export default function Register(){
                         <form onSubmit={handleSubmit} className="lg:flex justify-center">
                             <div className={loading ? "blur-sm pointer-events:none" : "mx-auto ml-2 mr-2 mt-10 p-2 mb-10 rounded-2xl shadow-2xl bg-white lg:w-230"}>
                                 <div className="flex justify-end font-sans text-2xl font-bold">
-                                    <h1 onClick={handleFormClose} className="select-none bg-red-500 text-white p-1 rounded-lg hover:cursor-pointer">X</h1>
+                                    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossOrigin="anonymous"></link>
+                                    <button onClick={handleFormClose} type="button" className="select-none p-2 rounded-3xl hover:cursor-pointer hover:bg-red-500 hover:text-white close transition duration-300 ease-in-out" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
                                 </div>
 
                                 <div className="flex justify-center font-sans font-bold text-xl md:text-3xl mt-3">

@@ -16,6 +16,9 @@ export const metadata: Metadata = {
   title: "DLBTS 2026",
   icons : {
     icon : "/icon.png"
+  },
+  other: {
+    "google-site-verification": "volwQbBkqro2IVaJ0shDeQk6K3U4E1VR9mNLa5o1nHo"
   }
 };
 

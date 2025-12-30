@@ -45,7 +45,7 @@ export default function Home() {
   return (
     <div className="relative bg-gray-100 min-h-screen md:bg-gray-100">
       <div className="px-5 py-5 font-sans text-black font-bold text-2xl">
-        DLBTS - 2026
+        {"DLBTS - " + new Date().getFullYear()}
       </div>
 
       <div className={loading ? "blur-sm pointer-events:none" : ""}>
@@ -54,7 +54,7 @@ export default function Home() {
             Sign In
           </div>
           <div className="font-sans p-2 text-gray-700 md:flex md:justify-center md:text-lg">
-            DLBTS 2026, Kanchipuram South, Tamil Nadu
+            {"DLBTS " + new Date().getFullYear() + ", Kanchipuram South, Tamil Nadu"}
           </div>
           <hr className="mt-2 text-gray-300"></hr>
           <form onSubmit={handleLogin}>

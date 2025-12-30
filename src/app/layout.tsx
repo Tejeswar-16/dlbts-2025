@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "DLBTS 2026",
+  title: "DLBTS " + new Date().getFullYear(),
   icons : {
     icon : "/icon.png"
   },

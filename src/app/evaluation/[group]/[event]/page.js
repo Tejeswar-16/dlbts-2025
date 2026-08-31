@@ -7,80 +7,86 @@ import { query, getDocs, collection, doc, where, updateDoc, addDoc } from "fireb
 import Image from "next/image";
 import { signOut } from "firebase/auth";
 import * as XLSX from "xlsx";
+import { eventNames } from "process";
 
 export default function Judging(){
     
     const eventMap = {
-        "bhajans" : "Bhajans",
-        "slokas" : "Slokas",
-        "vedam" : "Vedam",
+        "bhajansinging" : "Bhajan Singing",
+        "slokachanting" : "Sloka Chanting",
+        "vedachanting" : "Veda Chanting",
         "tamizhchants" : "Tamizh Chants",
-        "storytellingenglish" : "Story Telling (English)",
-        "storytellingtamil" : "Story Telling (Tamil)",
+        "storytellingenglishtamilbilingual" : "Story Telling (English/Tamil/Bilingual)",
+        "fancydress" : "Fancy Dress",
         "drawing" : "Drawing",
         "devotionalsingingboys" : "Devotional Singing - Boys",
         "devotionalsinginggirls" : "Devotional Singing - Girls",
-        "bhajansboys" : "Bhajans - Boys",
-        "bhajansgirls" : "Bhajans - Girls",
-        "slokasboys" : "Slokas - Boys",
-        "slokasgirls" : "Slokas - Girls",
-        "vedamboys" : "Vedam - Boys",
-        "vedamgirls" : "Vedam - Girls",
+        "bhajansingingboys" : "Bhajan Singing - Boys",
+        "bhajansinginggirls" : "Bhajan Singing - Girls",
+        "slokachantingboys" : "Sloka Chanting - Boys",
+        "slokachantinggirls" : "Sloka Chanting - Girls",
+        "vedachantingboys" : "Veda Chanting - Boys",
+        "vedachantinggirls" : "Veda Chanting - Girls",
         "tamizhchantsboys" : "Tamizh chants - Boys",
         "tamizhchantsgirls" : "Tamizh chants - Girls",
-        "elocutionenglish" : "Elocution (English)",
-        "elocutiontamil" : "Elocution (Tamil)",
+        "justaminuteenglish" : "Just a Minute - English",
+        "justaminutetamil" : "Just a Minute - Tamil",
+        "silentmonologue" : "Silent Monologue",
+        "antarangasai" : "Antaranga Sai",
         "altardecorationboys" : "Altar Decoration - Boys",
         "altardecorationgirls" : "Altar Decoration - Girls",
         "rudramnamakamchantingboys" : "Rudram Namakam Chanting - Boys",
         "rudramnamakamchantinggirls" : "Rudram Namakam Chanting - Girls",
-        "quiz" : "Quiz"
+        "quiz" : "Quiz",
+        "dumbcharades" : "Dumb Charades",
+        "rangoli" : "Rangoli",
+        "tedsaienglish" : "Ted Sai - English",
+        "tedsaitamil" : "Ted Sai - Tamil",
+        "wealthoutofwaste" : "Wealth out of Waste"        
     }
 
     const lockMap = {
-        "g1bh@dlbts.ks" : ["Group 1","Bhajans"],
-        "g1sl@dlbts.ks" : ["Group 1","Slokas"],
-        "g1ve@dlbts.ks" : ["Group 1","Vedam"],
+        "g1sc@dlbts.ks" : ["Group 1","Sloka Chanting"],
+        "g1vc@dlbts.ks" : ["Group 1","Veda Chanting"],
         "g1tc@dlbts.ks" : ["Group 1","Tamizh Chants"],
-        "g1ste@dlbts.ks" : ["Group 1","Story Telling (English)"],
-        "g1stt@dlbts.ks" : ["Group 1","Story Telling (Tamil)"],
+        "g1st@dlbts.ks" : ["Group 1","Story Telling (English / Tamil / Bilingual)"],
+        "g1fd@dlbts.ks" : ["Group 1","Fancy Dress"],
         "g1dw@dlbts.ks" : ["Group 1","Drawing"],
-        "g1dsb@dlbts.ks" : ["Group 1","Devotional Singing - Boys"],
-        "g1dsg@dlbts.ks" : ["Group 1","Devotional Singing - Girls"],
+        "g1bh@dlbts.ks" : ["Group 1","Bhajan Singing"],
 
-        "g2bb@dlbts.ks" : ["Group 2","Bhajans - Boys"],
-        "g2bg@dlbts.ks" : ["Group 2","Bhajans - Girls"],
-        "g2sb@dlbts.ks" : ["Group 2","Slokas - Boys"],
-        "g2sg@dlbts.ks" : ["Group 2","Slokas - Girls"],
-        "g2vb@dlbts.ks" : ["Group 2","Vedam - Boys"],
-        "g2vg@dlbts.ks" : ["Group 2","Vedam - Girls"],
+        "g2sb@dlbts.ks" : ["Group 2","Sloka Chanting - Boys"],
+        "g2sg@dlbts.ks" : ["Group 2","Sloka Chanting - Girls"],
+        "g2vb@dlbts.ks" : ["Group 2","Veda Chanting - Boys"],
+        "g2vg@dlbts.ks" : ["Group 2","Veda Chanting - Girls"],
         "g2tcb@dlbts.ks" : ["Group 2","Tamizh Chants - Boys"],
         "g2tcg@dlbts.ks" : ["Group 2","Tamizh Chants - Girls"],
-        "g2ee@dlbts.ks" : ["Group 2","Elocution (English)"],
-        "g2et@dlbts.ks" : ["Group 2","Elocution (Tamil)"],
+        "g2jame@dlbts.ks" : ["Group 2","Just a Minute - English"],
+        "g2jamt@dlbts.ks" : ["Group 2","Just a Minute - Tamil"],
         "g2dw@dlbts.ks" : ["Group 2","Drawing"],
+        "g2bb@dlbts.ks" : ["Group 2","Bhajan Singing - Boys"],
+        "g2bg@dlbts.ks" : ["Group 2","Bhajan Singing - Girls"],
 
-        "g3bb@dlbts.ks" : ["Group 3","Bhajans - Boys"],
-        "g3bg@dlbts.ks" : ["Group 3","Bhajans - Girls"],
-        "g3sb@dlbts.ks" : ["Group 3","Slokas - Boys"],
-        "g3sg@dlbts.ks" : ["Group 3","Slokas - Girls"],
-        "g3vb@dlbts.ks" : ["Group 3","Vedam - Boys"],
-        "g3vg@dlbts.ks" : ["Group 3","Vedam - Girls"],
+        "g3sb@dlbts.ks" : ["Group 3","Sloka Chanting - Boys"],
+        "g3sg@dlbts.ks" : ["Group 3","Sloka Chanting - Girls"],
+        "g3vb@dlbts.ks" : ["Group 3","Veda Chanting - Boys"],
+        "g3vg@dlbts.ks" : ["Group 3","Veda Chanting - Girls"],
         "g3tcb@dlbts.ks" : ["Group 3","Tamizh Chants - Boys"],
         "g3tcg@dlbts.ks" : ["Group 3","Tamizh Chants - Girls"],
-        "g3ee@dlbts.ks" : ["Group 3","Elocution (English)"],
-        "g3et@dlbts.ks" : ["Group 3","Elocution (Tamil)"],
+        "g3tse@dlbts.ks" : ["Group 3","Ted Sai - English"],
+        "g3tst@dlbts.ks" : ["Group 3","Ted Sai - Tamil"],
         "g3dw@dlbts.ks" : ["Group 3","Drawing"],
-        "g3qu@dlbts.ks" : ["Group 3","Quiz"],
+        "g3bb@dlbts.ks" : ["Group 3","Bhajan Singing - Boys"],
+        "g3bg@dlbts.ks" : ["Group 3","Bhajan Singing - Girls"],
 
-        "g4qu@dlbts.ks" : ["Group 4","Quiz"],
+        "tequ@dlbts.ks" : ["Group 1, 2 & 3","Quiz"],
+        "terg@dlbts.ks" : ["Group 1, 2 & 3","Rangoli"],
+        "tedc@dlbts.ks" : ["Group 1, 2 & 3","Dumb Charades"],
+        "teww@dlbts.ks" : ["Group 1, 2 & 3","Wealth out of Waste"],
 
-        "geadb@dlbts.ks" : ["Group 2 & 3","Altar Decoration - Boys"],
-        "geadg@dlbts.ks" : ["Group 2 & 3","Altar Decoration - Girls"],
-        "gedsb@dlbts.ks" : ["Group 2 & 3","Devotional Singing - Boys"],
-        "gedsg@dlbts.ks" : ["Group 2 & 3","Devotional Singing - Girls"],
-        "gencb@dlbts.ks" : ["Group 2 & 3","Rudram Namakam Chanting - Boys"],
-        "gencg@dlbts.ks" : ["Group 2 & 3","Rudram Namakam Chanting - Girls"],
+        "geadb@dlbts.ks" : ["Group 1, 2 & 3","Altar Decoration - Boys"],
+        "geadg@dlbts.ks" : ["Group 1, 2 & 3","Altar Decoration - Girls"],
+        "gencb@dlbts.ks" : ["Group 1, 2 & 3","Rudram Namakam Chanting - Boys"],
+        "gencg@dlbts.ks" : ["Group 1, 2 & 3","Rudram Namakam Chanting - Girls"],
     }
 
     const params = useParams();
@@ -142,12 +148,49 @@ export default function Judging(){
     const [adRemarks,setAdRemarks] = useState("");
     const [qMark,setQMark] = useState(0);
     const [qRemarks,setQRemarks] = useState("");
+    const [fdCharRep,setFdCharRep] = useState("");
+    const [fdExpDel,setFdExpDel] = useState("");
+    const [fdContRel,setFdContRel] = useState("");
+    const [fdTotal,setFdTotal] = useState("");
+    const [fdRemarks,setFdRemarks] = useState("");
+    const [jamcont,setJamCont] = useState("");
+    const [jamlangflu,setJamLangFlu] = useState("");
+    const [jamoverall,setJamOverall] = useState("");
+    const [jamTotal,setJamTotal] = useState("");
+    const [jamRemarks,setJamRemarks] = useState("");
+    const [tscontrel,setTsContRel] = useState("");
+    const [tspersConn,setTsPersConn] = useState("");
+    const [tsexpDel,setTsExpDel] = useState("");
+    const [tsLanFlu,setTsLanFlu] = useState("");
+    const [tsTotal,setTsTotal] = useState("");
+    const [tsRemarks,setTsRemarks] = useState("");
     const [disabled,setDisabled] = useState(false);
+    const [samithis,setSamithis] = useState({});
+    const [groupEventData,setGroupEventData] = useState([]);
+    const [tedcAccurateSaying,setTeDcAccurateSaying] = useState("");
+    const [tedcTotal,setTeDcTotal] = useState("");
+    const [tedcRemarks,setTeDcRemarks] = useState("");
+    const [wowCreativity,setWowCreativity] = useState("");
+    const [wowWastage,setWowWastage] = useState("");
+    const [wowUtility,setWowUtility] = useState("");
+    const [wowNeatness,setWowNeatness] = useState("");
+    const [wowTeamWork,setWowTeamWork] = useState("");
+    const [wowTotal,setWowTotal] = useState("");
+    const [wowRemarks,setWowRemarks] = useState("");
+    const [rgCreativity,setRgCreativity] = useState("");
+    const [rgTheme,setRgTheme] = useState("");
+    const [rgColor,setRgColor] = useState("");
+    const [rgSymmetry,setRgSymmety] = useState("");
+    const [rgTeam,setRgTeam] = useState("");
+    const [rgTotal,setRgTotal] = useState("");
+    const [rgRemarks,setRgRemarks] = useState("");
 
     function uncut(a)
     {
-        if (a === "group2%26group3groupevents")
-            return "Group Events - Group 2 & 3";
+        if (a === "groupevents")
+            return "Group Events";
+        else if (a === "teamevents")
+            return "Team Events";
         else
         {
             if (!a)
@@ -224,37 +267,21 @@ export default function Judging(){
             const data = querySnapshot.docs.map((doc) => doc.data());
 
             let filteredData;
-            if (group === "Group 1" && event === "Devotional Singing - Boys")
+            if (event === "Altar Decoration - Boys")
             {
-                filteredData = data.filter((fd) => (fd.group === "Group 1" && fd.groupEvent === "Devotional Singing - Boys"));
-            }
-            else if (group === "Group 1" && event === "Devotional Singing - Girls")
-            {
-                filteredData = data.filter((fd) => (fd.group === "Group 1" && fd.groupEvent === "Devotional Singing - Girls"));
-            }
-            else if (event === "Altar Decoration - Boys")
-            {
-                filteredData = data.filter((fd) => ((fd.group === "Group 2" || fd.group === "Group 3") && fd.groupEvent === "Altar Decoration - Boys"));
+                filteredData = data.filter((fd) => ((fd.group === "Group 1" || fd.group === "Group 2" || fd.group === "Group 3") && fd.groupEvent === "Altar Decoration - Boys"));
             }
             else if (event === "Altar Decoration - Girls")
             {
-                filteredData = data.filter((fd) => ((fd.group === "Group 2" || fd.group === "Group 3") && fd.groupEvent === "Altar Decoration - Girls"));
-            }
-            else if (event === "Devotional Singing - Boys")
-            {
-                filteredData = data.filter((fd) => ((fd.group === "Group 2" || fd.group === "Group 3") && fd.groupEvent === "Devotional Singing - Boys"));
-            }
-            else if (event === "Devotional Singing - Girls")
-            {
-                filteredData = data.filter((fd) => ((fd.group === "Group 2" || fd.group === "Group 3") && fd.groupEvent === "Devotional Singing - Girls"));
+                filteredData = data.filter((fd) => ((fd.group === "Group 1" || fd.group === "Group 2" || fd.group === "Group 3") && fd.groupEvent === "Altar Decoration - Girls"));
             }
             else if (event === "Rudram Namakam Chanting - Boys")
             {
-                filteredData = data.filter((fd) => ((fd.group === "Group 2" || fd.group === "Group 3") && fd.groupEvent === "Rudram Namakam Chanting - Boys"));
+                filteredData = data.filter((fd) => ((fd.group === "Group 1" || fd.group === "Group 2" || fd.group === "Group 3") && fd.groupEvent === "Rudram Namakam Chanting - Boys"));
             }
             else if (event === "Rudram Namakam Chanting - Girls")
             {
-                filteredData = data.filter((fd) => ((fd.group === "Group 2" || fd.group === "Group 3") && fd.groupEvent === "Rudram Namakam Chanting - Girls"));
+                filteredData = data.filter((fd) => ((fd.group === "Group 1" || fd.group === "Group 2" || fd.group === "Group 3") && fd.groupEvent === "Rudram Namakam Chanting - Girls"));
             }
             else 
             {
@@ -294,6 +321,30 @@ export default function Judging(){
         setAdTotal(Number(adAsthetics)+Number(adRM)+Number(adTeamwork));
     },[adAsthetics,adRM,adTeamwork]);
 
+    useEffect(() => {
+        setFdTotal(Number(fdCharRep)+Number(fdContRel)+Number(fdExpDel));
+    },[fdCharRep,fdContRel,fdExpDel]);
+
+    useEffect(() => {
+        setJamTotal(Number(jamcont)+Number(jamlangflu)+Number(jamoverall));
+    },[jamcont,jamlangflu,jamoverall]);
+
+    useEffect(() => {
+        setTsTotal(Number(tsLanFlu)+Number(tscontrel)+Number(tsexpDel)+Number(tspersConn));
+    },[tsLanFlu,tscontrel,tsexpDel,tspersConn]);
+
+    useEffect(() => {
+        setTeDcTotal(Number(tedcAccurateSaying)*5);
+    },[tedcAccurateSaying]);
+
+    useEffect(() => {
+        setWowTotal(Number(wowCreativity)+Number(wowNeatness)+Number(wowTeamWork)+Number(wowUtility)+Number(wowWastage));
+    },[wowCreativity,wowNeatness,wowTeamWork,wowUtility,wowWastage]);
+
+    useEffect(() => {
+        setRgTotal(Number(rgCreativity)+Number(rgColor)+Number(rgSymmetry)+Number(rgTheme)+Number(rgTeam));
+    },[rgCreativity,rgColor,rgSymmetry,rgTheme,rgTeam]);
+
     function cleanName(name) {
         let cleaned = name.replace(/\./g, " ");
         cleaned = cleaned.trim().replace(/\s+/g, " ");
@@ -318,7 +369,7 @@ export default function Judging(){
             const querySnapshot = await getDocs(q);
             const data = querySnapshot.docs.map((doc) => doc.data());
             let filteredData = data.filter((fd) => fd.id == currentId && fd.judge == judgeEmail);
-            if ((event === "Slokas") || (event === "Slokas - Boys") || (event === "Slokas - Girls") || (event === "Tamizh Chants") || (event === "Tamizh chants - Boys") || (event === "Tamizh chants - Girls"))
+            if ((event === "Sloka Chanting") || (event === "Sloka Chanting - Boys") || (event === "Sloka Chanting - Girls") || (event === "Tamizh Chants") || (event === "Tamizh chants - Boys") || (event === "Tamizh chants - Girls"))
             {
                 if (filteredData.length === 0)
                 {
@@ -347,7 +398,7 @@ export default function Judging(){
                 setStcMemory(mark.memory);
                 setStcRemarks(mark.remarks);
             }
-            else if ((event === "Bhajans") || (event === "Bhajans - Boys") || (event === "Bhajans - Girls"))
+            else if ((event === "Bhajan Singing") || (event === "Bhajan Singing - Boys") || (event === "Bhajan Singing - Girls"))
             {
                 if (filteredData.length === 0)
                 {
@@ -378,7 +429,7 @@ export default function Judging(){
                 setBgbMP(mark.memory_pronunciation);
                 setBgbRemarks(mark.remarks);
             }
-            else if ((event === "Vedam") || (event === "Vedam - Boys") || (event === "Vedam - Girls") || (event === "Rudram Namakam Chanting - Boys") || (event === "Rudram Namakam Chanting - Girls"))
+            else if ((event === "Veda Chanting") || (event === "Veda Chanting - Boys") || (event === "Veda Chanting - Girls") || (event === "Rudram Namakam Chanting - Boys") || (event === "Rudram Namakam Chanting - Girls"))
             {
                 if (filteredData.length === 0)
                 {
@@ -407,7 +458,7 @@ export default function Judging(){
                 setvMemory(mark.memory);
                 setVRemarks(mark.remarks);
             }
-            else if ((event === "Story Telling (English)") || (event === "Story Telling (Tamil)") || (event === "Elocution (English)") || (event === "Elocution (Tamil)"))
+            else if ((event === "Story Telling (English/Tamil/Bilingual)") || (event === "Elocution (English)") || (event === "Elocution (Tamil)"))
             {
                 if (filteredData.length === 0)
                 {
@@ -543,7 +594,174 @@ export default function Judging(){
                 setQMark(mark.totalMarks);
                 setQRemarks(mark.remarks);
             }
-
+            else if ((event === "Fancy Dress"))
+            {
+                if (filteredData.length === 0)
+                {
+                    filteredData = [{
+                        id : "",
+                        character_representation : 0,
+                        expression_delivery : 0,
+                        content_relevance : 0,
+                        totalMarks : 0,
+                        remarks: "",
+                        dob : "",
+                        event : "",
+                        gender : "",
+                        group : "",
+                        name : "",
+                        samithi : "",
+                        judge : "",
+                        lock : ""
+                    }]
+                }
+                const mark = filteredData[0];
+                setFdCharRep(mark.character_representation);
+                setFdExpDel(mark.expression_delivery);
+                setFdContRel(mark.content_relevance);
+                setFdRemarks(mark.remarks);
+            }
+            else if ((event === "Just a Minute - English") || (event === "Just a Minute - Tamil"))
+            {
+                if (filteredData.length === 0)
+                {
+                    filteredData = [{
+                        id : "",
+                        content : 0,
+                        language_fluency : 0,
+                        overall_presentation : 0,
+                        totalMarks : 0,
+                        remarks: "",
+                        dob : "",
+                        event : "",
+                        gender : "",
+                        group : "",
+                        name : "",
+                        samithi : "",
+                        judge : "",
+                        lock : ""
+                    }]
+                }
+                const mark = filteredData[0];
+                setJamCont(mark.content);
+                setJamLangFlu(mark.language_fluency);
+                setJamOverall(mark.overall_presentation);
+                setJamRemarks(mark.remarks);
+            }
+            else if ((event === "Ted Sai - English") || (event === "Ted Sai - Tamil"))
+            {
+                if (filteredData.length === 0)
+                {
+                    filteredData = [{
+                        id : "",
+                        content_relevance : 0,
+                        personal_connection : 0,
+                        expression_delivery : 0,
+                        language_fluency : 0,
+                        totalMarks : 0,
+                        remarks: "",
+                        dob : "",
+                        event : "",
+                        gender : "",
+                        group : "",
+                        name : "",
+                        samithi : "",
+                        judge : "",
+                        lock : ""
+                    }]
+                }
+                const mark = filteredData[0];
+                setTsContRel(mark.content_relevance);
+                setTsPersConn(mark.personal_connection);
+                setTsExpDel(mark.expression_delivery);
+                setTsLanFlu(mark.language_fluency);
+                setTsRemarks(mark.remarks);
+            }
+            else if ((event === "Dumb Charades"))
+            {
+                if (filteredData.length === 0)
+                {
+                    filteredData = [{
+                        id : "",
+                        accurate_sayings : 0,
+                        totalMarks : 0,
+                        remarks: "",
+                        dob : "",
+                        event : "",
+                        gender : "",
+                        group : "",
+                        name : "",
+                        samithi : "",
+                        judge : "",
+                        lock : ""
+                    }]
+                }
+                const mark = filteredData[0];
+                setTeDcAccurateSaying(mark.accurate_sayings);
+                setTeDcRemarks(mark.remarks);
+            }
+            else if ((event === "Wealth out of Waste"))
+            {
+                if (filteredData.length === 0)
+                {
+                    filteredData = [{
+                        id : "",
+                        creativity_uniqueness : 0,
+                        wastage_minimisation : 0,
+                        utility_practicality : 0,
+                        neatness_finish : 0,
+                        team_work : 0,
+                        totalMarks : 0,
+                        remarks: "",
+                        dob : "",
+                        event : "",
+                        gender : "",
+                        group : "",
+                        name : "",
+                        samithi : "",
+                        judge : "",
+                        lock : ""
+                    }]
+                }
+                const mark = filteredData[0];
+                setWowCreativity(mark.creativity_uniqueness);
+                setWowWastage(mark.wastage_minimisation);
+                setWowUtility(mark.utility_practicality);
+                setWowNeatness(mark.neatness_finish);
+                setWowTeamWork(mark.team_work);
+                setWowRemarks(mark.remarks);
+            }
+            else if ((event === "Rangoli"))
+            {
+                if (filteredData.length === 0)
+                {
+                    filteredData = [{
+                        id : "",
+                        theme_relevance : 0,
+                        creativity : 0,
+                        colour_combination : 0,
+                        symmetry : 0,
+                        team_coordination : 0,
+                        totalMarks : 0,
+                        remarks: "",
+                        dob : "",
+                        event : "",
+                        gender : "",
+                        group : "",
+                        name : "",
+                        samithi : "",
+                        judge : "",
+                        lock : ""
+                    }]
+                }
+                const mark = filteredData[0];
+                setRgTheme(mark.theme_relevance);
+                setRgCreativity(mark.creativity);
+                setRgColor(mark.colour_combination);
+                setRgSymmety(mark.symmetry);
+                setRgTeam(mark.team_coordination);
+                setRgRemarks(mark.remarks);
+            }
             setMarks(filteredData);
             setLoading(false);
         }  
@@ -562,7 +780,7 @@ export default function Judging(){
             where("judge","==",judgeEmail)
         );
         const querySnapshot = await getDocs(q);
-        if ((event === "Slokas") || (event === "Slokas - Boys") || (event === "Slokas - Girls") || (event === "Tamizh Chants") || (event === "Tamizh chants - Boys") || (event === "Tamizh chants - Girls"))
+        if ((event === "Sloka Chanting") || (event === "Sloka Chanting - Boys") || (event === "Sloka Chanting - Girls") || (event === "Tamizh Chants") || (event === "Tamizh chants - Boys") || (event === "Tamizh chants - Girls"))
         {
             if (!querySnapshot.empty)
             {
@@ -609,7 +827,7 @@ export default function Judging(){
                 alert("Sairam! Marks added successfully!");
             }
         }
-        else if ((event === "Bhajans") || (event === "Bhajans - Boys") || (event === "Bhajans - Girls"))
+        else if ((event === "Bhajan Singing") || (event === "Bhajan Singing - Boys") || (event === "Bhajan Singing - Girls"))
         {
             if (!querySnapshot.empty)
             {
@@ -658,7 +876,7 @@ export default function Judging(){
                 alert("Sairam! Marks added successfully!");
             }   
         }
-        else if ((event === "Vedam") || (event === "Vedam - Boys") || (event === "Vedam - Girls") || (event === "Rudram Namakam Chanting - Boys") || (event === "Rudram Namakam Chanting - Girls"))
+        else if ((event === "Veda Chanting") || (event === "Veda Chanting - Boys") || (event === "Veda Chanting - Girls") || (event === "Rudram Namakam Chanting - Boys") || (event === "Rudram Namakam Chanting - Girls"))
         {
             if (!querySnapshot.empty)
             {
@@ -705,7 +923,7 @@ export default function Judging(){
                 alert("Sairam! Marks added successfully!");
             }
         }
-        else if ((event === "Story Telling (English)") || (event === "Story Telling (Tamil)") || (event === "Elocution (English)") || (event === "Elocution (Tamil)"))
+        else if ((event === "Story Telling (English/Tamil/Bilingual)") || (event === "Elocution (English)") || (event === "Elocution (Tamil)"))
         {
             if (!querySnapshot.empty)
             {
@@ -930,6 +1148,282 @@ export default function Judging(){
                 alert("Sairam! Marks added successfully!");
             }
         }
+        else if ((event === "Fancy Dress"))
+        {
+            if (!querySnapshot.empty)
+            {
+                querySnapshot.forEach(async (document) => {
+                const docRef = doc(db,"studentMarks",document.id);
+                await updateDoc(docRef,{
+                        id : id,
+                        name : amName,
+                        dob : amDoB,
+                        group : amGroup,
+                        samithi : amSamithi,
+                        gender : amGender,
+                        event : event,
+                        character_representation : fdCharRep,
+                        expression_delivery : fdExpDel,
+                        content_relevance : fdContRel,
+                        totalMarks : fdTotal,
+                        remarks: fdRemarks,
+                        judge : judgeEmail
+                    });
+                });
+                alert("Sairam! Marks updated successfully!");
+            }
+            else
+            {
+                await addDoc(collection(db,"studentMarks"),{
+                        id : id,
+                        name : amName,
+                        dob : amDoB,
+                        group : amGroup,
+                        samithi : amSamithi,
+                        gender : amGender,
+                        event : event,
+                        character_representation : fdCharRep,
+                        expression_delivery : fdExpDel,
+                        content_relevance : fdContRel,
+                        totalMarks : fdTotal,
+                        remarks: fdRemarks,
+                        judge : judgeEmail,
+                        lock : ""
+                });
+                alert("Sairam! Marks added successfully!");
+            }
+        }
+        else if ((event === "Just a Minute - English") || (event === "Just a Minute - Tamil"))
+        {
+            if (!querySnapshot.empty)
+            {
+                querySnapshot.forEach(async (document) => {
+                const docRef = doc(db,"studentMarks",document.id);
+                await updateDoc(docRef,{
+                        id : id,
+                        name : amName,
+                        dob : amDoB,
+                        group : amGroup,
+                        samithi : amSamithi,
+                        gender : amGender,
+                        event : event,
+                        content : jamcont,
+                        language_fluency : jamlangflu,
+                        overall_presentation : jamoverall,
+                        totalMarks : jamTotal,
+                        remarks: jamRemarks,
+                        judge : judgeEmail
+                    });
+                });
+                alert("Sairam! Marks updated successfully!");
+            }
+            else
+            {
+                await addDoc(collection(db,"studentMarks"),{
+                        id : id,
+                        name : amName,
+                        dob : amDoB,
+                        group : amGroup,
+                        samithi : amSamithi,
+                        gender : amGender,
+                        event : event,
+                        content : jamcont,
+                        language_fluency : jamlangflu,
+                        overall_presentation : jamoverall,
+                        totalMarks : jamTotal,
+                        remarks: jamRemarks,
+                        judge : judgeEmail,
+                        lock : ""
+                });
+                alert("Sairam! Marks added successfully!");
+            }
+        }
+        else if ((event === "Ted Sai - English") || (event === "Ted Sai - Tamil"))
+        {
+            if (!querySnapshot.empty)
+            {
+                querySnapshot.forEach(async (document) => {
+                const docRef = doc(db,"studentMarks",document.id);
+                await updateDoc(docRef,{
+                        id : id,
+                        name : amName,
+                        dob : amDoB,
+                        group : amGroup,
+                        samithi : amSamithi,
+                        gender : amGender,
+                        event : event,
+                        content_relevance : tscontrel,
+                        personal_connection : tspersConn,
+                        expression_delivery : tsexpDel,
+                        language_fluency : tsLanFlu,
+                        totalMarks : tsTotal,
+                        remarks: tsRemarks,
+                        judge : judgeEmail
+                    });
+                });
+                alert("Sairam! Marks updated successfully!");
+            }
+            else
+            {
+                await addDoc(collection(db,"studentMarks"),{
+                        id : id,
+                        name : amName,
+                        dob : amDoB,
+                        group : amGroup,
+                        samithi : amSamithi,
+                        gender : amGender,
+                        event : event,
+                        content_relevance : tscontrel,
+                        personal_connection : tspersConn,
+                        expression_delivery : tsexpDel,
+                        language_fluency : tsLanFlu,
+                        totalMarks : tsTotal,
+                        remarks: tsRemarks,
+                        judge : judgeEmail,
+                        lock : ""
+                });
+                alert("Sairam! Marks added successfully!");
+            }
+        }
+        else if ((event === "Dumb Charades"))
+        {
+            if (!querySnapshot.empty)
+            {
+                querySnapshot.forEach(async (document) => {
+                const docRef = doc(db,"studentMarks",document.id);
+                await updateDoc(docRef,{
+                        id : id,
+                        name : amName,
+                        dob : amDoB,
+                        group : amGroup,
+                        samithi : amSamithi,
+                        gender : amGender,
+                        event : event,
+                        accurate_sayings : tedcAccurateSaying,
+                        totalMarks : tedcTotal,
+                        remarks: tedcRemarks,
+                        judge : judgeEmail
+                    });
+                });
+                alert("Sairam! Marks updated successfully!");
+            }
+            else
+            {
+                await addDoc(collection(db,"studentMarks"),{
+                        id : id,
+                        name : amName,
+                        dob : amDoB,
+                        group : amGroup,
+                        samithi : amSamithi,
+                        gender : amGender,
+                        event : event,
+                        accurate_sayings : tedcAccurateSaying,
+                        totalMarks : tedcTotal,
+                        remarks: tedcRemarks,
+                        judge : judgeEmail,
+                        lock : ""
+                });
+                alert("Sairam! Marks added successfully!");
+            }
+        }
+        else if ((event === "Wealth out of Waste"))
+        {
+            if (!querySnapshot.empty)
+            {
+                querySnapshot.forEach(async (document) => {
+                const docRef = doc(db,"studentMarks",document.id);
+                await updateDoc(docRef,{
+                        id : id,
+                        name : amName,
+                        dob : amDoB,
+                        group : amGroup,
+                        samithi : amSamithi,
+                        gender : amGender,
+                        event : event,
+                        creativity_uniqueness : wowCreativity,
+                        wastage_minimisation : wowWastage,
+                        utility_practicality : wowUtility,
+                        neatness_finish : wowNeatness,
+                        team_work : wowTeamWork,
+                        totalMarks : wowTotal,
+                        remarks: wowRemarks,
+                        judge : judgeEmail
+                    });
+                });
+                alert("Sairam! Marks updated successfully!");
+            }
+            else
+            {
+                await addDoc(collection(db,"studentMarks"),{
+                        id : id,
+                        name : amName,
+                        dob : amDoB,
+                        group : amGroup,
+                        samithi : amSamithi,
+                        gender : amGender,
+                        event : event,
+                        creativity_uniqueness : wowCreativity,
+                        wastage_minimisation : wowWastage,
+                        utility_practicality : wowUtility,
+                        neatness_finish : wowNeatness,
+                        team_work : wowTeamWork,
+                        totalMarks : wowTotal,
+                        remarks: wowRemarks,
+                        judge : judgeEmail,
+                        lock : ""
+                });
+                alert("Sairam! Marks added successfully!");
+            }
+        }
+        else if ((event === "Rangoli"))
+        {
+            if (!querySnapshot.empty)
+            {
+                querySnapshot.forEach(async (document) => {
+                const docRef = doc(db,"studentMarks",document.id);
+                await updateDoc(docRef,{
+                        id : id,
+                        name : amName,
+                        dob : amDoB,
+                        group : amGroup,
+                        samithi : amSamithi,
+                        gender : amGender,
+                        event : event,
+                        theme_relevance : rgTheme,
+                        creativity : rgCreativity,
+                        colour_combination : rgColor,
+                        symmetry : rgSymmetry,
+                        team_coordination : rgTeam,
+                        totalMarks : rgTotal,
+                        remarks: rgRemarks,
+                        judge : judgeEmail
+                    });
+                });
+                alert("Sairam! Marks updated successfully!");
+            }
+            else
+            {
+                await addDoc(collection(db,"studentMarks"),{
+                        id : id,
+                        name : amName,
+                        dob : amDoB,
+                        group : amGroup,
+                        samithi : amSamithi,
+                        gender : amGender,
+                        event : event,
+                        theme_relevance : rgTheme,
+                        creativity : rgCreativity,
+                        colour_combination : rgColor,
+                        symmetry : rgSymmetry,
+                        team_coordination : rgTeam,
+                        totalMarks : rgTotal,
+                        remarks: rgRemarks,
+                        judge : judgeEmail,
+                        lock : ""
+                });
+                alert("Sairam! Marks added successfully!");
+            }
+        }
         setLoading(false);
     }
 
@@ -1027,6 +1521,77 @@ export default function Judging(){
         XLSX.utils.book_append_sheet(workbook,worksheet,"Students");
         XLSX.writeFile(workbook,group.toLowerCase()+"-"+event.toLowerCase()+".xlsx");
     }
+
+    async function fetchGroupEvents(){
+        try{
+            setLoading(true);
+            const q = query(
+                collection(db,"studentDetails"),
+                where("attendance","==","P")
+            );
+            const presentSnapshot = await getDocs(q);
+            const presentIds = new Set(presentSnapshot.docs.map((doc) => doc.id));
+            const qry = query(
+                collection(db,"groupEventTeams"),
+                where("eventName","==",event)
+            );
+            const teamsSnapshot = await getDocs(qry);
+            const teams = teamsSnapshot.docs.map((doc) => ({
+                id: doc.id,
+                ...doc.data()
+            }));
+            const teamsWithAttendance = teams.map((team) => ({
+                ...team,
+                members: (team.members || []).map((member) => ({
+                    ...member,
+                    present: presentIds.has(member.studentId)
+                }))
+            }))
+            .filter((team) =>
+                team.members.some((member) => member.present)
+            );
+            setGroupEventData(teamsWithAttendance)
+        }
+        catch(err){
+            console.error(err);
+            alert("Unable to fetch group event attendance");
+        }
+        finally{
+            setLoading(false);
+        }
+    }
+
+    useEffect(() => {
+        if (event) {
+            fetchGroupEvents();
+        }
+    },[event]);
+
+    useEffect(() => {
+        const initial = {'Chengalpet: Team A':[],'Collectorate: Team A':[],'Guduvancheri: Team A':[],
+                 'Indra Nagar: Team A':[],'Irumbuliyur: Team A':[],'Little Kancheepuram: Team A':[],
+                 'Madambakkam: Team A':[],'Main Kancheepuram: Team A':[],'Mannivakkam: Team A':[],
+                 'Maraimalai Nagar: Team A':[],'Parvathi Nagar: Team A':[],'Perungalathur: Team A':[],
+                 'Poondi Bazar: Team A':[],'Sothupakkam: Team A':[],'Sriperumpudur: Team A':[],
+                 'Tambaram: Team A':[],
+                 'Chengalpet: Team B':[],'Collectorate: Team B':[],'Guduvancheri: Team B':[],
+                 'Indra Nagar: Team B':[],'Irumbuliyur: Team B':[],'Little Kancheepuram: Team B':[],
+                 'Madambakkam: Team B':[],'Main Kancheepuram: Team B':[],'Mannivakkam: Team B':[],
+                 'Maraimalai Nagar: Team B':[],'Parvathi Nagar: Team B':[],'Perungalathur: Team B':[],
+                 'Poondi Bazar: Team B':[],'Sothupakkam: Team B':[],'Sriperumpudur: Team B':[],
+                 'Tambaram: Team B':[]};
+        if (groupEventData.length !== 0){
+            for (const team  of groupEventData){
+                const teamSamithi = team.samithi;
+                const key = `${teamSamithi}: ${team.teamName}`;
+                if (initial[key]){
+                    initial[key].push(team);
+                }
+            }
+        }
+        setSamithis(initial);
+    },[groupEventData]);
+    
     
     return(
         <>
@@ -1046,8 +1611,8 @@ export default function Judging(){
                 </nav>
 
                 <div className="mx-auto bg-white rounded-xl shadow-xl w-75 md:w-180 lg:w-250 mt-5 pb-5">
-                    <h1 className="flex justify-center font-sans font-bold text-md md:text-xl lg:text-2xl p-2">{group+" --> "+event}</h1>
-                    {((event === "Bhajans") || (event === "Bhajans - Boys") || (event === "Bhajans - Girls")) && 
+                    <h1 className="mx-auto flex justify-center items-center font-sans text-center font-bold text-md md:text-xl lg:text-2xl p-2">{group+" --> "+event}</h1>
+                    {((event === "Bhajan Singing") || (event === "Bhajan Singing - Boys") || (event === "Bhajan Singing - Girls")) && 
                     
                     <>
                         <h1 className="flex justify-center font-sans font-bold text-md md:text-xl lg:text-xl p-2">Evaluation Criteria</h1>
@@ -1088,7 +1653,7 @@ export default function Judging(){
                     </>
                     }
 
-                    {((event === "Slokas") || (event === "Slokas - Boys") || (event === "Slokas - Girls") || (event === "Tamizh Chants") || (event === "Tamizh chants - Boys") || (event === "Tamizh chants - Girls")) && 
+                    {((event === "Sloka Chanting") || (event === "Sloka Chanting - Boys") || (event === "Sloka Chanting - Girls") || (event === "Tamizh Chants") || (event === "Tamizh chants - Boys") || (event === "Tamizh chants - Girls")) && 
                     <>
                         <h1 className="flex justify-center font-sans font-bold text-md md:text-xl lg:text-xl p-2">Evaluation Criteria</h1>
                         <table className="mx-auto text-center w-70 md:w-150 lg:w-150">
@@ -1124,7 +1689,7 @@ export default function Judging(){
                     </>
                     }
 
-                    {((event === "Vedam") || (event === "Vedam - Boys") || (event === "Vedam - Girls") || (event === "Rudram Namakam Chanting - Boys") || (event === "Rudram Namakam Chanting - Girls")) && 
+                    {((event === "Veda Chanting") || (event === "Veda Chanting - Boys") || (event === "Veda Chanting - Girls") || (event === "Rudram Namakam Chanting - Boys") || (event === "Rudram Namakam Chanting - Girls")) && 
                     <>
                         <h1 className="flex justify-center font-sans font-bold text-md md:text-xl lg:text-xl p-2">Evaluation Criteria</h1>
                         <table className="mx-auto text-center w-70 md:w-150 lg:w-150">
@@ -1160,7 +1725,7 @@ export default function Judging(){
                     </>
                     }
 
-                    {((event === "Story Telling (English)") || (event === "Story Telling (Tamil)") || (event === "Elocution (English)") || (event === "Elocution (Tamil)")) && 
+                    {((event === "Story Telling (English/Tamil/Bilingual)") || (event === "Elocution (English)") || (event === "Elocution (Tamil)")) && 
                     <>
                         <h1 className="flex justify-center font-sans font-bold text-md md:text-xl lg:text-xl p-2">Evaluation Criteria</h1>
                         <table className="mx-auto text-center w-70 md:w-150 lg:w-150">
@@ -1192,6 +1757,200 @@ export default function Judging(){
                     </>
                     }
 
+                    {((event === "Rangoli")) && 
+                    <>
+                        <h1 className="flex justify-center font-sans font-bold text-md md:text-xl lg:text-xl p-2">Evaluation Criteria</h1>
+                        <table className="mx-auto text-center w-70 md:w-150 lg:w-150">
+                            <thead className="bg-blue-950 text-white">
+                                <tr>
+                                    <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Criteria</th>
+                                    <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Marks</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td className="font-sans px-2 py-2 font-semibold border border-black">Theme Relevance</td>
+                                    <td className="font-sans px-2 py-2 font-semibold border border-black">10</td>
+                                </tr>
+                                <tr>
+                                    <td className="font-sans px-2 py-2 font-semibold border border-black">Creativity</td>
+                                    <td className="font-sans px-2 py-2 font-semibold border border-black">10</td>
+                                </tr>
+                                <tr>
+                                    <td className="font-sans px-2 py-2 font-semibold border border-black">Colour Combination </td>
+                                    <td className="font-sans px-2 py-2 font-semibold border border-black">10</td>
+                                </tr>
+                                <tr>
+                                    <td className="font-sans px-2 py-2 font-semibold border border-black">Symmetry</td>
+                                    <td className="font-sans px-2 py-2 font-semibold border border-black">5</td>
+                                </tr>
+                                <tr>
+                                    <td className="font-sans px-2 py-2 font-semibold border border-black">Team Coordination</td>
+                                    <td className="font-sans px-2 py-2 font-semibold border border-black">5</td>
+                                </tr>
+                                <tr>
+                                    <td className="font-sans px-2 py-2 font-semibold border bg-gray-200 border-black">TOTAL</td>
+                                    <td className="font-sans px-2 py-2 font-semibold border bg-gray-200 border-black">40 marks</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </>
+                    }
+
+                    {((event === "Fancy Dress")) && 
+                    <>
+                        <h1 className="flex justify-center font-sans font-bold text-md md:text-xl lg:text-xl p-2">Evaluation Criteria</h1>
+                        <table className="mx-auto text-center w-70 md:w-150 lg:w-150">
+                            <thead className="bg-blue-950 text-white">
+                                <tr>
+                                    <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Criteria</th>
+                                    <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Marks</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td className="font-sans px-2 py-2 font-semibold border border-black">Character Representation</td>
+                                    <td className="font-sans px-2 py-2 font-semibold border border-black">10</td>
+                                </tr>
+                                <tr>
+                                    <td className="font-sans px-2 py-2 font-semibold border border-black">Expression and Delivery</td>
+                                    <td className="font-sans px-2 py-2 font-semibold border border-black">10</td>
+                                </tr>
+                                <tr>
+                                    <td className="font-sans px-2 py-2 font-semibold border border-black">Content and Relevance</td>
+                                    <td className="font-sans px-2 py-2 font-semibold border border-black">10</td>
+                                </tr>
+                                <tr>
+                                    <td className="font-sans px-2 py-2 font-semibold border bg-gray-200 border-black">TOTAL</td>
+                                    <td className="font-sans px-2 py-2 font-semibold border bg-gray-200 border-black">30 marks</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </>
+                    }
+
+                    {((event === "Ted Sai - English") || (event === "Ted Sai - Tamil")) && 
+                    <>
+                        <h1 className="flex justify-center font-sans font-bold text-md md:text-xl lg:text-xl p-2">Evaluation Criteria</h1>
+                        <table className="mx-auto text-center w-70 md:w-150 lg:w-150">
+                            <thead className="bg-blue-950 text-white">
+                                <tr>
+                                    <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Criteria</th>
+                                    <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Marks</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td className="font-sans px-2 py-2 font-semibold border border-black">Content & Relevance</td>
+                                    <td className="font-sans px-2 py-2 font-semibold border border-black">10</td>
+                                </tr>
+                                <tr>
+                                    <td className="font-sans px-2 py-2 font-semibold border border-black">Personal Connection</td>
+                                    <td className="font-sans px-2 py-2 font-semibold border border-black">10</td>
+                                </tr>
+                                <tr>
+                                    <td className="font-sans px-2 py-2 font-semibold border border-black">Expression & Delivery</td>
+                                    <td className="font-sans px-2 py-2 font-semibold border border-black">5</td>
+                                </tr>
+                                <tr>
+                                    <td className="font-sans px-2 py-2 font-semibold border border-black">Language & Fluency</td>
+                                    <td className="font-sans px-2 py-2 font-semibold border border-black">5</td>
+                                </tr>
+                                <tr>
+                                    <td className="font-sans px-2 py-2 font-semibold border bg-gray-200 border-black">TOTAL</td>
+                                    <td className="font-sans px-2 py-2 font-semibold border bg-gray-200 border-black">30 marks</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </>
+                    }
+
+                    {((event === "Just a Minute - English") || (event === "Just a Minute - Tamil")) && 
+                    <>
+                        <h1 className="flex justify-center font-sans font-bold text-md md:text-xl lg:text-xl p-2">Evaluation Criteria</h1>
+                        <table className="mx-auto text-center w-70 md:w-150 lg:w-150">
+                            <thead className="bg-blue-950 text-white">
+                                <tr>
+                                    <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Criteria</th>
+                                    <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Marks</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td className="font-sans px-2 py-2 font-semibold border border-black">Content</td>
+                                    <td className="font-sans px-2 py-2 font-semibold border border-black">10</td>
+                                </tr>
+                                <tr>
+                                    <td className="font-sans px-2 py-2 font-semibold border border-black">Language & Fluency</td>
+                                    <td className="font-sans px-2 py-2 font-semibold border border-black">10</td>
+                                </tr>
+                                <tr>
+                                    <td className="font-sans px-2 py-2 font-semibold border border-black">Overall Presentation</td>
+                                    <td className="font-sans px-2 py-2 font-semibold border border-black">10</td>
+                                </tr>
+                                <tr>
+                                    <td className="font-sans px-2 py-2 font-semibold border bg-gray-200 border-black">TOTAL</td>
+                                    <td className="font-sans px-2 py-2 font-semibold border bg-gray-200 border-black">30 marks</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </>
+                    }
+
+                    {((event === "Wealth out of Waste")) && 
+                    <>
+                        <h1 className="flex justify-center font-sans font-bold text-md md:text-xl lg:text-xl p-2">Evaluation Criteria</h1>
+                        <table className="mx-auto text-center w-70 md:w-150 lg:w-150">
+                            <thead className="bg-blue-950 text-white">
+                                <tr>
+                                    <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Criteria</th>
+                                    <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Marks</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td className="font-sans px-2 py-2 font-semibold border border-black">Creativity & Uniqueness</td>
+                                    <td className="font-sans px-2 py-2 font-semibold border border-black">10</td>
+                                </tr>
+                                <tr>
+                                    <td className="font-sans px-2 py-2 font-semibold border border-black">Wastage Minimisation</td>
+                                    <td className="font-sans px-2 py-2 font-semibold border border-black">5</td>
+                                </tr>
+                                <tr>
+                                    <td className="font-sans px-2 py-2 font-semibold border border-black">Utility/Practicality</td>
+                                    <td className="font-sans px-2 py-2 font-semibold border border-black">10</td>
+                                </tr>
+                                <tr>
+                                    <td className="font-sans px-2 py-2 font-semibold border border-black">Neatness and Finish</td>
+                                    <td className="font-sans px-2 py-2 font-semibold border border-black">10</td>
+                                </tr>
+                                <tr>
+                                    <td className="font-sans px-2 py-2 font-semibold border border-black">Team Work</td>
+                                    <td className="font-sans px-2 py-2 font-semibold border border-black">5</td>
+                                </tr>
+                                <tr>
+                                    <td className="font-sans px-2 py-2 font-semibold border bg-gray-200 border-black">TOTAL</td>
+                                    <td className="font-sans px-2 py-2 font-semibold border bg-gray-200 border-black">40 marks</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </>
+                    }
+
+                    {((event === "Dumb Charades")) && 
+                    <>
+                        <h1 className="flex justify-center font-sans font-bold text-md md:text-xl lg:text-xl p-2">Evaluation Criteria</h1>
+                        <h1 className="flex justify-center text-blue-900 bg-gray-200 rounded-xl shadow-xl mx-4 text-center font-sans font-bold text-md md:text-xl lg:text-xl p-2">Each successfully identified saying will be awarded 5 marks. The total score will be determined by the number of accurate Sayings identified, multiplied by 5</h1>
+                    </>
+                    }
+
+                    {((event === "Quiz")) && 
+                    <>
+                        <h1 className="flex justify-center font-sans font-bold text-md md:text-xl lg:text-xl p-2">Evaluation Criteria</h1>
+                        <h1 className="flex justify-center text-blue-900 bg-gray-200 rounded-xl shadow-xl mx-4 text-center font-sans font-bold text-md md:text-xl lg:text-xl p-2">Assessed through general round, audio visual round, and rapid fire round.</h1>
+                    </>
+                    }
+
                     {((event === "Drawing")) && 
                     <>
                         <h1 className="flex justify-center font-sans font-bold text-md md:text-xl lg:text-xl p-2">Evaluation Criteria</h1>
@@ -1204,15 +1963,15 @@ export default function Judging(){
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td className="font-sans px-2 py-2 font-semibold border border-black">Theme</td>
-                                    <td className="font-sans px-2 py-2 font-semibold border border-black">10</td>
-                                </tr>
-                                <tr>
-                                    <td className="font-sans px-2 py-2 font-semibold border border-black">Colour Coordination</td>
+                                    <td className="font-sans px-2 py-2 font-semibold border border-black">Accuracy</td>
                                     <td className="font-sans px-2 py-2 font-semibold border border-black">10</td>
                                 </tr>
                                 <tr>
                                     <td className="font-sans px-2 py-2 font-semibold border border-black">Layout</td>
+                                    <td className="font-sans px-2 py-2 font-semibold border border-black">10</td>
+                                </tr>
+                                <tr>
+                                    <td className="font-sans px-2 py-2 font-semibold border border-black">Colouring</td>
                                     <td className="font-sans px-2 py-2 font-semibold border border-black">10</td>
                                 </tr>
                                 <tr>
@@ -1313,7 +2072,7 @@ export default function Judging(){
                 }
 
                 <div className="mx-auto bg-white rounded-xl shadow-xl mt-5 pb-5 w-75 md:w-180 lg:w-250">
-                        <h1 className="flex justify-center font-sans font-bold pt-4 pb-4 p-4 text-md md:text-xl">Students Registered for {group}: {event}</h1>
+                        <h1 className="flex justify-center font-sans text-center font-bold pt-4 pb-4 p-4 text-md md:text-xl">Students Registered for {group}: {event}</h1>
                         <div className="overflow-hidden overflow-x-auto">
                             <table className="mx-auto text-center w-70 md:w-150 lg:w-150 pb-2">
                                 <thead className="bg-blue-950 text-white">
@@ -1324,7 +2083,18 @@ export default function Judging(){
                                 </thead>
                                 <tbody>
                                     {
-                                        studentData.map((student) => (
+                                        (judgeEmail.slice(7,9) !== "ge" || judgeEmail.slice(7,9) !== "te") &&
+                                        studentData.map((student) => {
+                                            let count = 0;
+                                            if (student.event1 !== "N/A")
+                                                count += 1
+                                            if (student.event2 !== "N/A")
+                                                count += 1
+                                            if (student.teamEvent !== "N/A")
+                                                count += 1
+                                            if (student.groupEvent !== "N/A")
+                                                count += 1
+                                            return (
                                             <tr key={student.id}>
                                                 <td className="font-sans px-2 py-4 font-semibold border border-black">
                                                     <div className="md:flex md:flex-row md:justify-between md:items-center">
@@ -1339,14 +2109,42 @@ export default function Judging(){
                                                         
                                                     </div>
                                                     {
-                                                        (student.event2 !== "Select an event" || student.groupEvent !== "Select an event") && (
+                                                        (count > 1) && (
                                                             <div className="mt-3 lg:mt-1">
-                                                                <h1 className="mx-auto bg-red-100 p-1 rounded-lg text-sm lg:text-md w-40 md:w-100">Participating in two events. Kindly prioritize evaluation</h1>
+                                                                <h1 className="mx-auto bg-red-100 p-1 rounded-lg text-sm lg:text-md w-40 md:w-100">Participating in {count} events. Kindly prioritize evaluation</h1>
                                                             </div>
                                                         )
                                                     }
                                                 </td>
                                                 <td className="font-sans px-2 py-2 border border-black"><button disabled={disabled} onClick={() => {handleAwardMarks(student.name,student.dob,student.group,student.gender,student.samithi)}} className={!disabled ? `bg-yellow-200 p-2 rounded-xl font-semibold shadow-xl hover:cursor-pointer` : `bg-gray-200 p-2 rounded-xl shadow-xl hover:cursor-not-allowed`}>Award Marks</button></td>
+                                            </tr>
+                                        )})
+                                    }
+                                    {
+                                        ((judgeEmail.slice(7,9) === "ge" || judgeEmail.slice(7,9) === "te")) && 
+                                        groupEventData.filter((group) => group.members && group.members.length > 0)
+                                        .map((group) => (
+                                            <tr key={group.id}>
+                                                <td className="font-sans px-2 py-4 font-semibold border border-black">
+                                                    <div className="md:flex md:flex-row md:justify-between md:items-center">
+                                                        <div>
+                                                            <h1 className="font-sans font-bold text-lg mx-auto flex justify-center items-center lg:text-xl">{group.teamName.toUpperCase()}</h1>
+                                                        </div>
+                                                        <div className="flex flex-col justify-between items-center mt-2 mb-2 lg:mt-0 lg:mb-0">
+                                                            {
+                                                                group.members.map((student,index) => (
+                                                                    <div key={index} className="border p-2 m-2 rounded-lg shadow-lg shadow-gray-500">
+                                                                        <h1 className="font-sans text-sm lg:text-md">Name: {student.name} ({student.present ? "Present" : "Absent"})</h1>
+                                                                        <h1 className="font-sans text-sm lg:text-md">Group: {student.group}</h1>
+                                                                        <h1 className="font-sans text-sm lg:text-md">Gender: {student.gender}</h1>
+                                                                        <h1 className="font-sans text-sm lg:text-md">DOB: {student.dob}</h1>
+                                                                    </div>                                                                
+                                                                ))
+                                                            }
+                                                        </div>                                                        
+                                                    </div>
+                                                </td>
+                                                <td className="font-sans px-2 py-2 border border-black"><button disabled={disabled} onClick={() => {handleAwardMarks(group.members.map((s) => s.name).join(", ") ,group.members.map((s) => s.dob).join(", "),group.members.map((s) => s.group).join(", "),group.members[0].gender,group.samithi)}} className={!disabled ? `bg-yellow-200 p-2 rounded-lg font-semibold shadow-lg shadow-yellow-100 hover:cursor-pointer` : `bg-gray-200 p-2 rounded-xl shadow-xl hover:cursor-not-allowed`}>Award Marks</button></td>
                                             </tr>
                                         ))
                                     }
@@ -1356,11 +2154,11 @@ export default function Judging(){
                 </div>
 
                 {
-                clicked && ((event === "Slokas") || (event === "Slokas - Boys") || (event === "Slokas - Girls") || (event === "Tamizh Chants") || (event === "Tamizh chants - Boys") || (event === "Tamizh chants - Girls")) &&
+                clicked && ((event === "Sloka Chanting") || (event === "Sloka Chanting - Boys") || (event === "Sloka Chanting - Girls") || (event === "Tamizh Chants") || (event === "Tamizh chants - Boys") || (event === "Tamizh chants - Girls")) &&
                     <div className="fixed inset-0 flex flex-col justify-center backdrop-blur-sm items-center">
                         <div className="bg-white w-75 md:w-125 rounded-xl shadow-xl">
                             <div className="flex justify-end pt-2 pr-2">
-                                <button onClick={handleClose} className="rounded-md p-1 font-sans bg-red-500 text-sm hover:cursor-pointer text-gray-100">X</button>
+                                <button onClick={handleClose} className="rounded-md p-1 font-sans text-sm hover:cursor-pointer text-gray-100">❌</button>
                             </div>
                             <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Award Marks</h1>
                             <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Student Name: {amName}</h1>
@@ -1452,11 +2250,11 @@ export default function Judging(){
                     </div>
                 }  
 
-                {clicked && ((event === "Bhajans") || (event === "Bhajans - Boys") || (event === "Bhajans - Girls")) && 
+                {clicked && ((event === "Bhajan Singing") || (event === "Bhajan Singing - Boys") || (event === "Bhajan Singing - Girls")) && 
                     <div className="fixed inset-0 flex flex-col justify-center backdrop-blur-sm items-center">
                         <div className="bg-white w-75 md:w-125 rounded-xl shadow-xl">
                             <div className="flex justify-end pt-2 pr-2">
-                                <button onClick={handleClose} className="rounded-md p-1 font-sans bg-red-500 text-sm hover:cursor-pointer text-gray-100">X</button>
+                                <button onClick={handleClose} className="rounded-md p-1 font-sans text-sm hover:cursor-pointer text-gray-100">❌</button>
                             </div>
                             <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Award Marks</h1>
                             <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Student Name: {amName}</h1>
@@ -1576,14 +2374,19 @@ export default function Judging(){
                     </div>
                 }
 
-                {clicked && ((event === "Vedam") || (event === "Vedam - Boys") || (event === "Vedam - Girls") || (event === "Rudram Namakam Chanting - Boys") || (event === "Rudram Namakam Chanting - Girls")) && 
+                {clicked && ((event === "Veda Chanting") || (event === "Veda Chanting - Boys") || (event === "Veda Chanting - Girls") || (event === "Rudram Namakam Chanting - Boys") || (event === "Rudram Namakam Chanting - Girls")) && 
                     <div className="fixed inset-0 flex flex-col justify-center backdrop-blur-sm items-center">
                         <div className="bg-white w-75 md:w-125 rounded-xl shadow-xl">
                             <div className="flex justify-end pt-2 pr-2">
-                                <button onClick={handleClose} className="rounded-md p-1 font-sans bg-red-500 text-sm hover:cursor-pointer text-gray-100">X</button>
+                                <button onClick={handleClose} className="rounded-md p-1 font-sans text-sm hover:cursor-pointer text-gray-100">❌</button>
                             </div>
                             <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Award Marks</h1>
-                            <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Student Name: {amName}</h1>
+                            {   
+                                ((event === "Rudram Namakam Chanting - Boys") || (event === "Rudram Namakam Chanting - Girls")) ?
+                                    <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Samithi Name: {amSamithi}</h1>
+                                :
+                                    <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Student Name: {amName}</h1>
+                            }
                             <table className="mx-auto text-center w-70 md:w-100 mt-2 mb-2">
                                 <thead className="bg-blue-950 text-white">
                                     <tr>
@@ -1692,11 +2495,11 @@ export default function Judging(){
                     </div>
                 }
                 
-                {clicked && ((event === "Story Telling (English)") || (event === "Story Telling (Tamil)") || (event === "Elocution (English)") || (event === "Elocution (Tamil)")) && 
+                {clicked && ((event === "Story Telling (English/Tamil/Bilingual)") || (event === "Elocution (English)") || (event === "Elocution (Tamil)")) && 
                     <div className="fixed inset-0 flex flex-col justify-center backdrop-blur-sm items-center">
                         <div className="bg-white w-75 md:w-125 rounded-xl shadow-xl">
                             <div className="flex justify-end pt-2 pr-2">
-                                <button onClick={handleClose} className="rounded-md p-1 font-sans bg-red-500 text-sm hover:cursor-pointer text-gray-100">X</button>
+                                <button onClick={handleClose} className="rounded-md p-1 font-sans text-sm hover:cursor-pointer text-gray-100">❌</button>
                             </div>
                             <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Award Marks</h1>
                             <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Student Name: {amName}</h1>
@@ -1784,7 +2587,7 @@ export default function Judging(){
                     <div className="fixed inset-0 flex flex-col justify-center backdrop-blur-sm items-center">
                         <div className="bg-white w-75 md:w-125 rounded-xl shadow-xl">
                             <div className="flex justify-end pt-2 pr-2">
-                                <button onClick={handleClose} className="rounded-md p-1 font-sans bg-red-500 text-sm hover:cursor-pointer text-gray-100">X</button>
+                                <button onClick={handleClose} className="rounded-md p-1 font-sans text-sm hover:cursor-pointer text-gray-100">❌</button>
                             </div>
                             <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Award Marks</h1>
                             <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Student Name: {amName}</h1>
@@ -1868,14 +2671,400 @@ export default function Judging(){
                     </div>
                 }
 
+                {clicked && ((event === "Fancy Dress")) && 
+                    <div className="fixed inset-0 flex flex-col justify-center backdrop-blur-sm items-center">
+                        <div className="bg-white w-75 md:w-125 rounded-xl shadow-xl">
+                            <div className="flex justify-end pt-2 pr-2">
+                                <button onClick={handleClose} className="rounded-md p-1 font-sans text-sm hover:cursor-pointer text-gray-100">❌</button>
+                            </div>
+                            <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Award Marks</h1>
+                            <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Student Name: {amName}</h1>
+                            <table className="mx-auto text-center w-70 md:w-100 mt-2 mb-2">
+                                <thead className="bg-blue-950 text-white">
+                                    <tr>
+                                        <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Criteria</th>
+                                        <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Marks</th>
+                                    </tr>
+                                </thead>
+                                {marks.map((mark) => (
+                                    <tbody key={mark.id}>
+                                        <tr>
+                                            <td className="font-sans px-2 py-2 font-semibold border border-black">Character Representation</td>
+                                            <td className="font-sans px-2 py-2 font-semibold border border-black">
+                                                <select value={fdCharRep} onChange={(e) => {setFdCharRep(e.target.value)}} name="marks" className="w-20 border rounded-xl p-2">
+                                                    <option>0</option>
+                                                    <option>1</option>
+                                                    <option>2</option>
+                                                    <option>3</option>
+                                                    <option>4</option>
+                                                    <option>5</option>
+                                                    <option>6</option>
+                                                    <option>7</option>
+                                                    <option>8</option>
+                                                    <option>9</option>
+                                                    <option>10</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td className="font-sans px-2 py-2 font-semibold border border-black">Expression and Delivery</td>
+                                            <td className="font-sans px-2 py-2 font-semibold border border-black">
+                                                <select value={fdExpDel} onChange={(e) => {setFdExpDel(e.target.value)}} name="marks" className="w-20 border rounded-xl p-2">
+                                                    <option>0</option>
+                                                    <option>1</option>
+                                                    <option>2</option>
+                                                    <option>3</option>
+                                                    <option>4</option>
+                                                    <option>5</option>
+                                                    <option>6</option>
+                                                    <option>7</option>
+                                                    <option>8</option>
+                                                    <option>9</option>
+                                                    <option>10</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td className="font-sans px-2 py-2 font-semibold border border-black">Content and Relevance</td>
+                                            <td className="font-sans px-2 py-2 font-semibold border border-black">
+                                                <select value={fdContRel} onChange={(e) => {setFdContRel(e.target.value)}} name="marks" className="w-20 border rounded-xl p-2">
+                                                    <option>0</option>
+                                                    <option>1</option>
+                                                    <option>2</option>
+                                                    <option>3</option>
+                                                    <option>4</option>
+                                                    <option>5</option>
+                                                    <option>6</option>
+                                                    <option>7</option>
+                                                    <option>8</option>
+                                                    <option>9</option>
+                                                    <option>10</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td className="font-sans px-2 py-2 font-semibold border bg-gray-200 border-black">TOTAL</td>
+                                            <td className="font-sans px-2 py-2 font-semibold border bg-gray-200 border-black">{fdTotal} marks</td>
+                                        </tr>
+                                    </tbody>
+                                ))}
+                            </table>
+                            <div className="flex justify-center">
+                                <textarea value={fdRemarks} onChange={(e)=>{setFdRemarks(e.target.value)}} type="text" maxLength={100} placeholder="Enter your remarks here (max 100 characters)" className="resize-none font-sans p-2 mb-2 rounded-xl w-70 h-30 md:w-100 md:h-20 border"></textarea>
+                            </div>
+                            <div className="flex justify-center">
+                                <button onClick={() => {updateMarks()}} className="flex justify-center font-sans bg-green-200 rounded-xl hover:cursor-pointer font-semibold text-lg p-2 mb-2">Update Marks</button>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                {clicked && ((event === "Wealth out of Waste")) && 
+                    <div className="fixed inset-0 flex flex-col justify-center backdrop-blur-sm items-center">
+                        <div className="bg-white w-75 md:w-125 rounded-xl shadow-xl">
+                            <div className="flex justify-end pt-2 pr-2">
+                                <button onClick={handleClose} className="rounded-md p-1 font-sans text-sm hover:cursor-pointer text-gray-100">❌</button>
+                            </div>
+                            <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Award Marks</h1>
+                            <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Student Name: {amName}</h1>
+                            <table className="mx-auto text-center w-70 md:w-100 mt-2 mb-2">
+                                <thead className="bg-blue-950 text-white">
+                                    <tr>
+                                        <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Criteria</th>
+                                        <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Marks</th>
+                                    </tr>
+                                </thead>
+                                {marks.map((mark) => (
+                                    <tbody key={mark.id}>
+                                        <tr>
+                                            <td className="font-sans px-2 py-2 font-semibold border border-black">Creativity & Uniqueness</td>
+                                            <td className="font-sans px-2 py-2 font-semibold border border-black">
+                                                <select value={wowCreativity} onChange={(e) => {setWowCreativity(e.target.value)}} name="marks" className="w-20 border rounded-xl p-2">
+                                                    <option>0</option>
+                                                    <option>1</option>
+                                                    <option>2</option>
+                                                    <option>3</option>
+                                                    <option>4</option>
+                                                    <option>5</option>
+                                                    <option>6</option>
+                                                    <option>7</option>
+                                                    <option>8</option>
+                                                    <option>9</option>
+                                                    <option>10</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td className="font-sans px-2 py-2 font-semibold border border-black">Wastage Minimisation</td>
+                                            <td className="font-sans px-2 py-2 font-semibold border border-black">
+                                                <select value={wowWastage} onChange={(e) => {setWowWastage(e.target.value)}} name="marks" className="w-20 border rounded-xl p-2">
+                                                    <option>0</option>
+                                                    <option>1</option>
+                                                    <option>2</option>
+                                                    <option>3</option>
+                                                    <option>4</option>
+                                                    <option>5</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td className="font-sans px-2 py-2 font-semibold border border-black">Utility/Practicality</td>
+                                            <td className="font-sans px-2 py-2 font-semibold border border-black">
+                                                <select value={wowUtility} onChange={(e) => {setWowUtility(e.target.value)}} name="marks" className="w-20 border rounded-xl p-2">
+                                                    <option>0</option>
+                                                    <option>1</option>
+                                                    <option>2</option>
+                                                    <option>3</option>
+                                                    <option>4</option>
+                                                    <option>5</option>
+                                                    <option>6</option>
+                                                    <option>7</option>
+                                                    <option>8</option>
+                                                    <option>9</option>
+                                                    <option>10</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td className="font-sans px-2 py-2 font-semibold border border-black">Neatness and Finish</td>
+                                            <td className="font-sans px-2 py-2 font-semibold border border-black">
+                                                <select value={wowNeatness} onChange={(e) => {setWowNeatness(e.target.value)}} name="marks" className="w-20 border rounded-xl p-2">
+                                                    <option>0</option>
+                                                    <option>1</option>
+                                                    <option>2</option>
+                                                    <option>3</option>
+                                                    <option>4</option>
+                                                    <option>5</option>
+                                                    <option>6</option>
+                                                    <option>7</option>
+                                                    <option>8</option>
+                                                    <option>9</option>
+                                                    <option>10</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td className="font-sans px-2 py-2 font-semibold border border-black">Team Work</td>
+                                            <td className="font-sans px-2 py-2 font-semibold border border-black">
+                                                <select value={wowTeamWork} onChange={(e) => {setWowTeamWork(e.target.value)}} name="marks" className="w-20 border rounded-xl p-2">
+                                                    <option>0</option>
+                                                    <option>1</option>
+                                                    <option>2</option>
+                                                    <option>3</option>
+                                                    <option>4</option>
+                                                    <option>5</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td className="font-sans px-2 py-2 font-semibold border bg-gray-200 border-black">TOTAL</td>
+                                            <td className="font-sans px-2 py-2 font-semibold border bg-gray-200 border-black">{wowTotal} marks</td>
+                                        </tr>
+                                    </tbody>
+                                ))}
+                            </table>
+                            <div className="flex justify-center">
+                                <textarea value={wowRemarks} onChange={(e)=>{setWowRemarks(e.target.value)}} type="text" maxLength={100} placeholder="Enter your remarks here (max 100 characters)" className="resize-none font-sans p-2 mb-2 rounded-xl w-70 h-30 md:w-100 md:h-20 border"></textarea>
+                            </div>
+                            <div className="flex justify-center">
+                                <button onClick={() => {updateMarks()}} className="flex justify-center font-sans bg-green-200 rounded-xl hover:cursor-pointer font-semibold text-lg p-2 mb-2">Update Marks</button>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                {clicked && ((event === "Just a Minute - English") || (event === "Just a Minute - Tamil")) && 
+                    <div className="fixed inset-0 flex flex-col justify-center backdrop-blur-sm items-center">
+                        <div className="bg-white w-75 md:w-125 rounded-xl shadow-xl">
+                            <div className="flex justify-end pt-2 pr-2">
+                                <button onClick={handleClose} className="rounded-md p-1 font-sans text-sm hover:cursor-pointer text-gray-100">❌</button>
+                            </div>
+                            <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Award Marks</h1>
+                            <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Student Name: {amName}</h1>
+                            <table className="mx-auto text-center w-70 md:w-100 mt-2 mb-2">
+                                <thead className="bg-blue-950 text-white">
+                                    <tr>
+                                        <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Criteria</th>
+                                        <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Marks</th>
+                                    </tr>
+                                </thead>
+                                {marks.map((mark) => (
+                                    <tbody key={mark.id}>
+                                        <tr>
+                                            <td className="font-sans px-2 py-2 font-semibold border border-black">Content</td>
+                                            <td className="font-sans px-2 py-2 font-semibold border border-black">
+                                                <select value={jamcont} onChange={(e) => {setJamCont(e.target.value)}} name="marks" className="w-20 border rounded-xl p-2">
+                                                    <option>0</option>
+                                                    <option>1</option>
+                                                    <option>2</option>
+                                                    <option>3</option>
+                                                    <option>4</option>
+                                                    <option>5</option>
+                                                    <option>6</option>
+                                                    <option>7</option>
+                                                    <option>8</option>
+                                                    <option>9</option>
+                                                    <option>10</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td className="font-sans px-2 py-2 font-semibold border border-black">Language & Fluency</td>
+                                            <td className="font-sans px-2 py-2 font-semibold border border-black">
+                                                <select value={jamlangflu} onChange={(e) => {setJamLangFlu(e.target.value)}} name="marks" className="w-20 border rounded-xl p-2">
+                                                    <option>0</option>
+                                                    <option>1</option>
+                                                    <option>2</option>
+                                                    <option>3</option>
+                                                    <option>4</option>
+                                                    <option>5</option>
+                                                    <option>6</option>
+                                                    <option>7</option>
+                                                    <option>8</option>
+                                                    <option>9</option>
+                                                    <option>10</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td className="font-sans px-2 py-2 font-semibold border border-black">Overall Presentation</td>
+                                            <td className="font-sans px-2 py-2 font-semibold border border-black">
+                                                <select value={jamoverall} onChange={(e) => {setJamOverall(e.target.value)}} name="marks" className="w-20 border rounded-xl p-2">
+                                                    <option>0</option>
+                                                    <option>1</option>
+                                                    <option>2</option>
+                                                    <option>3</option>
+                                                    <option>4</option>
+                                                    <option>5</option>
+                                                    <option>6</option>
+                                                    <option>7</option>
+                                                    <option>8</option>
+                                                    <option>9</option>
+                                                    <option>10</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td className="font-sans px-2 py-2 font-semibold border bg-gray-200 border-black">TOTAL</td>
+                                            <td className="font-sans px-2 py-2 font-semibold border bg-gray-200 border-black">{jamTotal} marks</td>
+                                        </tr>
+                                    </tbody>
+                                ))}
+                            </table>
+                            <div className="flex justify-center">
+                                <textarea value={jamRemarks} onChange={(e)=>{setJamRemarks(e.target.value)}} type="text" maxLength={100} placeholder="Enter your remarks here (max 100 characters)" className="resize-none font-sans p-2 mb-2 rounded-xl w-70 h-30 md:w-100 md:h-20 border"></textarea>
+                            </div>
+                            <div className="flex justify-center">
+                                <button onClick={() => {updateMarks()}} className="flex justify-center font-sans bg-green-200 rounded-xl hover:cursor-pointer font-semibold text-lg p-2 mb-2">Update Marks</button>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                {clicked && ((event === "Ted Sai - English") || (event === "Ted Sai - Tamil")) && 
+                    <div className="fixed inset-0 flex flex-col justify-center backdrop-blur-sm items-center">
+                        <div className="bg-white w-75 md:w-125 rounded-xl shadow-xl">
+                            <div className="flex justify-end pt-2 pr-2">
+                                <button onClick={handleClose} className="rounded-md p-1 font-sans text-sm hover:cursor-pointer text-gray-100">❌</button>
+                            </div>
+                            <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Award Marks</h1>
+                            <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Student Name: {amName}</h1>
+                            <table className="mx-auto text-center w-70 md:w-100 mt-2 mb-2">
+                                <thead className="bg-blue-950 text-white">
+                                    <tr>
+                                        <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Criteria</th>
+                                        <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Marks</th>
+                                    </tr>
+                                </thead>
+                                {marks.map((mark) => (
+                                    <tbody key={mark.id}>
+                                        <tr>
+                                            <td className="font-sans px-2 py-2 font-semibold border border-black">Content & Relevance</td>
+                                            <td className="font-sans px-2 py-2 font-semibold border border-black">
+                                                <select value={tscontrel} onChange={(e) => {setTsContRel(e.target.value)}} name="marks" className="w-20 border rounded-xl p-2">
+                                                    <option>0</option>
+                                                    <option>1</option>
+                                                    <option>2</option>
+                                                    <option>3</option>
+                                                    <option>4</option>
+                                                    <option>5</option>
+                                                    <option>6</option>
+                                                    <option>7</option>
+                                                    <option>8</option>
+                                                    <option>9</option>
+                                                    <option>10</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td className="font-sans px-2 py-2 font-semibold border border-black">Personal Connection</td>
+                                            <td className="font-sans px-2 py-2 font-semibold border border-black">
+                                                <select value={tspersConn} onChange={(e) => {setTsPersConn(e.target.value)}} name="marks" className="w-20 border rounded-xl p-2">
+                                                    <option>0</option>
+                                                    <option>1</option>
+                                                    <option>2</option>
+                                                    <option>3</option>
+                                                    <option>4</option>
+                                                    <option>5</option>
+                                                    <option>6</option>
+                                                    <option>7</option>
+                                                    <option>8</option>
+                                                    <option>9</option>
+                                                    <option>10</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td className="font-sans px-2 py-2 font-semibold border border-black">Expression & Delivery</td>
+                                            <td className="font-sans px-2 py-2 font-semibold border border-black">
+                                                <select value={tsexpDel} onChange={(e) => {setTsExpDel(e.target.value)}} name="marks" className="w-20 border rounded-xl p-2">
+                                                    <option>0</option>
+                                                    <option>1</option>
+                                                    <option>2</option>
+                                                    <option>3</option>
+                                                    <option>4</option>
+                                                    <option>5</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td className="font-sans px-2 py-2 font-semibold border border-black">Language & Fluency</td>
+                                            <td className="font-sans px-2 py-2 font-semibold border border-black">
+                                                <select value={tsLanFlu} onChange={(e) => {setTsLanFlu(e.target.value)}} name="marks" className="w-20 border rounded-xl p-2">
+                                                    <option>0</option>
+                                                    <option>1</option>
+                                                    <option>2</option>
+                                                    <option>3</option>
+                                                    <option>4</option>
+                                                    <option>5</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td className="font-sans px-2 py-2 font-semibold border bg-gray-200 border-black">TOTAL</td>
+                                            <td className="font-sans px-2 py-2 font-semibold border bg-gray-200 border-black">{tsTotal} marks</td>
+                                        </tr>
+                                    </tbody>
+                                ))}
+                            </table>
+                            <div className="flex justify-center">
+                                <textarea value={tsRemarks} onChange={(e)=>{setTsRemarks(e.target.value)}} type="text" maxLength={100} placeholder="Enter your remarks here (max 100 characters)" className="resize-none font-sans p-2 mb-2 rounded-xl w-70 h-30 md:w-100 md:h-20 border"></textarea>
+                            </div>
+                            <div className="flex justify-center">
+                                <button onClick={() => {updateMarks()}} className="flex justify-center font-sans bg-green-200 rounded-xl hover:cursor-pointer font-semibold text-lg p-2 mb-2">Update Marks</button>
+                            </div>
+                        </div>
+                    </div>
+                }
+
                 {clicked && ((event === "Devotional Singing - Boys") || (event === "Devotional Singing - Girls")) && 
                     <div className="fixed inset-0 flex flex-col justify-center backdrop-blur-sm items-center">
                         <div className="bg-white w-75 md:w-125 rounded-xl shadow-xl">
                             <div className="flex justify-end pt-2 pr-2">
-                                <button onClick={handleClose} className="rounded-md p-1 font-sans bg-red-500 text-sm hover:cursor-pointer text-gray-100">X</button>
+                                <button onClick={handleClose} className="rounded-md p-1 font-sans text-sm hover:cursor-pointer text-gray-100">❌</button>
                             </div>
                             <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Award Marks</h1>
-                            <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Student Name: {amName}</h1>
+                            <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Samithi Name: {amSamithi}</h1>
                             <table className="mx-auto text-center w-70 md:w-100 mt-2 mb-2">
                                 <thead className="bg-blue-950 text-white">
                                     <tr>
@@ -2014,10 +3203,10 @@ export default function Judging(){
                     <div className="fixed inset-0 flex flex-col justify-center backdrop-blur-sm items-center">
                         <div className="bg-white w-75 md:w-125 rounded-xl shadow-xl">
                             <div className="flex justify-end pt-2 pr-2">
-                                <button onClick={handleClose} className="rounded-md p-1 font-sans bg-red-500 text-sm hover:cursor-pointer text-gray-100">X</button>
+                                <button onClick={handleClose} className="rounded-md p-1 font-sans text-sm hover:cursor-pointer text-gray-100">❌</button>
                             </div>
                             <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Award Marks</h1>
-                            <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Student Name: {amName}</h1>
+                            <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Samithi Name: {amSamithi}</h1>
                             <table className="mx-auto text-center w-70 md:w-100 mt-2 mb-2">
                                 <thead className="bg-blue-950 text-white">
                                     <tr>
@@ -2102,18 +3291,158 @@ export default function Judging(){
                     <div className="fixed inset-0 flex flex-col justify-center backdrop-blur-sm items-center">
                         <div className="bg-white w-75 md:w-125 rounded-xl shadow-xl">
                             <div className="flex justify-end pt-2 pr-2">
-                                <button onClick={handleClose} className="rounded-md p-1 font-sans bg-red-500 text-sm hover:cursor-pointer text-gray-100">X</button>
+                                <button onClick={handleClose} className="rounded-md p-1 font-sans text-sm hover:cursor-pointer text-gray-100">❌</button>
                             </div>
                             <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Award Marks</h1>
                             <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Student Name: {amName}</h1>
-                            <div className="flex justify-center">
-                                <input value={qMark} onChange={(e) => setQMark(e.target.value)} className="font-sans rounded-xl border p-2 w-50 mx-4 my-4" type="number" placeholder="Enter the marks here..."></input>
+                            <div className="flex justify-center flex-col justify-center items-center">
+                                <h1 className="font-sans text-xl mt-2 font-semibold">Enter the marks</h1>
+                                <input value={qMark} onChange={(e) => setQMark(e.target.value)} className="font-sans rounded-xl border w-100 p-2 w-50 mx-4 mb-4" type="number" placeholder="Enter the marks here..."></input>
                             </div>
                             <div className="flex justify-center">
                                 <textarea value={qRemarks} onChange={(e)=>{setQRemarks(e.target.value)}} type="text" maxLength={100} placeholder="Enter your remarks here (max 100 characters)" className="resize-none font-sans p-2 mb-2 rounded-xl w-70 h-30 md:w-100 md:h-20 border"></textarea>
                             </div>
                             <div className="flex justify-center">
                                 <button onClick={() => {updateMarks()}} className="font-sans bg-green-200 rounded-xl hover:cursor-pointer font-semibold text-lg p-2 mb-2">Update Marks</button>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                {clicked && (event === "Dumb Charades") && 
+                    <div className="fixed inset-0 flex flex-col justify-center backdrop-blur-sm items-center">
+                        <div className="bg-white w-75 md:w-125 rounded-xl shadow-xl">
+                            <div className="flex justify-end pt-2 pr-2">
+                                <button onClick={handleClose} className="rounded-md p-1 font-sans text-sm hover:cursor-pointer text-gray-100">❌</button>
+                            </div>
+                            <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Award Marks</h1>
+                            <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Student Name: {amName}</h1>
+                            <div className="flex justify-center items-center flex-col">
+                                <h1 className="font-bold mt-4">Enter the number of accurate sayings</h1>
+                                <input value={tedcAccurateSaying} onChange={(e) => setTeDcAccurateSaying(e.target.value)} className="font-sans rounded-xl border p-2 w-100 mx-4 mb-2" type="number" placeholder="Enter the marks here..."></input>
+                            </div>
+                            <div className="flex justify-center">
+                                <textarea value={tedcRemarks} onChange={(e)=>{setTeDcRemarks(e.target.value)}} type="text" maxLength={100} placeholder="Enter your remarks here (max 100 characters)" className="resize-none font-sans p-2 mb-2 rounded-xl w-70 h-30 md:w-100 md:h-20 border"></textarea>
+                            </div>
+                            <div className="flex justify-center">
+                                <h1 className="font-bold text-xl">Total Marks: {tedcTotal}</h1>
+                            </div>
+                            <div className="flex justify-center">
+                                <button onClick={() => {updateMarks()}} className="font-sans bg-green-200 rounded-xl hover:cursor-pointer font-semibold text-lg p-2 mb-2">Update Marks</button>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                {clicked && (event === "Rangoli") && 
+                    <div className="fixed inset-0 flex flex-col justify-center backdrop-blur-sm items-center">
+                        <div className="bg-white w-75 md:w-125 rounded-xl shadow-xl">
+                            <div className="flex justify-end pt-2 pr-2">
+                                <button onClick={handleClose} className="rounded-md p-1 font-sans text-sm hover:cursor-pointer text-gray-100">❌</button>
+                            </div>
+                            <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Award Marks</h1>
+                            <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Samithi Name: {amSamithi}</h1>
+                            <table className="mx-auto text-center w-70 md:w-100 mt-2 mb-2">
+                                <thead className="bg-blue-950 text-white">
+                                    <tr>
+                                        <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Criteria</th>
+                                        <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Marks</th>
+                                    </tr>
+                                </thead>
+                                {marks.map((mark) => (
+                                    <tbody key={mark.id}>
+                                        <tr>
+                                            <td className="font-sans px-2 py-2 font-semibold border border-black">Theme Relevance</td>
+                                            <td className="font-sans px-2 py-2 font-semibold border border-black">
+                                                <select value={rgTheme} onChange={(e) => {setRgTheme(e.target.value)}} name="marks" className="w-20 border rounded-xl p-2">
+                                                    <option>0</option>
+                                                    <option>1</option>
+                                                    <option>2</option>
+                                                    <option>3</option>
+                                                    <option>4</option>
+                                                    <option>5</option>
+                                                    <option>6</option>
+                                                    <option>7</option>
+                                                    <option>8</option>
+                                                    <option>9</option>
+                                                    <option>10</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td className="font-sans px-2 py-2 font-semibold border border-black">Creativity</td>
+                                            <td className="font-sans px-2 py-2 font-semibold border border-black">
+                                                <select value={rgCreativity} onChange={(e) => {setRgCreativity(e.target.value)}} name="marks" className="w-20 border rounded-xl p-2">
+                                                    <option>0</option>
+                                                    <option>1</option>
+                                                    <option>2</option>
+                                                    <option>3</option>
+                                                    <option>4</option>
+                                                    <option>5</option>
+                                                    <option>6</option>
+                                                    <option>7</option>
+                                                    <option>8</option>
+                                                    <option>9</option>
+                                                    <option>10</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td className="font-sans px-2 py-2 font-semibold border border-black">Colour Combination</td>
+                                            <td className="font-sans px-2 py-2 font-semibold border border-black">
+                                                <select value={rgColor} onChange={(e) => {setRgColor(e.target.value)}} name="marks" className="w-20 border rounded-xl p-2">
+                                                    <option>0</option>
+                                                    <option>1</option>
+                                                    <option>2</option>
+                                                    <option>3</option>
+                                                    <option>4</option>
+                                                    <option>5</option>
+                                                    <option>6</option>
+                                                    <option>7</option>
+                                                    <option>8</option>
+                                                    <option>9</option>
+                                                    <option>10</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td className="font-sans px-2 py-2 font-semibold border border-black">Symmetry</td>
+                                            <td className="font-sans px-2 py-2 font-semibold border border-black">
+                                                <select value={rgSymmetry} onChange={(e) => {setRgSymmety(e.target.value)}} name="marks" className="w-20 border rounded-xl p-2">
+                                                    <option>0</option>
+                                                    <option>1</option>
+                                                    <option>2</option>
+                                                    <option>3</option>
+                                                    <option>4</option>
+                                                    <option>5</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td className="font-sans px-2 py-2 font-semibold border border-black">Team Coordination</td>
+                                            <td className="font-sans px-2 py-2 font-semibold border border-black">
+                                                <select value={rgTeam} onChange={(e) => {setRgTeam(e.target.value)}} name="marks" className="w-20 border rounded-xl p-2">
+                                                    <option>0</option>
+                                                    <option>1</option>
+                                                    <option>2</option>
+                                                    <option>3</option>
+                                                    <option>4</option>
+                                                    <option>5</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td className="font-sans px-2 py-2 font-semibold border bg-gray-200 border-black">TOTAL</td>
+                                            <td className="font-sans px-2 py-2 font-semibold border bg-gray-200 border-black">{rgTotal} marks</td>
+                                        </tr>
+                                    </tbody>
+                                ))}
+                            </table>
+                            <div className="flex justify-center">
+                                <textarea value={rgRemarks} onChange={(e)=>{setRgRemarks(e.target.value)}} type="text" maxLength={100} placeholder="Enter your remarks here (max 100 characters)" className="resize-none font-sans p-2 mb-2 rounded-xl w-70 h-30 md:w-100 md:h-20 border"></textarea>
+                            </div>
+                            <div className="flex justify-center">
+                                <button onClick={() => {updateMarks()}} className="flex justify-center font-sans bg-green-200 rounded-xl hover:cursor-pointer font-semibold text-lg p-2 mb-2">Update Marks</button>
                             </div>
                         </div>
                     </div>

@@ -11,38 +11,41 @@ import { useEffect, useState } from "react";
 export default function EventLeaderboard(){
 
     const eventMap = {
-        "bhajans" : "Bhajans",
-        "slokas" : "Slokas",
-        "vedam" : "Vedam",
+        "bhajansinging" : "Bhajan Singing",
+        "slokachanting" : "Sloka Chanting",
+        "vedachanting" : "Veda Chanting",
         "tamizhchants" : "Tamizh Chants",
-        "storytellingenglish" : "Story Telling (English)",
-        "storytellingtamil" : "Story Telling (Tamil)",
+        "storytellingenglishtamilbilingual" : "Story Telling (English/Tamil/Bilingual)",
         "drawing" : "Drawing",
+        "fancydress" : "Fancy Dress",
         "quiz" : "Quiz",
-        "devotionalsingingboys" : "Devotional Singing - Boys",
-        "devotionalsinginggirls" : "Devotional Singing - Girls",
-        "bhajansboys" : "Bhajans - Boys",
-        "bhajansgirls" : "Bhajans - Girls",
-        "slokasboys" : "Slokas - Boys",
-        "slokasgirls" : "Slokas - Girls",
-        "vedamboys" : "Vedam - Boys",
-        "vedamgirls" : "Vedam - Girls",
+        "tedsaienglish" : "Ted Sai - English",
+        "tedsaitamil" : "Ted Sai - Tamil",
+        "bhajansingingboys" : "Bhajan Singing - Boys",
+        "bhajansinginggirls" : "Bhajan Singing - Girls",
+        "slokachantingboys" : "Sloka Chanting - Boys",
+        "slokachantinggirls" : "Sloka Chanting - Girls",
+        "vedachantingboys" : "Veda Chanting - Boys",
+        "vedachantinggirls" : "Veda Chanting - Girls",
         "tamizhchantsboys" : "Tamizh chants - Boys",
         "tamizhchantsgirls" : "Tamizh chants - Girls",
-        "elocutionenglish" : "Elocution (English)",
-        "elocutiontamil" : "Elocution (Tamil)",
+        "justaminuteenglish" : "Just a Minute - English",
+        "justaminutetamil" : "Just a Minute - Tamil",
         "altardecorationboys" : "Altar Decoration - Boys",
         "altardecorationgirls" : "Altar Decoration - Girls",
         "rudramnamakamchantingboys" : "Rudram Namakam Chanting - Boys",
-        "rudramnamakamchantinggirls" : "Rudram Namakam Chanting - Girls"
+        "rudramnamakamchantinggirls" : "Rudram Namakam Chanting - Girls",
+        "dumbcharades" : "Dumb Charades",
+        "wealthoutofwaste" : "Wealth out of Waste",
+        "rangoli" : "Rangoli"
     }
 
     const groupMap = {
         "group1" : "Group 1",
         "group2" : "Group 2",
         "group3" : "Group 3",
-        "group4" : "Group 4",
-        "group2%26group3groupevents" : "Group Events - Group 2 & 3"
+        "groupevents" : "Group Events",
+        "teamevents" : "Team Events"
     }
 
     const [name,setName] = useState("");
@@ -126,37 +129,45 @@ export default function EventLeaderboard(){
             const data = querySnapshot.docs.map((doc) => doc.data());
 
             let filteredData;
-            if (group === "Group 1" && event === "Devotional Singing - Boys")
+            if (event === "Altar Decoration - Boys")
             {
-                filteredData = data.filter((fd) => (fd.group === "Group 1" && fd.event === "Devotional Singing - Boys"));
-            }
-            else if (group === "Group 1" && event === "Devotional Singing - Girls")
-            {
-                filteredData = data.filter((fd) => (fd.group === "Group 1" && fd.event === "Devotional Singing - Girls"));
-            }
-            else if (event === "Altar Decoration - Boys")
-            {
-                filteredData = data.filter((fd) => ((fd.group === "Group 2" || fd.group === "Group 3") && fd.event === "Altar Decoration - Boys"));
+                filteredData = data.filter((fd) => (fd.event === "Altar Decoration - Boys"));
             }
             else if (event === "Altar Decoration - Girls")
             {
-                filteredData = data.filter((fd) => ((fd.group === "Group 2" || fd.group === "Group 3") && fd.event === "Altar Decoration - Girls"));
+                filteredData = data.filter((fd) => (fd.event === "Altar Decoration - Girls"));
             }
             else if (event === "Devotional Singing - Boys")
             {
-                filteredData = data.filter((fd) => ((fd.group === "Group 2" || fd.group === "Group 3") && fd.event === "Devotional Singing - Boys"));
+                filteredData = data.filter((fd) => (fd.event === "Devotional Singing - Boys"));
             }
             else if (event === "Devotional Singing - Girls")
             {
-                filteredData = data.filter((fd) => ((fd.group === "Group 2" || fd.group === "Group 3") && fd.event === "Devotional Singing - Girls"));
+                filteredData = data.filter((fd) => (fd.event === "Devotional Singing - Girls"));
             }
             else if (event === "Rudram Namakam Chanting - Boys")
             {
-                filteredData = data.filter((fd) => ((fd.group === "Group 2" || fd.group === "Group 3") && fd.event === "Rudram Namakam Chanting - Boys"));
+                filteredData = data.filter((fd) => (fd.event === "Rudram Namakam Chanting - Boys"));
             }
             else if (event === "Rudram Namakam Chanting - Girls")
             {
-                filteredData = data.filter((fd) => ((fd.group === "Group 2" || fd.group === "Group 3") && fd.event === "Rudram Namakam Chanting - Girls"));
+                filteredData = data.filter((fd) => (fd.event === "Rudram Namakam Chanting - Girls"));
+            }
+            else if (event === "Dumb Charades")
+            {
+                filteredData = data.filter((fd) => (fd.event === "Dumb Charades"));
+            }
+            else if (event === "Wealth out of Waste")
+            {
+                filteredData = data.filter((fd) => (fd.event === "Wealth out of Waste"));
+            }
+            else if (event === "Quiz")
+            {
+                filteredData = data.filter((fd) => (fd.event === "Quiz"));
+            }
+            else if (event === "Rangoli")
+            {
+                filteredData = data.filter((fd) => (fd.event === "Rangoli"));
             }
             else 
             {
@@ -262,7 +273,7 @@ export default function EventLeaderboard(){
                 }
 
                 <div className="mx-auto rounded-xl shadow-xl bg-white w-75 md:w-100 mt-10">
-                    <h1 className="font-sans flex justify-center font-bold text-xl p-2">{group+" --> "+event}</h1>
+                    <h1 className="font-sans flex justify-center font-bold text-center text-xl p-2">{group+" --> "+event}</h1>
                     <div className="flex flex-row justify-between">
                         <div className="flex flex-col">
                             <div className="flex flex-col justify-center w-30 md:w-50 bg-fuchsia-300 ml-5 lg:ml-4 mb-2 rounded-xl p-2">
@@ -287,15 +298,22 @@ export default function EventLeaderboard(){
                 <div className="mx-auto rounded-xl shadow-xl bg-white mt-10 w-75 md:w-180 lg:w-250">
                     <div className="flex flex-col justify-center items-center">
                         <h1 className="flex justify-center font-sans font-bold mt-2 text-2xl">Leaderboard</h1>
-                        <h1 className="flex justify-center font-sans font-bold ml-2 text-lg md:text-2xl">{group+" --> "+event}</h1>
+                        <h1 className="flex justify-center font-sans font-bold ml-2 text-center text-lg md:text-2xl">{group+" --> "+event}</h1>
 
                         <div className="overflow-x-auto w-70 md:w-175 lg:w-245 mt-4 mb-4">
                             <table className="mx-auto text-center">
                                 <thead className="bg-blue-950 text-white">
                                     <tr>
-                                        <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Name</td>
-                                        <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">DOB</td>
-                                        <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Gender</td>
+                                        {
+                                            ((email.slice(7,9) === "ge") || (email.slice(7,9) === "te")) ? 
+                                                <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Samithi Name</td>
+                                            :
+                                                <>
+                                                    <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Name</td>
+                                                    <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">DOB</td>
+                                                    <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Gender</td>
+                                                </>
+                                        }                                        
                                         <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Judge 1</td>
                                         <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Judge 2</td>
                                         <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Judge 3</td>
@@ -307,9 +325,16 @@ export default function EventLeaderboard(){
                                     {
                                         studentData.map((student) => (
                                             <tr key={`${student.name}_${student.dob}_${student.samithi}`} className="hover:bg-gray-200 transition duration-300 ease-in-out">
-                                                <td className="font-sans text-lg px-4 py-2 border border-black">{student.name}</td>
-                                                <td className="font-sans text-lg px-4 py-2 border border-black">{student.dob}</td>
-                                                <td className="font-sans text-lg px-4 py-2 border border-black">{student.gender}</td>
+                                                {
+                                                    ((email.slice(7,9) === "ge") || (email.slice(7,9) === "te")) ? 
+                                                        <td className="font-sans text-lg px-4 py-2 border border-black">{student.samithi} ({student.name})</td>
+                                                    :
+                                                        <>
+                                                            <td className="font-sans text-lg px-4 py-2 border border-black">{student.name}</td>
+                                                            <td className="font-sans text-lg px-4 py-2 border border-black">{student.dob}</td>
+                                                            <td className="font-sans text-lg px-4 py-2 border border-black">{student.gender}</td>
+                                                        </>
+                                                }
                                                 <td className="font-sans text-lg px-4 py-2 border border-black">{student.judge1}</td>
                                                 <td className="font-sans text-lg px-4 py-2 border border-black">{student.judge2}</td>
                                                 <td className="font-sans text-lg px-4 py-2 border border-black">{student.judge3}</td>

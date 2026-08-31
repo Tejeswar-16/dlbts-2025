@@ -80,11 +80,13 @@ export default function Leadboard(){
             const querySnapshot = await getDocs(q);
             const data = querySnapshot.docs.map((doc) => doc.data());
 
-            let filteredData = data;
-            
+            let filteredData = data.filter(obj => 
+                obj && Object.keys(obj).length !== 0 && obj.constructor === Object
+            );
             //Total Mark Calculation && Cumulative Remarks
             for (let i=0;i<filteredData.length;i++)
             {
+                
                 let judge = (filteredData[i].judge.startsWith("judge01")) ? "Judge 1" : (filteredData[i].judge.startsWith("judge02")) ? "Judge 2" : "Judge 3"
                 let sum = Number(filteredData[i].totalMarks);
                 let remarks = (filteredData[i].remarks != undefined) ? judge+": "+filteredData[i].remarks+"\n" : "No remarks";
@@ -101,35 +103,54 @@ export default function Leadboard(){
                 }
                 filteredData[i].totalMarks = sum;
                 filteredData[i].remarks = remarks;
+                
             }
             
-            if (group === "Group 2 & Group 3 - Group Events")
+            if (group === "Group Events")
             {
                 if (event === "Altar Decoration - Boys")
                 {
-                    filteredData = filteredData.filter((fd) => (fd.group === "Group 2" || fd.group === "Group 3") && fd.event === "Altar Decoration - Boys") 
+                    filteredData = filteredData.filter((fd) => fd.event === "Altar Decoration - Boys") 
                 }
                 else if (event === "Altar Decoration - Girls")
                 {
-                    filteredData = filteredData.filter((fd) => (fd.group === "Group 2" || fd.group === "Group 3") && fd.event === "Altar Decoration - Girls") 
-                }
-                else if (event === "Devotional Singing - Boys")
-                {
-                    filteredData = filteredData.filter((fd) => (fd.group === "Group 2" || fd.group === "Group 3") && fd.event === "Devotional Singing - Boys") 
-                }
-                else if (event === "Devotional Singing - Girls")
-                {
-                    filteredData = filteredData.filter((fd) => (fd.group === "Group 2" || fd.group === "Group 3") && fd.event === "Devotional Singing - Girls") 
+                    filteredData = filteredData.filter((fd) => fd.event === "Altar Decoration - Girls") 
                 }
                 else if (event === "Rudram Namakam Chanting - Boys")
                 {
-                    filteredData = filteredData.filter((fd) => (fd.group === "Group 2" || fd.group === "Group 3") && fd.event === "Rudram Namakam Chanting - Boys") 
+                    filteredData = filteredData.filter((fd) => fd.event === "Rudram Namakam Chanting - Boys") 
                 }
                 else if (event === "Rudram Namakam Chanting - Girls")
                 {
-                    filteredData = filteredData.filter((fd) => (fd.group === "Group 2" || fd.group === "Group 3") && fd.event === "Rudram Namakam Chanting - Girls") 
+                    filteredData = filteredData.filter((fd) => fd.event === "Rudram Namakam Chanting - Girls") 
                 }
-
+                else
+                {
+                    filteredData = filteredData.filter((fd) => fd.judge.slice(7,9) === "ge");
+                }
+            }
+            else if (group === "Team Events")
+            {
+                if (event === "Wealth out of Waste")
+                {
+                    filteredData = filteredData.filter((fd) => fd.event === "Wealth out of Waste") 
+                }
+                else if (event === "Dumb Charades")
+                {
+                    filteredData = filteredData.filter((fd) => fd.event === "Dumb Charades") 
+                }
+                else if (event === "Rangoli")
+                {
+                    filteredData = filteredData.filter((fd) => fd.event === "Rangoli") 
+                }
+                else if (event === "Quiz")
+                {
+                    filteredData = filteredData.filter((fd) => fd.event === "Quiz") 
+                }
+                else
+                {
+                    filteredData = filteredData.filter((fd) => fd.judge.slice(7,9) === "te");
+                }
             }
             else
             {
@@ -301,7 +322,7 @@ export default function Leadboard(){
                 {clicked && 
                     <div className="mx-auto rounded-xl shadow-xl bg-white mt-5 w-75 md:w-180 lg:w-250">
                         <div className="flex justify-end mr-2 pt-2">
-                            <h1 onClick={handleClose} className="select-none text-white bg-red-500 p-1 rounded-lg hover:cursor-pointer">X</h1>
+                            <h1 onClick={handleClose} className="select-none text-white p-1 rounded-lg hover:cursor-pointer">❌</h1>
                         </div>
                         <h1 className="flex justify-center font-sans font-bold text-xl md:text-2xl p-2">Lock Events</h1>
                         <div className="overflow-x-auto w-70 md:w-175 lg:w-245 mt-2 mb-4 pb-4">
@@ -316,7 +337,7 @@ export default function Leadboard(){
                                 <tbody>
                                     {
                                         lockedEvents.map((lockedEvent,index) => (
-                                            <tr key={index} className={(lockedEvent.group === "Group 1") ? "bg-violet-100 hover:bg-gray-200 transition duration-300 ease-in-out" : (lockedEvent.group === "Group 2") ? "bg-fuchsia-100 hover:bg-gray-200 transition duration-300 ease-in-out" : (lockedEvent.group === "Group 3") ? "bg-pink-100 hover:bg-gray-200 transition duration-300 ease-in-out" : "bg-purple-100 hover:bg-gray-200 transition duration-300 ease-in-out"}>
+                                            <tr key={index} className={(lockedEvent.group === "Group 1") ? "bg-violet-100 hover:bg-violet-200 transition duration-300 ease-in-out" : (lockedEvent.group === "Group 2") ? "bg-fuchsia-100 hover:bg-fuchsia-200 transition duration-300 ease-in-out" : (lockedEvent.group === "Group 3") ? "bg-pink-100 hover:bg-pink-200 transition duration-300 ease-in-out" : (lockedEvent.group === "Group Events") ? "bg-fuchsia-100 hover:bg-fuchsia-200 transition duration-300 ease-in-out" : "bg-violet-100 hover:bg-violet-200 transition duration-300 ease-in-out"}>
                                                 <td className="font-sans text-lg px-4 py-2 border border-black">{lockedEvent.group}</td>
                                                 <td className="font-sans text-lg px-4 py-2 border border-black">{lockedEvent.event}</td>
                                                 <td className="font-sans text-lg px-4 py-2 border border-black"><button onClick={() => handleLock(lockedEvent.group,lockedEvent.event)} className={lockedEvent.lock === "false" ? `bg-blue-200 font-bold p-2 rounded-xl hover:bg-blue-400 hover:cursor-pointer transition duration-300 ease-in-out` : `bg-red-200 font-bold p-2 rounded-xl hover:bg-red-400 hover:cursor-pointer transition duration-300 ease-in-out`}>{lockedEvent.lock === "false" ? "Lock" : "Unlock"}</button></td>
@@ -339,8 +360,8 @@ export default function Leadboard(){
                                 <option>Group 1</option>
                                 <option>Group 2</option>
                                 <option>Group 3</option>
-                                <option>Group 4</option>    
-                                <option>Group 2 & Group 3 - Group Events</option>
+                                <option>Team Events</option>
+                                <option>Group Events</option>
                             </select>
                         </div>
                         <div className="flex flex-col">
@@ -371,59 +392,57 @@ export default function Leadboard(){
                             (group === "Group 1") ? ( 
                                 <select value={event} onChange={(e) => {setEvent(e.target.value)}} className="font-sans rounded-xl border w-65 ml-4 md:ml-0 md:w-50 mt-2 mb-4 mr-4 p-2">
                                     <option value="All">All</option>
-                                    <option>Bhajans</option>
-                                    <option>Slokas</option>
-                                    <option>Vedam</option>
+                                    <option>Sloka Chanting</option>
+                                    <option>Veda Chanting</option>
                                     <option>Tamizh Chants</option>
-                                    <option>Story Telling (English)</option>
-                                    <option>Story Telling (Tamil)</option>
+                                    <option>Story Telling (English/Tamil/Bilingual)</option>
+                                    <option>Fancy Dress</option>
+                                    <option>Bhajan Singing</option>
                                     <option>Drawing</option>
-                                    <option>Devotional Singing - Boys</option>
-                                    <option>Devotional Singing - Girls</option>
                                 </select>
                             ) : (group === "Group 2") ? (
                                 <select value={event} onChange={(e) => {setEvent(e.target.value)}} className="font-sans rounded-xl border w-65 ml-4 md:ml-0 md:w-50 mt-2 mb-4 mr-4 p-2">
                                     <option value="All">All</option>
-                                    <option>Bhajans - Boys</option>
-                                    <option>Bhajans - Girls</option>
-                                    <option>Slokas - Boys</option>
-                                    <option>Slokas - Girls</option>
-                                    <option>Vedam - Boys</option>
-                                    <option>Vedam - Girls</option>
+                                    <option>Sloka Chanting - Boys</option>
+                                    <option>Sloka Chanting - Girls</option>
+                                    <option>Veda Chanting - Boys</option>
+                                    <option>Veda Chanting - Girls</option>
                                     <option>Tamizh chants - Boys</option>
                                     <option>Tamizh chants - Girls</option>
-                                    <option>Elocution (English)</option>
-                                    <option>Elocution (Tamil)</option>
+                                    <option>Just a Minute - English</option>
+                                    <option>Just a Minute - Tamil</option>
                                     <option>Drawing</option>
+                                    <option>Bhajan Singing - Boys</option>
+                                    <option>Bhajan Singing - Girls</option>
                                 </select>
                             ) : (group === "Group 3") ? (
                                 <select value={event} onChange={(e) => {setEvent(e.target.value)}} className="font-sans rounded-xl border w-65 ml-4 md:ml-0 md:w-50 mt-2 mb-4 mr-4 p-2">
                                     <option value="All">All</option>
-                                    <option>Bhajans - Boys</option>
-                                    <option>Bhajans - Girls</option>
-                                    <option>Slokas - Boys</option>
-                                    <option>Slokas - Girls</option>
-                                    <option>Vedam - Boys</option>
-                                    <option>Vedam - Girls</option>
+                                    <option>Sloka Chanting - Boys</option>
+                                    <option>Sloka Chanting - Girls</option>
+                                    <option>Veda Chanting - Boys</option>
+                                    <option>Veda Chanting - Girls</option>
                                     <option>Tamizh chants - Boys</option>
                                     <option>Tamizh chants - Girls</option>
-                                    <option>Elocution (English)</option>
-                                    <option>Elocution (Tamil)</option>
+                                    <option>Ted Sai - English</option>
+                                    <option>Ted Sai - Tamil</option>
                                     <option>Drawing</option>
-                                    <option>Quiz</option>
+                                    <option>Bhajan Singing - Boys</option>
+                                    <option>Bhajan Singing - Girls</option>
                                 </select>
-                            ) : (group === "Group 4") ? (
+                            ) : (group === "Team Events") ? (
                                 <select value={event} onChange={(e) => {setEvent(e.target.value)}} className="font-sans rounded-xl border w-65 ml-4 md:ml-0 md:w-50 mt-2 mb-4 mr-4 p-2">
                                     <option value="All">All</option>
                                     <option>Quiz</option>
+                                    <option>Rangoli</option>
+                                    <option>Dumb Charades</option>
+                                    <option>Wealth out of Waste</option>
                                 </select>
                             ) : (
                                 <select value={event} onChange={(e) => {setEvent(e.target.value)}} className="font-sans rounded-xl border w-65 ml-4 md:ml-0 md:w-50 mt-2 mb-4 mr-4 p-2">
                                     <option value="All">All</option>
                                     <option>Altar Decoration - Boys</option>
-                                    <option>Altar Decoration - Girls</option>
-                                    <option>Devotional Singing - Boys</option>
-                                    <option>Devotional Singing - Girls</option>
+                                    <option>Altar Decoration - Girls</option>                                                
                                     <option>Rudram Namakam Chanting - Boys</option>
                                     <option>Rudram Namakam Chanting - Girls</option> 
                                 </select>  
@@ -433,7 +452,7 @@ export default function Leadboard(){
                 </div>
 
                 <div className="mx-auto rounded-xl shadow-xl bg-white w-75 md:w-100 mt-10">
-                    <h1 className="font-sans flex justify-center font-bold text-md p-2">{heading}</h1>
+                    <h1 className="font-sans flex justify-center font-bold text-center text-md p-2">{heading}</h1>
                     <div className="flex flex-row justify-between">
                         <div className="flex flex-col">
                             <div className="flex flex-col justify-center w-30 md:w-50 bg-fuchsia-300 ml-5 lg:ml-4 mb-2 rounded-xl p-2">

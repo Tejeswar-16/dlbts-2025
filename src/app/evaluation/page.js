@@ -69,35 +69,45 @@ export default function Evaluation(){
         "g1" : "Group 1",
         "g2" : "Group 2",
         "g3" : "Group 3",
-        "g4" : "Group 4",
-        "ge" : "Group 2 & Group 3 - Group Events"
+        "te" : "Team Events",
+        "ge" : "Group Events"
     };
 
     const eventMap = {
-        "bh" : "Bhajans",
-        "sl" : "Slokas",
-        "ve" : "Vedam",
+        "sc" : "Sloka Chanting",
+        "vc" : "Veda Chanting",
         "tc" : "Tamizh Chants",
-        "ste" : "Story Telling (English)",
-        "stt" : "Story Telling (Tamil)",
+        "st" : "Story Telling (English/Tamil/Bilingual)",
+        "fd" : "Fancy Dress",
+        "bh" : "Bhajan Singing",
         "dw" : "Drawing",
-        "dsb" : "Devotional Singing - Boys",
-        "dsg" : "Devotional Singing - Girls",
-        "bb" : "Bhajans - Boys",
-        "bg" : "Bhajans - Girls",
-        "sb" : "Slokas - Boys",
-        "sg" : "Slokas - Girls",
-        "vb" : "Vedam - Boys",
-        "vg" : "Vedam - Girls",
+
+        "sb" : "Sloka Chanting - Boys",
+        "sg" : "Sloka Chanting - Girls",
+        "vb" : "Veda Chanting - Boys",
+        "vg" : "Veda Chanting - Girls",
         "tcb" : "Tamizh chants - Boys",
         "tcg" : "Tamizh chants - Girls",
-        "ee" : "Elocution (English)",
-        "et" : "Elocution (Tamil)",
+        "jame" : "Just a Minute - English",
+        "jamt" : "Just a Minute - Tamil",
+
+        "tse" : "Ted Sai - English",
+        "tst" : "Ted Sai - Tamil",
+        "dlb" : "Dual Lens - Boys",
+        "dlg" : "Dual Lens - Girls",
+        "tan" : "Then and Now",
+
+        "bb" : "Bhajan Singing - Boys",
+        "bg" : "Bhajan Singing - Girls",
+        "rg" : "Rangoli",
+        "dc" : "Dumb Charades",
+
         "adb" : "Altar Decoration - Boys",
         "adg" : "Altar Decoration - Girls",
         "ncb" : "Rudram Namakam Chanting - Boys",
         "ncg" : "Rudram Namakam Chanting - Girls",
-        "qu" : "Quiz"
+        "qu" : "Quiz",
+        "ww" : "Wealth out of Waste"
     }
 
     function handleOnClick(e){  
@@ -108,15 +118,16 @@ export default function Evaluation(){
         {   
             let grp = judgeEmail.substring(7,9);
             let evt = cut(judgeEmail).substring(9);
+            console.log(grp,evt)
             if (groupMap[grp] !== judgeGroup || eventMap[evt] !== judgeEvent)
             {
                 if (judgeEmail === "admin@dlbts.ks")
-                    router.push("/evaluation/"+judgeGroup.trim().replace(/[\s-()]/g,'').toLowerCase()+"/"+judgeEvent.trim().replace(/[\s-()]/g,'').toLowerCase());
+                    router.push("/evaluation/"+judgeGroup.trim().replace(/[\s-()]/g,'').toLowerCase()+"/"+judgeEvent.trim().replace(/[\s-()/]/g,'').toLowerCase());
                 else
                     alert("Sairam! You do not have access to visit this page. Please select the correct group and event");
             }
             else
-                router.push("/evaluation/"+judgeGroup.trim().replace(/[\s-()]/g,'').toLowerCase()+"/"+judgeEvent.trim().replace(/[\s-()]/g,'').toLowerCase());
+                router.push("/evaluation/"+judgeGroup.trim().replace(/[\s-()]/g,'').toLowerCase()+"/"+judgeEvent.trim().replace(/[\s-()/]/g,'').toLowerCase());
         }
     }
 
@@ -158,89 +169,121 @@ export default function Evaluation(){
                             <option>Group 1</option>
                             <option>Group 2</option>
                             <option>Group 3</option>
-                            <option>Group 4</option>
-                            <option>Group 2 & Group 3 - Group Events</option>
+                            <option>Team Events</option>
+                            <option>Group Events</option>
                         </select>
-
+                        {/* <option>Dumb Charades</option>
+                                                <option>Wealth out of Waste</option>
+                                                <option>Quiz</option>
+                                                <option>Rangoli</option> */}
                         {
                             judgeGroup && 
                             <>
                                 <h1 className="font-sans font-bold text-xl mx-5 pt-4 pb-2">Pick the Event</h1>
                             {(judgeGroup === "Group 1") ? (
                                 <div>
-                                    <input value="Bhajans" checked={judgeEvent === "Bhajans"} onChange={(e) => setJudgeEvent(e.target.value)} required className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
-                                    <label className="font-sans text-lg">Bhajans</label><br></br>
-                                    <input value="Slokas" checked={judgeEvent === "Slokas"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
-                                    <label className="font-sans text-lg">Slokas</label><br></br>
-                                    <input value="Vedam" checked={judgeEvent === "Vedam"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
-                                    <label className="font-sans text-lg">Vedam</label><br></br>
+                                    <input value="Sloka Chanting" checked={judgeEvent === "Sloka Chanting"} onChange={(e) => setJudgeEvent(e.target.value)} required className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
+                                    <label className="font-sans text-lg">Sloka Chanting</label><br></br>
+
+                                    <input value="Veda Chanting" checked={judgeEvent === "Veda Chanting"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
+                                    <label className="font-sans text-lg">Veda Chanting</label><br></br>
+
                                     <input value="Tamizh Chants" checked={judgeEvent === "Tamizh Chants"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
                                     <label className="font-sans text-lg">Tamizh Chants</label><br></br>
-                                    <input value="Story Telling (English)" checked={judgeEvent === "Story Telling (English)"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
-                                    <label className="font-sans text-lg">Story Telling (English)</label><br></br>
-                                    <input value="Story Telling (Tamil)" checked={judgeEvent === "Story Telling (Tamil)"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
-                                    <label className="font-sans text-lg">Story Telling (Tamil)</label><br></br>
+
+                                    <input value="Story Telling (English/Tamil/Bilingual)" checked={judgeEvent === "Story Telling (English/Tamil/Bilingual)"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
+                                    <label className="font-sans text-lg">Story Telling (English/Tamil/Bilingual)</label><br></br>
+
+                                    <input value="Fancy Dress" checked={judgeEvent === "Fancy Dress"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
+                                    <label className="font-sans text-lg">Fancy Dress</label><br></br>
+
                                     <input value="Drawing" checked={judgeEvent === "Drawing"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
                                     <label className="font-sans text-lg">Drawing</label><br></br>
-                                    <input value="Devotional Singing - Boys" checked={judgeEvent === "Devotional Singing - Boys"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
-                                    <label className="font-sans text-lg">Devotional Singing - Boys</label><br></br>
-                                    <input value="Devotional Singing - Girls" checked={judgeEvent === "Devotional Singing - Girls"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
-                                    <label className="font-sans text-lg">Devotional Singing - Girls</label><br></br>
+
+                                    <input value="Bhajan Singing" checked={judgeEvent === "Bhajan Singing"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
+                                    <label className="font-sans text-lg">Bhajan Singing</label><br></br>
                                 </div>)
                             : (judgeGroup === "Group 2") ? (
                                 <div>
-                                    <input value="Bhajans - Boys" checked={judgeEvent === "Bhajans - Boys"} onChange={(e) => setJudgeEvent(e.target.value)} required className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
-                                    <label className="font-sans text-lg">Bhajans - Boys</label><br></br>
-                                    <input value="Bhajans - Girls" checked={judgeEvent === "Bhajans - Girls"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
-                                    <label className="font-sans text-lg">Bhajans - Girls</label><br></br>
-                                    <input value="Slokas - Boys" checked={judgeEvent === "Slokas - Boys"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
-                                    <label className="font-sans text-lg">Slokas - Boys</label><br></br>
-                                    <input value="Slokas - Girls" checked={judgeEvent === "Slokas - Girls"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
-                                    <label className="font-sans text-lg">Slokas - Girls</label><br></br>
-                                    <input value="Vedam - Boys" checked={judgeEvent === "Vedam - Boys"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
-                                    <label className="font-sans text-lg">Vedam - Boys</label><br></br>
-                                    <input value="Vedam - Girls" checked={judgeEvent === "Vedam - Girls"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
-                                    <label className="font-sans text-lg">Vedam - Girls</label><br></br>
+                                    <input value="Sloka Chanting - Boys" checked={judgeEvent === "Sloka Chanting - Boys"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
+                                    <label className="font-sans text-lg">Sloka Chanting - Boys</label><br></br>
+
+                                    <input value="Sloka Chanting - Girls" checked={judgeEvent === "Sloka Chanting - Girls"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
+                                    <label className="font-sans text-lg">Sloka Chanting - Girls</label><br></br>
+
+                                    <input value="Veda Chanting - Boys" checked={judgeEvent === "Veda Chanting - Boys"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
+                                    <label className="font-sans text-lg">Veda Chanting - Boys</label><br></br>
+
+                                    <input value="Veda Chanting - Girls" checked={judgeEvent === "Veda Chanting - Girls"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
+                                    <label className="font-sans text-lg">Veda Chanting - Girls</label><br></br>
+
                                     <input value="Tamizh chants - Boys" checked={judgeEvent === "Tamizh chants - Boys"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
                                     <label className="font-sans text-lg">Tamizh chants - Boys</label><br></br>
+
                                     <input value="Tamizh chants - Girls" checked={judgeEvent === "Tamizh chants - Girls"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
                                     <label className="font-sans text-lg">Tamizh chants - Girls</label><br></br>
-                                    <input value="Elocution (English)" checked={judgeEvent === "Elocution (English)"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
-                                    <label className="font-sans text-lg">Elocution (English)</label><br></br>
-                                    <input value="Elocution (Tamil)" checked={judgeEvent === "Elocution (Tamil)"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
-                                    <label className="font-sans text-lg">Elocution (Tamil)</label><br></br>
+
+                                    <input value="Just a Minute - English" checked={judgeEvent === "Just a Minute - English"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
+                                    <label className="font-sans text-lg">Just a Minute - English</label><br></br>
+
+                                    <input value="Just a Minute - Tamil" checked={judgeEvent === "Just a Minute - Tamil"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
+                                    <label className="font-sans text-lg">Just a Minute - Tamil</label><br></br>
+
                                     <input value="Drawing" checked={judgeEvent === "Drawing"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
                                     <label className="font-sans text-lg">Drawing</label><br></br>
+
+                                    <input value="Bhajan Singing - Boys" checked={judgeEvent === "Bhajan Singing - Boys"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
+                                    <label className="font-sans text-lg">Bhajan Singing - Boys</label><br></br>
+
+                                    <input value="Bhajan Singing - Girls" checked={judgeEvent === "Bhajan Singing - Girls"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
+                                    <label className="font-sans text-lg">Bhajan Singing - Girls</label><br></br>
                                 </div> )
                             :  (judgeGroup === "Group 3") ? (
                                 <div>
-                                    <input value="Bhajans - Boys" checked={judgeEvent === "Bhajans - Boys"} onChange={(e) => setJudgeEvent(e.target.value)} required className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
-                                    <label className="font-sans text-lg">Bhajans - Boys</label><br></br>
-                                    <input value="Bhajans - Girls" checked={judgeEvent === "Bhajans - Girls"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
-                                    <label className="font-sans text-lg">Bhajans - Girls</label><br></br>
-                                    <input value="Slokas - Boys" checked={judgeEvent === "Slokas - Boys"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
-                                    <label className="font-sans text-lg">Slokas - Boys</label><br></br>
-                                    <input value="Slokas - Girls" checked={judgeEvent === "Slokas - Girls"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
-                                    <label className="font-sans text-lg">Slokas - Girls</label><br></br>
-                                    <input value="Vedam - Boys" checked={judgeEvent === "Vedam - Boys"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
-                                    <label className="font-sans text-lg">Vedam - Boys</label><br></br>
-                                    <input value="Vedam - Girls" checked={judgeEvent === "Vedam - Girls"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
-                                    <label className="font-sans text-lg">Vedam - Girls</label><br></br>
+                                    <input value="Sloka Chanting - Boys" checked={judgeEvent === "Sloka Chanting - Boys"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
+                                    <label className="font-sans text-lg">Sloka Chanting - Boys</label><br></br>
+
+                                    <input value="Sloka Chanting - Girls" checked={judgeEvent === "Sloka Chanting - Girls"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
+                                    <label className="font-sans text-lg">Sloka Chanting - Girls</label><br></br>
+
+                                    <input value="Veda Chanting - Boys" checked={judgeEvent === "Veda Chanting - Boys"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
+                                    <label className="font-sans text-lg">Veda Chanting - Boys</label><br></br>
+
+                                    <input value="Veda Chanting - Girls" checked={judgeEvent === "Veda Chanting - Girls"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
+                                    <label className="font-sans text-lg">Veda Chanting - Girls</label><br></br>
+
                                     <input value="Tamizh chants - Boys" checked={judgeEvent === "Tamizh chants - Boys"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
                                     <label className="font-sans text-lg">Tamizh chants - Boys</label><br></br>
+
                                     <input value="Tamizh chants - Girls" checked={judgeEvent === "Tamizh chants - Girls"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
                                     <label className="font-sans text-lg">Tamizh chants - Girls</label><br></br>
-                                    <input value="Elocution (English)" checked={judgeEvent === "Elocution (English)"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
-                                    <label className="font-sans text-lg">Elocution (English)</label><br></br>
-                                    <input value="Elocution (Tamil)" checked={judgeEvent === "Elocution (Tamil)"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
-                                    <label className="font-sans text-lg">Elocution (Tamil)</label><br></br>
+
+                                    <input value="Ted Sai - English" checked={judgeEvent === "Ted Sai - English"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
+                                    <label className="font-sans text-lg">Ted Sai - English</label><br></br>
+
+                                    <input value="Ted Sai - Tamil" checked={judgeEvent === "Ted Sai - Tamil"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
+                                    <label className="font-sans text-lg">Ted Sai - Tamil</label><br></br>
+
                                     <input value="Drawing" checked={judgeEvent === "Drawing"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
                                     <label className="font-sans text-lg">Drawing</label><br></br>
-                                    <input value="Quiz" checked={judgeEvent === "Quiz"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
-                                    <label className="font-sans text-lg">Quiz</label><br></br>
+
+                                    <input value="Bhajan Singing - Boys" checked={judgeEvent === "Bhajan Singing - Boys"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
+                                    <label className="font-sans text-lg">Bhajan Singing - Boys</label><br></br>
+
+                                    <input value="Bhajan Singing - Girls" checked={judgeEvent === "Bhajan Singing - Girls"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
+                                    <label className="font-sans text-lg">Bhajan Singing - Girls</label><br></br>
                                 </div>)
-                            :  (judgeGroup === "Group 4") ?
+                            :  (judgeGroup === "Team Events") ?
                                 <div>
+                                    <input value="Wealth out of Waste" checked={judgeEvent === "Wealth out of Waste"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
+                                    <label className="font-sans text-lg">Wealth out of Waste</label><br></br>
+
+                                    <input value="Dumb Charades" checked={judgeEvent === "Dumb Charades"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
+                                    <label className="font-sans text-lg">Dumb Charades</label><br></br>
+
+                                    <input value="Rangoli" checked={judgeEvent === "Rangoli"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
+                                    <label className="font-sans text-lg">Rangoli</label><br></br>
+
                                     <input value="Quiz" checked={judgeEvent === "Quiz"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
                                     <label className="font-sans text-lg">Quiz</label><br></br>
                                 </div>
@@ -249,14 +292,13 @@ export default function Evaluation(){
                                 <div>
                                     <input value="Altar Decoration - Boys" checked={judgeEvent === "Altar Decoration - Boys"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
                                     <label className="font-sans text-lg">Altar Decoration - Boys</label><br></br>
+
                                     <input value="Altar Decoration - Girls" checked={judgeEvent === "Altar Decoration - Girls"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
                                     <label className="font-sans text-lg">Altar Decoration - Girls</label><br></br>
-                                    <input value="Devotional Singing - Boys" checked={judgeEvent === "Devotional Singing - Boys"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
-                                    <label className="font-sans text-lg">Devotional Singing - Boys</label><br></br>
-                                    <input value="Devotional Singing - Girls" checked={judgeEvent === "Devotional Singing - Girls"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
-                                    <label className="font-sans text-lg">Devotional Singing - Girls</label><br></br>
+                                    
                                     <input value="Rudram Namakam Chanting - Boys" checked={judgeEvent === "Rudram Namakam Chanting - Boys"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
                                     <label className="font-sans text-lg">Rudram Namakam Chanting - Boys</label><br></br>
+
                                     <input value="Rudram Namakam Chanting - Girls" checked={judgeEvent === "Rudram Namakam Chanting - Girls"} onChange={(e) => setJudgeEvent(e.target.value)} className="p-3 mx-5 font-sans text-lg" type="radio" name="event"/>
                                     <label className="font-sans text-lg">Rudram Namakam Chanting - Girls</label><br></br>
                                 </div>

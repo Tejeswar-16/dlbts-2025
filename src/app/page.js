@@ -25,22 +25,22 @@ export default function Home() {
       const userEmail = userCredential.user.email;
       alert("Sairam! Logged in successfully");
 
-      setLoading(false);
       if (userEmail === "admin@dlbts.ks")
         router.push("/dashboard");
       if (userEmail.startsWith("judge"))
         router.push("/evaluation");
       if (userEmail.startsWith("officials"))
         router.push("/register");
-
     }
     catch(error)
     {
       if (error.code === "auth/user-not-found" || error.code === "auth/wrong-password" || error.code === "auth/invalid-credential")
       {
-        setLoading(false);
         alert("Sairam! Invalid email or password.");
       }
+    }
+    finally{
+      setLoading(false);
     }
   }
 
@@ -55,7 +55,7 @@ export default function Home() {
           <div className="pt-2 flex justify-center font-sans font-semibold text-xl md:text-2xl">
             Sign In
           </div>
-          <div className="font-sans p-2 text-gray-700 md:flex md:justify-center md:text-lg">
+          <div className="font-sans p-2 text-gray-700 md:flex md:justify-center md:text-lg text-center">
             {"DLBTS " + new Date().getFullYear() + ", Kanchipuram South, Tamil Nadu"}
           </div>
           <hr className="mt-2 text-gray-300"></hr>

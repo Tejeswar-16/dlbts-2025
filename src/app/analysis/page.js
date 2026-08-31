@@ -51,7 +51,9 @@ export default function Home(){
             const querySnapshot = await getDocs(q);
             const data = querySnapshot.docs.map((doc) => doc.data());
             
-            let filteredData = data;
+            let filteredData = data.filter(obj => 
+                obj && Object.keys(obj).length !== 0 && obj.constructor === Object
+            );
 
             //Total Mark Calculation && Cumulative Remarks
             for (let i=0;i<filteredData.length;i++)
@@ -74,19 +76,20 @@ export default function Home(){
                 filteredData[i].remarks = remarks;
             }
             
-            let groups = ["Group 1","Group 1","Group 1","Group 1","Group 1","Group 1","Group 1","Group 1","Group 1",
-                          "Group 2","Group 2","Group 2","Group 2","Group 2","Group 2","Group 2","Group 2","Group 2","Group 2","Group 2",
-                          "Group 3","Group 3","Group 3","Group 3","Group 3","Group 3","Group 3","Group 3","Group 3","Group 3","Group 3","Group 3",
-                          "Group 4"]
+            let groups = [
+                          "Group 1","Group 1","Group 1","Group 1","Group 1","Group 1","Group 1",
+                          "Group 2","Group 2","Group 2","Group 2","Group 2","Group 2","Group 2","Group 2","Group 2","Group 2",
+                          "Group 3","Group 3","Group 3","Group 3","Group 3","Group 3","Group 3","Group 3","Group 3","Group 3",
+                         ]
         
-            let events = ["Bhajans","Slokas","Vedam","Tamizh Chants","Story Telling (English)","Story Telling (Tamil)",
-                          "Drawing","Devotional Singing - Boys","Devotional Singing - Girls","Bhajans - Boys",
-                          "Bhajans - Girls", "Slokas - Boys", "Slokas - Girls","Vedam - Boys","Vedam - Girls",
-                          "Tamizh chants - Boys", "Tamizh chants - Girls", "Elocution (English)","Elocution (Tamil)","Drawing",
-                          "Bhajans - Boys","Bhajans - Girls", "Slokas - Boys", "Slokas - Girls","Vedam - Boys","Vedam - Girls",
-                          "Tamizh chants - Boys", "Tamizh chants - Girls", "Elocution (English)","Elocution (Tamil)","Drawing","Quiz","Quiz"]
+            let events = ["Sloka Chanting","Veda Chanting","Tamizh Chants","Story Telling (English/Tamil/Bilingual)","Fancy Dress",
+                          "Drawing","Bhajan Singing","Sloka Chanting - Boys","Sloka Chanting - Girls", "Veda Chanting - Boys", "Veda Chanting - Girls",
+                          "Tamizh chants - Boys", "Tamizh chants - Girls", "Just a Minute - English","Just a Minute - Tamil", "Drawing",
+                          "Bhajan Singing - Boys","Bhajan Singing - Girls", "Sloka Chanting - Boys", "Sloka Chanting - Girls","Veda Chanting - Boys","Veda Chanting - Girls","Tamizh chants - Boys", 
+                          "Tamizh chants - Girls", "Ted Sai - English","Ted Sai - Tamil","Drawing","Bhajan Singing - Boys","Bhajan Singing - Girls"]
                           
-            let groupEvents = ["Altar Decoration - Boys","Altar Decoration - Girls","Rudram Namakam Chanting - Boys","Rudram Namakam Chanting - Girls","Devotional Singing - Boys","Devotional Singing - Girls"]
+            let teamEvents = ["Quiz","Rangoli","Dumb Charades","Wealth out of Waste"]
+            let groupEvents = ["Altar Decoration - Boys","Altar Decoration - Girls","Rudram Namakam Chanting - Boys","Rudram Namakam Chanting - Girls"]
 
             let grpEvent = []
             for (let i=0;i<groups.length;i++){
@@ -115,7 +118,32 @@ export default function Home(){
                 grpEvent = [...grpEvent,...top3];
             }
             for (let i=0;i<groupEvents.length;i++){
-                let ge = filteredData.filter((fd) => (fd.group === "Group 2" || fd.group === "Group 3") && fd.event === groupEvents[i])
+                let ge = filteredData.filter((fd) =>  fd.event === groupEvents[i])
+                if (ge.length === 0)
+                    continue;
+                ge = ge.sort((x,y) => y.totalMarks - x.totalMarks);
+                let top3 = []
+                let count = 1;
+                top3.push(ge[0]);
+                for (let j=1;j<ge.length;j++){
+                    if (ge[j].totalMarks === ge[j-1].totalMarks){
+                        if (count <= 3)
+                            top3.push(ge[j]);
+                    }
+                    else{
+                        if (count < 3){
+                            top3.push(ge[j])
+                            count++;
+                        }
+                        else{
+                            break;
+                        }
+                    }
+                }
+                grpEvent = [...grpEvent,...ge];
+            }
+            for (let i=0;i<teamEvents.length;i++){
+                let ge = filteredData.filter((fd) =>  fd.event === teamEvents[i])
                 if (ge.length === 0)
                     continue;
                 ge = ge.sort((x,y) => y.totalMarks - x.totalMarks);
@@ -142,31 +170,46 @@ export default function Home(){
             
             filteredData = grpEvent;
 
-            if (group === "Group 2 & Group 3 - Group Events")
-            {
+            if (group === "Group Events"){
                 if (event === "Altar Decoration - Boys")
                 {
-                    filteredData = filteredData.filter((fd) => (fd.group === "Group 2" || fd.group === "Group 3") && fd.event === "Altar Decoration - Boys")
+                    filteredData = filteredData.filter((fd) => (fd.event === "Altar Decoration - Boys"))
                 }
                 else if (event === "Altar Decoration - Girls")
                 {
-                    filteredData = filteredData.filter((fd) => (fd.group === "Group 2" || fd.group === "Group 3") && fd.event === "Altar Decoration - Girls") 
-                }
-                else if (event === "Devotional Singing - Boys")
-                {
-                    filteredData = filteredData.filter((fd) => (fd.group === "Group 2" || fd.group === "Group 3") && fd.event === "Devotional Singing - Boys") 
-                }
-                else if (event === "Devotional Singing - Girls")
-                {
-                    filteredData = filteredData.filter((fd) => (fd.group === "Group 2" || fd.group === "Group 3") && fd.event === "Devotional Singing - Girls") 
+                    filteredData = filteredData.filter((fd) => (fd.event === "Altar Decoration - Girls"))
                 }
                 else if (event === "Rudram Namakam Chanting - Boys")
                 {
-                    filteredData = filteredData.filter((fd) => (fd.group === "Group 2" || fd.group === "Group 3") && fd.event === "Rudram Namakam Chanting - Boys") 
+                    filteredData = filteredData.filter((fd) => (fd.event === "Rudram Namakam Chanting - Boys"))
                 }
                 else if (event === "Rudram Namakam Chanting - Girls")
                 {
-                    filteredData = filteredData.filter((fd) => (fd.group === "Group 2" || fd.group === "Group 3") && fd.event === "Rudram Namakam Chanting - Girls") 
+                    filteredData = filteredData.filter((fd) => (fd.event === "Rudram Namakam Chanting - Girls"))
+                }
+                else{
+                    filteredData = filteredData.filter((fd) => fd.judge.slice(7,9) === "ge")
+                }
+            }
+            else if (group === "Team Events"){
+                if (event === "Quiz")
+                {
+                    filteredData = filteredData.filter((fd) => (fd.event === "Quiz"))
+                }
+                else if (event === "Rangoli")
+                {
+                    filteredData = filteredData.filter((fd) => (fd.event === "Rangoli"))
+                }
+                else if (event === "Dumb Charades")
+                {
+                    filteredData = filteredData.filter((fd) => (fd.event === "Dumb Charades"))
+                }
+                else if (event === "Wealth out of Waste")
+                {
+                    filteredData = filteredData.filter((fd) => (fd.event === "Wealth out of Waste"))
+                }
+                else{
+                    filteredData = filteredData.filter((fd) => fd.judge.slice(7,9) === "te")
                 }
             }
             else
@@ -192,7 +235,13 @@ export default function Home(){
 
             let studentMap = new Map();
             filteredData.map((student) => {
-                let key = `${student.group} : ${student.event}`
+                let key = "";
+                if (student.event === "Altar Decoration - Boys" || student.event === "Altar Decoration - Girls" || student.event === "Rudram Namakam Chanting - Boys" || student.event === "Rudram Namakam Chanting - Girls")
+                    key = `Group Events - ${student.event}`
+                else if (student.event === "Quiz" || student.event === "Rangoli" || student.event === "Dumb Charades" || student.event === "Wealth out of Waste")
+                    key = `Team Events - ${student.event}`
+                else
+                    key = `${student.group} : ${student.event}`
                 const entry = [student.group,student.event,student.name,student.samithi,student.remarks,student.totalMarks];
                 if (studentMap.has(key))
                 {
@@ -274,9 +323,9 @@ export default function Home(){
                                 <option value="All">All</option>
                                 <option>Group 1</option>
                                 <option>Group 2</option>
-                                <option>Group 3</option>
-                                <option>Group 4</option>    
-                                <option>Group 2 & Group 3 - Group Events</option>
+                                <option>Group 3</option>  
+                                <option>Team Events</option>
+                                <option>Group Events</option>
                             </select>
                         </div>
                         <div className="flex flex-col">
@@ -307,59 +356,57 @@ export default function Home(){
                             (group === "Group 1") ? ( 
                                 <select value={event} onChange={(e) => {setEvent(e.target.value)}} className="font-sans rounded-xl border w-65 ml-4 md:ml-0 md:w-50 mt-2 mb-4 mr-4 p-2">
                                     <option value="All">All</option>
-                                    <option>Bhajans</option>
-                                    <option>Slokas</option>
-                                    <option>Vedam</option>
+                                    <option>Sloka Chanting</option>
+                                    <option>Veda Chanting</option>
                                     <option>Tamizh Chants</option>
-                                    <option>Story Telling (English)</option>
-                                    <option>Story Telling (Tamil)</option>
+                                    <option>Story Telling (English/Tamil/Bilingual)</option>
+                                    <option>Fancy Dress</option>
+                                    <option>Bhajan Singing</option>
                                     <option>Drawing</option>
-                                    <option>Devotional Singing - Boys</option>
-                                    <option>Devotional Singing - Girls</option>
                                 </select>
                             ) : (group === "Group 2") ? (
                                 <select value={event} onChange={(e) => {setEvent(e.target.value)}} className="font-sans rounded-xl border w-65 ml-4 md:ml-0 md:w-50 mt-2 mb-4 mr-4 p-2">
                                     <option value="All">All</option>
-                                    <option>Bhajans - Boys</option>
-                                    <option>Bhajans - Girls</option>
-                                    <option>Slokas - Boys</option>
-                                    <option>Slokas - Girls</option>
-                                    <option>Vedam - Boys</option>
-                                    <option>Vedam - Girls</option>
+                                    <option>Sloka Chanting - Boys</option>
+                                    <option>Sloka Chanting - Girls</option>
+                                    <option>Veda Chanting - Boys</option>
+                                    <option>Veda Chanting - Girls</option>
                                     <option>Tamizh chants - Boys</option>
                                     <option>Tamizh chants - Girls</option>
-                                    <option>Elocution (English)</option>
-                                    <option>Elocution (Tamil)</option>
+                                    <option>Just a Minute - English</option>
+                                    <option>Just a Minute - Tamil</option>
                                     <option>Drawing</option>
+                                    <option>Bhajan Singing - Boys</option>
+                                    <option>Bhajan Singing - Girls</option>
                                 </select>
                             ) : (group === "Group 3") ? (
                                 <select value={event} onChange={(e) => {setEvent(e.target.value)}} className="font-sans rounded-xl border w-65 ml-4 md:ml-0 md:w-50 mt-2 mb-4 mr-4 p-2">
                                     <option value="All">All</option>
-                                    <option>Bhajans - Boys</option>
-                                    <option>Bhajans - Girls</option>
-                                    <option>Slokas - Boys</option>
-                                    <option>Slokas - Girls</option>
-                                    <option>Vedam - Boys</option>
-                                    <option>Vedam - Girls</option>
+                                    <option>Sloka Chanting - Boys</option>
+                                    <option>Sloka Chanting - Girls</option>
+                                    <option>Veda Chanting - Boys</option>
+                                    <option>Veda Chanting - Girls</option>
                                     <option>Tamizh chants - Boys</option>
                                     <option>Tamizh chants - Girls</option>
-                                    <option>Elocution (English)</option>
-                                    <option>Elocution (Tamil)</option>
+                                    <option>Ted Sai - English</option>
+                                    <option>Ted Sai - Tamil</option>
                                     <option>Drawing</option>
-                                    <option>Quiz</option>
+                                    <option>Bhajan Singing - Boys</option>
+                                    <option>Bhajan Singing - Girls</option>
                                 </select>
-                            ) : (group === "Group 4") ? (
+                            ) : (group === "Team Events") ? (
                                 <select value={event} onChange={(e) => {setEvent(e.target.value)}} className="font-sans rounded-xl border w-65 ml-4 md:ml-0 md:w-50 mt-2 mb-4 mr-4 p-2">
                                     <option value="All">All</option>
                                     <option>Quiz</option>
+                                    <option>Rangoli</option>
+                                    <option>Dumb Charades</option>
+                                    <option>Wealth out of Waste</option>
                                 </select>
                             ) : (
                                 <select value={event} onChange={(e) => {setEvent(e.target.value)}} className="font-sans rounded-xl border w-65 ml-4 md:ml-0 md:w-50 mt-2 mb-4 mr-4 p-2">
                                     <option value="All">All</option>
                                     <option>Altar Decoration - Boys</option>
-                                    <option>Altar Decoration - Girls</option>
-                                    <option>Devotional Singing - Boys</option>
-                                    <option>Devotional Singing - Girls</option>
+                                    <option>Altar Decoration - Girls</option>                                                
                                     <option>Rudram Namakam Chanting - Boys</option>
                                     <option>Rudram Namakam Chanting - Girls</option> 
                                 </select>  
@@ -407,9 +454,9 @@ export default function Home(){
                 <div className="flex flex-col md:flex-row md:flex-wrap justify-center">
                     {
                         studentData.map((students,index) => (
-                            <div key={index} onClick={() => handleDivClick(students)} className="mx-auto select-none rounded-xl shadow-xl border-t border-blue-900 w-75 md:w-100 bg-white m-5 hover:cursor-pointer hover:scale-105 transition duration-300">
+                            <div key={index} onClick={() => handleDivClick(students)} className="mx-auto select-none rounded-xl shadow-xl border-t border-blue-900 w-75 md:w-100 bg-white m-5 hover:cursor-pointer hover:scale-103 transition duration-300">
                                 <div className="rounded-t-xl p-3 shadow-xl bg-gradient-to-br from-blue-500 to-blue-900">
-                                    <div className="font-sans text-xl flex justify-center font-bold text-white">{students[0]}</div>
+                                    <p className="font-sans text-lg font-bold text-center text-white">{students[0]}</p>
                                 </div>
 
                                 <div className="p-2">
@@ -442,9 +489,9 @@ export default function Home(){
                 {
                     click &&
                     <div className="fixed inset-0 flex flex-col justify-center backdrop-blur-sm items-center"> 
-                        <div className="select-none rounded-xl shadow-xl border-t border-blue-900 w-75 md:w-150 h-120 bg-white m-5 hover:cursor-pointer hover:scale-105 transition duration-300">
+                        <div className="select-none rounded-xl shadow-xl border-t border-blue-900 w-75 md:w-150 h-120 bg-white m-5 hover:cursor-pointer transition duration-300">
                             <div className="rounded-t-xl p-3 shadow-xl bg-gradient-to-br from-blue-500 to-blue-900">
-                                <div className="font-sans text-xl flex justify-center font-bold text-white">{divData[0]}</div>
+                                <div className="font-sans text-xl text-center font-bold text-white">{divData[0]}</div>
                             </div>
 
                             <div className="p-2">
@@ -471,8 +518,8 @@ export default function Home(){
                                             }
                                         </tbody>
                                     </table>
+                                    <div onClick={() => setClick(false)} className="mx-auto flex justify-center font-semibold p-1 my-2 rounded-lg shadow-xl font-sans w-20 text-bold bg-black text-white hover:cursor-pointer">Close</div>
                                 </div>
-                                <div onClick={() => setClick(false)} className="mx-auto flex justify-center font-semibold p-1 my-2 rounded-lg shadow-xl font-sans w-20 text-bold bg-black text-white hover:cursor-pointer">Close</div>
                             </div>
                         </div>
                     </div>

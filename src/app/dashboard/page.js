@@ -161,10 +161,10 @@ export default function Dashboard(){
         });
     },[]);
 
-    const handleAttendance = async (nameValue) => {
+    const handleAttendance = async (id) => {
          const q = query(
             collection(db,"studentDetails"),
-            where("name","==",nameValue)
+            where("id","==",id)
          );
          const querySnapshot = await getDocs(q);
          querySnapshot.forEach(async (document) => {
@@ -278,7 +278,6 @@ export default function Dashboard(){
                                     <option>Group 1</option>
                                     <option>Group 2</option>
                                     <option>Group 3</option>
-                                    <option>Group 4</option>
                                 </select>
                             </div>
                             <div className="flex flex-col">
@@ -308,64 +307,75 @@ export default function Dashboard(){
                                 {(searchGroup === "Group 1") ? 
                                     <select value={searchEvent} onChange={(e) => {setSearchEvent(e.target.value)}} className="font-sans border rounded-xl ml-3 lg:mx-10 mt-3 w-69 lg:w-93 h-10 p-2">
                                         <option value="All">All</option>
-                                        <option>Bhajans</option>
-                                        <option>Slokas</option>
-                                        <option>Vedam</option>
+                                        <option>Sloka Chanting</option>
+                                        <option>Veda Chanting</option>
                                         <option>Tamizh Chants</option>
-                                        <option>Story Telling (English)</option>
-                                        <option>Story Telling (Tamil)</option>
+                                        <option>Story Telling (English/Tamil/Bilingual)</option>
+                                        <option>Fancy Dress (English/Tamil/Sanskrit)</option>
+                                        <option>Through My Eyes (English/Tamil)</option>
                                         <option>Drawing</option>
-                                        <option>Devotional Singing - Boys</option>
-                                        <option>Devotional Singing - Girls</option>
+                                        <option>Bhajan Singing - Boys</option>
+                                        <option>Bhajan Singing - Girls</option>
+                                        <option>Quiz</option>
+                                        <option>Poster Making</option>
+                                        <option>Wealth out of Waste</option>
+                                        <option>Altar Decoration - Boys</option>
+                                        <option>Altar Decoration - Girls</option>                                                
+                                        <option>Rudram Namakam Chanting - Boys</option>
+                                        <option>Rudram Namakam Chanting - Girls</option>
                                     </select>
                                 : (searchGroup === "Group 2") ?
                                     <select value={searchEvent} onChange={(e) => {setSearchEvent(e.target.value)}} className="font-sans border rounded-xl ml-3 lg:mx-10 mt-3 w-69 lg:w-93 h-10 p-2">
                                         <option value="All">All</option>
-                                        <option>Bhajans - Boys</option>
-                                        <option>Bhajans - Girls</option>
-                                        <option>Slokas - Boys</option>
-                                        <option>Slokas - Girls</option>
-                                        <option>Vedam - Boys</option>
-                                        <option>Vedam - Girls</option>
+                                        <option>Sloka Chanting - Boys</option>
+                                        <option>Sloka Chanting - Girls</option>
+                                        <option>Veda Chanting - Boys</option>
+                                        <option>Veda Chanting - Girls</option>
                                         <option>Tamizh chants - Boys</option>
                                         <option>Tamizh chants - Girls</option>
-                                        <option>Elocution (English)</option>
-                                        <option>Elocution (Tamil)</option>
-                                        <option>Drawing</option>
+                                        <option>Just a Minute - English</option>
+                                        <option>Just a Minute - Tamil</option>
+                                        <option>Silent Monologue</option>
+                                        <option>Antaranga Sai</option>
+                                        <option>Rangoli</option>
+                                        <option>Dumb Charades</option>
+                                        <option>Bhajans - Boys</option>
+                                        <option>Bhajans - Girls</option>
+                                        <option>Quiz</option>
+                                        <option>Poster Making</option>
+                                        <option>Wealth out of Waste</option>
                                         <option>Altar Decoration - Boys</option>
-                                        <option>Altar Decoration - Girls</option>
-                                        <option>Devotional Singing - Boys</option>
-                                        <option>Devotional Singing - Girls</option>
+                                        <option>Altar Decoration - Girls</option>                                                
                                         <option>Rudram Namakam Chanting - Boys</option>
                                         <option>Rudram Namakam Chanting - Girls</option>
                                     </select>
                                 : (searchGroup === "Group 3") ?
                                     <select value={searchEvent} onChange={(e) => {setSearchEvent(e.target.value)}} className="font-sans border rounded-xl ml-3 lg:mx-10 mt-3 w-69 lg:w-93 h-10 p-2">
                                         <option value="All">All</option>
-                                        <option>Bhajans - Boys</option>
-                                        <option>Bhajans - Girls</option>
-                                        <option>Slokas - Boys</option>
-                                        <option>Slokas - Girls</option>
-                                        <option>Vedam - Boys</option>
-                                        <option>Vedam - Girls</option>
+                                        <option>Sloka Chanting - Boys</option>
+                                        <option>Sloka Chanting - Girls</option>
+                                        <option>Veda Chanting - Boys</option>
+                                        <option>Veda Chanting - Girls</option>
                                         <option>Tamizh chants - Boys</option>
                                         <option>Tamizh chants - Girls</option>
-                                        <option>Elocution (English)</option>
-                                        <option>Elocution (Tamil)</option>
-                                        <option>Drawing</option>
+                                        <option>Ted Sai - English</option>
+                                        <option>Ted Sai - Tamil</option>
+                                        <option>Dual Lens - Boys</option>
+                                        <option>Dual Lens - Girls</option>
+                                        <option>Then and Now</option>
+                                        <option>Bhajans - Boys</option>
+                                        <option>Bhajans - Girls</option>
                                         <option>Quiz</option>
+                                        <option>Poster Making</option>
+                                        <option>Wealth out of Waste</option>
                                         <option>Altar Decoration - Boys</option>
-                                        <option>Altar Decoration - Girls</option>
-                                        <option>Devotional Singing - Boys</option>
-                                        <option>Devotional Singing - Girls</option>
+                                        <option>Altar Decoration - Girls</option>                                                
                                         <option>Rudram Namakam Chanting - Boys</option>
-                                        <option>Rudram Namakam Chanting - Girls</option>
                                         <option>Rudram Namakam Chanting - Girls</option>
                                     </select>
                                 :   
                                     <select value={searchEvent} onChange={(e) => {setSearchEvent(e.target.value)}} className="font-sans border rounded-xl ml-3 lg:mx-10 mt-3 w-69 lg:w-93 h-10 p-2">
                                         <option value="All">All</option>
-                                        <option>Quiz</option>
                                     </select>
                                 }
                             </div>
@@ -408,7 +418,6 @@ export default function Dashboard(){
                                 <option>Group 1</option>
                                 <option>Group 2</option>
                                 <option>Group 3</option>
-                                <option>Group 4</option>
                             </select>
                         </div>
                         <div className="flex flex-col">
@@ -438,63 +447,69 @@ export default function Dashboard(){
                             {(searchGroup === "Group 1") ? 
                                 <select value={searchEvent} onChange={(e) => {setSearchEvent(e.target.value)}} className="font-sans border rounded-xl ml-3 lg:mx-10 mt-3 w-69 lg:w-70 h-10 p-2">
                                     <option value="All">All</option>
-                                    <option>Bhajans</option>
-                                    <option>Slokas</option>
-                                    <option>Vedam</option>
+                                    <option>Sloka Chanting</option>
+                                    <option>Veda Chanting</option>
                                     <option>Tamizh Chants</option>
-                                    <option>Story Telling (English)</option>
-                                    <option>Story Telling (Tamil)</option>
+                                    <option>Story Telling (English/Tamil/Bilingual)</option>
+                                    <option>Fancy Dress</option>
                                     <option>Drawing</option>
-                                    <option>Devotional Singing - Boys</option>
-                                    <option>Devotional Singing - Girls</option>
+                                    <option>Bhajan Singing</option>
+                                    <option>Quiz</option>
+                                    <option>Rangoli</option>
+                                    <option>Wealth out of Waste</option>
+                                    <option>Altar Decoration - Boys</option>
+                                    <option>Altar Decoration - Girls</option>                                                
+                                    <option>Rudram Namakam Chanting - Boys</option>
+                                    <option>Rudram Namakam Chanting - Girls</option>
                                 </select>
                             : (searchGroup === "Group 2") ?
                                 <select value={searchEvent} onChange={(e) => {setSearchEvent(e.target.value)}} className="font-sans border rounded-xl ml-3 lg:mx-10 mt-3 w-69 lg:w-70 h-10 p-2">
                                     <option value="All">All</option>
-                                    <option>Bhajans - Boys</option>
-                                    <option>Bhajans - Girls</option>
-                                    <option>Slokas - Boys</option>
-                                    <option>Slokas - Girls</option>
-                                    <option>Vedam - Boys</option>
-                                    <option>Vedam - Girls</option>
+                                    <option>Sloka Chanting - Boys</option>
+                                    <option>Sloka Chanting - Girls</option>
+                                    <option>Veda Chanting - Boys</option>
+                                    <option>Veda Chanting - Girls</option>
                                     <option>Tamizh chants - Boys</option>
                                     <option>Tamizh chants - Girls</option>
-                                    <option>Elocution (English)</option>
-                                    <option>Elocution (Tamil)</option>
+                                    <option>Just a Minute - English</option>
+                                    <option>Just a Minute - Tamil</option>
                                     <option>Drawing</option>
+                                    <option>Bhajan Singing - Boys</option>
+                                    <option>Bhajan Singing - Girls</option>
+                                    <option>Quiz</option>
+                                    <option>Rangoli</option>
+                                    <option>Dumb Charades</option>
+                                    <option>Wealth out of Waste</option>
                                     <option>Altar Decoration - Boys</option>
-                                    <option>Altar Decoration - Girls</option>
-                                    <option>Devotional Singing - Boys</option>
-                                    <option>Devotional Singing - Girls</option>
+                                    <option>Altar Decoration - Girls</option>                                                
                                     <option>Rudram Namakam Chanting - Boys</option>
                                     <option>Rudram Namakam Chanting - Girls</option>
                                 </select>
                             : (searchGroup === "Group 3") ?
                                 <select value={searchEvent} onChange={(e) => {setSearchEvent(e.target.value)}} className="font-sans border rounded-xl ml-3 lg:mx-10 mt-3 w-69 lg:w-70 h-10 p-2">
                                     <option value="All">All</option>
-                                    <option>Bhajans - Boys</option>
-                                    <option>Bhajans - Girls</option>
-                                    <option>Slokas - Boys</option>
-                                    <option>Slokas - Girls</option>
-                                    <option>Vedam - Boys</option>
-                                    <option>Vedam - Girls</option>
+                                    <option>Sloka Chanting - Boys</option>
+                                    <option>Sloka Chanting - Girls</option>
+                                    <option>Veda Chanting - Boys</option>
+                                    <option>Veda Chanting - Girls</option>
                                     <option>Tamizh chants - Boys</option>
                                     <option>Tamizh chants - Girls</option>
-                                    <option>Elocution (English)</option>
-                                    <option>Elocution (Tamil)</option>
+                                    <option>Ted Sai - English</option>
+                                    <option>Ted Sai - Tamil</option>
                                     <option>Drawing</option>
+                                    <option>Bhajan Singing - Boys</option>
+                                    <option>Bhajan Singing - Girls</option>
                                     <option>Quiz</option>
+                                    <option>Rangoli</option>
+                                    <option>Wealth out of Waste</option>
                                     <option>Altar Decoration - Boys</option>
-                                    <option>Altar Decoration - Girls</option>
-                                    <option>Devotional Singing - Boys</option>
-                                    <option>Devotional Singing - Girls</option>
+                                    <option>Altar Decoration - Girls</option>                                                
                                     <option>Rudram Namakam Chanting - Boys</option>
                                     <option>Rudram Namakam Chanting - Girls</option>
                                 </select>
                             : 
                                 <select value={searchEvent} onChange={(e) => {setSearchEvent(e.target.value)}} className="font-sans border rounded-xl ml-3 lg:mx-10 mt-3 w-69 lg:w-70 h-10 p-2">
                                     <option value="All">All</option>
-                                    <option>Quiz</option>
                                 </select>
                             }
                         </div>
@@ -559,6 +574,7 @@ export default function Dashboard(){
                                     <th className="font-sans px-4 py-2 font-semibold border border-gray-400">Group 2 Exam</th>
                                     <th className="font-sans px-4 py-2 font-semibold border border-gray-400">Event 1</th>
                                     <th className="font-sans px-4 py-2 font-semibold border border-gray-400">Event 2</th>
+                                    <th className="font-sans px-4 py-2 font-semibold border border-gray-400">Team Event</th>
                                     <th className="font-sans px-4 py-2 font-semibold border border-gray-400">Group Event</th>
                                 </tr>
                             </thead>
@@ -567,17 +583,18 @@ export default function Dashboard(){
                                 (!loading &&   
                                     studentData.map((student) => (
                                         <tr key={student.id} className={student.attendance === "P" ? "hover:bg-green-200 bg-green-100 transition duration-300 ease-in-out" : "hover:bg-red-200 bg-red-100 transition duration-300 ease-in-out"}>
-                                            <td onClick={() => handleAttendance(student.name)} className="font-sans text-xl px-4 py-2 border border-black hover:cursor-pointer select-none">{student.attendance}</td>
-                                            <td className="font-sans text-xl px-4 py-2 border border-black">{student.name}</td>
-                                            <td className="font-sans text-xl px-4 py-2 border border-black">{student.gender}</td>
-                                            <td className="font-sans text-xl px-4 py-2 border border-black">{student.dob}</td>
-                                            <td className="font-sans text-xl px-4 py-2 border border-black">{student.doj}</td>
-                                            <td className="font-sans text-xl px-4 py-2 border border-black">{student.group}</td>
-                                            <td className="font-sans text-xl px-4 py-2 border border-black">{student.samithi}</td>
-                                            <td className="font-sans text-xl px-4 py-2 border border-black">{student.grp2Exam}</td>
-                                            <td className="font-sans text-xl px-4 py-2 border border-black">{student.event1}</td>
-                                            <td className="font-sans text-xl px-4 py-2 border border-black">{student.event2}</td>
-                                            <td className="font-sans text-xl px-4 py-2 border border-black">{student.groupEvent}</td>
+                                            <td onClick={() => handleAttendance(student.id)} className="font-sans text-lg px-4 py-2 border border-black hover:cursor-pointer select-none">{student.attendance}</td>
+                                            <td className="font-sans text-lg px-4 py-2 border border-black">{student.name}</td>
+                                            <td className="font-sans text-lg px-4 py-2 border border-black">{student.gender}</td>
+                                            <td className="font-sans text-lg px-4 py-2 border border-black">{student.dob}</td>
+                                            <td className="font-sans text-lg px-4 py-2 border border-black">{student.doj}</td>
+                                            <td className="font-sans text-lg px-4 py-2 border border-black">{student.group}</td>
+                                            <td className="font-sans text-lg px-4 py-2 border border-black">{student.samithi}</td>
+                                            <td className="font-sans text-lg px-4 py-2 border border-black">{student.grp2Exam}</td>
+                                            <td className="font-sans text-lg px-4 py-2 border border-black">{student.event1}</td>
+                                            <td className="font-sans text-lg px-4 py-2 border border-black">{student.event2}</td>
+                                            <td className="font-sans text-lg px-4 py-2 border border-black">{student.teamEvent}</td>
+                                            <td className="font-sans text-lg px-4 py-2 border border-black">{student.groupEvent}</td>
                                         </tr>
                                     ))
                                 )

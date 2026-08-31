@@ -27,7 +27,6 @@ export default function Register(){
     const [errorDoB,setErrorDoB] = useState("");
     const [errorDOJ,setErrorDOJ] = useState("");
     const [errorEvent,setErrorEvent] = useState("");
-    const [errorTeamEvent,setErrorTeamEvent] = useState("");
     const [teamError,setTeamError] = useState("");
     const [groupError,setGroupError] = useState("");
     const [genderError,setGenderError] = useState("");

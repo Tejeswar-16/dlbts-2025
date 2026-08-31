@@ -7,7 +7,6 @@ import { query, getDocs, collection, doc, where, updateDoc, addDoc } from "fireb
 import Image from "next/image";
 import { signOut } from "firebase/auth";
 import * as XLSX from "xlsx";
-import { eventNames } from "process";
 
 export default function Judging(){
     
@@ -165,7 +164,6 @@ export default function Judging(){
     const [tsTotal,setTsTotal] = useState("");
     const [tsRemarks,setTsRemarks] = useState("");
     const [disabled,setDisabled] = useState(false);
-    const [samithis,setSamithis] = useState({});
     const [groupEventData,setGroupEventData] = useState([]);
     const [tedcAccurateSaying,setTeDcAccurateSaying] = useState("");
     const [tedcTotal,setTeDcTotal] = useState("");
@@ -1589,7 +1587,6 @@ export default function Judging(){
                 }
             }
         }
-        setSamithis(initial);
     },[groupEventData]);
     
     

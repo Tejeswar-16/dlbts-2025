@@ -3279,7 +3279,7 @@ export default function Judging(){
                             <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Student Name: {amName}</h1>
                             <div className="flex justify-center flex-col justify-center items-center">
                                 <h1 className="font-sans text-xl mt-2 font-semibold">Enter the marks</h1>
-                                <input value={qMark} onChange={(e) => setQMark(e.target.value)} className="font-sans rounded-xl border w-100 p-2 w-50 mx-4 mb-4" type="number" placeholder="Enter the marks here..."></input>
+                                <input value={qMark} onChange={(e) => setQMark(e.target.value)} className="font-sans rounded-xl border md:w-100 p-2 w-70 mx-4 mb-4" type="number" placeholder="Enter the marks here..."></input>
                             </div>
                             <div className="flex justify-center">
                                 <textarea value={qRemarks} onChange={(e)=>{setQRemarks(e.target.value)}} type="text" maxLength={100} placeholder="Enter your remarks here (max 100 characters)" className="resize-none font-sans p-2 mb-2 rounded-xl w-70 h-30 md:w-100 md:h-20 border"></textarea>
@@ -3301,7 +3301,7 @@ export default function Judging(){
                             <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Student Name: {amName}</h1>
                             <div className="flex justify-center items-center flex-col">
                                 <h1 className="font-bold mt-4">Enter the number of accurate sayings</h1>
-                                <input value={tedcAccurateSaying} onChange={(e) => setTeDcAccurateSaying(e.target.value)} className="font-sans rounded-xl border p-2 w-100 mx-4 mb-2" type="number" placeholder="Enter the marks here..."></input>
+                                <input value={tedcAccurateSaying} onChange={(e) => setTeDcAccurateSaying(e.target.value)} className="font-sans rounded-xl border p-2 w-70 md:w-100 mx-4 mb-2" type="number" placeholder="Enter the marks here..."></input>
                             </div>
                             <div className="flex justify-center">
                                 <textarea value={tedcRemarks} onChange={(e)=>{setTeDcRemarks(e.target.value)}} type="text" maxLength={100} placeholder="Enter your remarks here (max 100 characters)" className="resize-none font-sans p-2 mb-2 rounded-xl w-70 h-30 md:w-100 md:h-20 border"></textarea>

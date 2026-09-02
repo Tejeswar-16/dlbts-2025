@@ -78,8 +78,8 @@ export default function Home(){
             
             let groups = [
                           "Group 1","Group 1","Group 1","Group 1","Group 1","Group 1","Group 1",
-                          "Group 2","Group 2","Group 2","Group 2","Group 2","Group 2","Group 2","Group 2","Group 2","Group 2",
-                          "Group 3","Group 3","Group 3","Group 3","Group 3","Group 3","Group 3","Group 3","Group 3","Group 3",
+                          "Group 2","Group 2","Group 2","Group 2","Group 2","Group 2","Group 2","Group 2","Group 2","Group 2","Group 2",
+                          "Group 3","Group 3","Group 3","Group 3","Group 3","Group 3","Group 3","Group 3","Group 3","Group 3","Group 3"
                          ]
         
             let events = ["Sloka Chanting","Veda Chanting","Tamizh Chants","Story Telling (English/Tamil/Bilingual)","Fancy Dress",
@@ -140,7 +140,7 @@ export default function Home(){
                         }
                     }
                 }
-                grpEvent = [...grpEvent,...ge];
+                grpEvent = [...grpEvent,...top3];
             }
             for (let i=0;i<teamEvents.length;i++){
                 let ge = filteredData.filter((fd) =>  fd.event === teamEvents[i])
@@ -165,7 +165,7 @@ export default function Home(){
                         }
                     }
                 }
-                grpEvent = [...grpEvent,...ge];
+                grpEvent = [...grpEvent,...top3];
             }
             
             filteredData = grpEvent;

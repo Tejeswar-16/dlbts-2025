@@ -48,7 +48,7 @@ export default function Judging(){
         "g1sc@dlbts.ks" : ["Group 1","Sloka Chanting"],
         "g1vc@dlbts.ks" : ["Group 1","Veda Chanting"],
         "g1tc@dlbts.ks" : ["Group 1","Tamizh Chants"],
-        "g1st@dlbts.ks" : ["Group 1","Story Telling (English / Tamil / Bilingual)"],
+        "g1st@dlbts.ks" : ["Group 1","Story Telling (English/Tamil/Bilingual)"],
         "g1fd@dlbts.ks" : ["Group 1","Fancy Dress"],
         "g1dw@dlbts.ks" : ["Group 1","Drawing"],
         "g1bh@dlbts.ks" : ["Group 1","Bhajan Singing"],
@@ -77,15 +77,15 @@ export default function Judging(){
         "g3bb@dlbts.ks" : ["Group 3","Bhajan Singing - Boys"],
         "g3bg@dlbts.ks" : ["Group 3","Bhajan Singing - Girls"],
 
-        "tequ@dlbts.ks" : ["Group 1, 2 & 3","Quiz"],
-        "terg@dlbts.ks" : ["Group 1, 2 & 3","Rangoli"],
-        "tedc@dlbts.ks" : ["Group 1, 2 & 3","Dumb Charades"],
-        "teww@dlbts.ks" : ["Group 1, 2 & 3","Wealth out of Waste"],
+        "tequ@dlbts.ks" : ["Team Events","Quiz"],
+        "terg@dlbts.ks" : ["Team Events","Rangoli"],
+        "tedc@dlbts.ks" : ["Team Events","Dumb Charades"],
+        "teww@dlbts.ks" : ["Team Events","Wealth out of Waste"],
 
-        "geadb@dlbts.ks" : ["Group 1, 2 & 3","Altar Decoration - Boys"],
-        "geadg@dlbts.ks" : ["Group 1, 2 & 3","Altar Decoration - Girls"],
-        "gencb@dlbts.ks" : ["Group 1, 2 & 3","Rudram Namakam Chanting - Boys"],
-        "gencg@dlbts.ks" : ["Group 1, 2 & 3","Rudram Namakam Chanting - Girls"],
+        "geadb@dlbts.ks" : ["Group Events","Altar Decoration - Boys"],
+        "geadg@dlbts.ks" : ["Group Events","Altar Decoration - Girls"],
+        "gencb@dlbts.ks" : ["Group Events","Rudram Namakam Chanting - Boys"],
+        "gencg@dlbts.ks" : ["Group Events","Rudram Namakam Chanting - Girls"],
     }
 
     const params = useParams();
@@ -1450,23 +1450,11 @@ export default function Judging(){
         async function fetchLock(){
             if (judgeEmail)
             {
-                let q;
-                if (judgeEmail.slice(7,9) === "ge")
-                {
-                    q = query(
-                        collection(db,"eventLock"),
-                        where("group","==","Group 2 & Group 3 - Group Events"),
-                        where("event","==",lockMap[judgeEmail.slice(7)][1])
-                    );
-                }
-                else
-                {
-                    q = query(
+                const q = query(
                         collection(db,"eventLock"),
                         where("group","==",lockMap[judgeEmail.slice(7)][0]),
                         where("event","==",lockMap[judgeEmail.slice(7)][1])
                     );
-                }
                 const querySnapshot = await getDocs(q);
                 const data = querySnapshot.docs.map((doc) => doc.data());
                 if (data.length !== 0)

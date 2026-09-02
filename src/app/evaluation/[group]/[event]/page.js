@@ -1565,19 +1565,16 @@ export default function Judging(){
         }
     },[event]);
 
+    const samithis = JSON.parse(
+        process.env.NEXT_PUBLIC_DISTRICTS || "[]"
+    );
+
     useEffect(() => {
-        const initial = {'Chengalpet: Team A':[],'Collectorate: Team A':[],'Guduvancheri: Team A':[],
-                 'Indra Nagar: Team A':[],'Irumbuliyur: Team A':[],'Little Kancheepuram: Team A':[],
-                 'Madambakkam: Team A':[],'Main Kancheepuram: Team A':[],'Mannivakkam: Team A':[],
-                 'Maraimalai Nagar: Team A':[],'Parvathi Nagar: Team A':[],'Perungalathur: Team A':[],
-                 'Poondi Bazar: Team A':[],'Sothupakkam: Team A':[],'Sriperumpudur: Team A':[],
-                 'Tambaram: Team A':[],
-                 'Chengalpet: Team B':[],'Collectorate: Team B':[],'Guduvancheri: Team B':[],
-                 'Indra Nagar: Team B':[],'Irumbuliyur: Team B':[],'Little Kancheepuram: Team B':[],
-                 'Madambakkam: Team B':[],'Main Kancheepuram: Team B':[],'Mannivakkam: Team B':[],
-                 'Maraimalai Nagar: Team B':[],'Parvathi Nagar: Team B':[],'Perungalathur: Team B':[],
-                 'Poondi Bazar: Team B':[],'Sothupakkam: Team B':[],'Sriperumpudur: Team B':[],
-                 'Tambaram: Team B':[]};
+        const initial = {};
+        samithis.forEach((samithi) => {
+            initial[`${samithi}: Team A`] = [];
+            initial[`${samithi}: Team B`] = [];
+        });
         if (groupEventData.length !== 0){
             for (const team  of groupEventData){
                 const teamSamithi = team.samithi;

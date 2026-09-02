@@ -298,6 +298,10 @@ export default function Home(){
         setDivData(students);
     }
 
+    const samithis = JSON.parse(
+        process.env.NEXT_PUBLIC_DISTRICTS || "[]"
+    );
+
     return (
         <>
             <div className="relative bg-gray-100 py-5 min-h-screen lg:bg-gray-100">
@@ -332,22 +336,11 @@ export default function Home(){
                             <h1 className="font-sans font-bold md:text-xl ml-4 md:ml-0">Samithi</h1>
                             <select value={samithi} onChange={(e) => {setSamithi(e.target.value)}} className="font-sans rounded-xl border w-65 ml-4 md:ml-0 md:w-45 mt-2 mb-4 p-2">
                                 <option value="All">All</option>
-                                <option>Chengalpet</option>
-                                <option>Collectorate</option>
-                                <option>Guduvancheri</option>
-                                <option>Indra Nagar</option>
-                                <option>Irumbuliyur</option>
-                                <option>Little Kancheepuram</option>
-                                <option>Madambakkam</option>
-                                <option>Main Kancheepuram</option>
-                                <option>Mannivakkam</option>
-                                <option>Maraimalai Nagar</option>
-                                <option>Parvathi Nagar</option>
-                                <option>Perungalathur</option>
-                                <option>Poondi Bazar</option>
-                                <option>Sothupakkam</option>
-                                <option>Sriperumpudur</option>
-                                <option>Tambaram</option>
+                                {samithis.map((district) => (
+                                    <option key={district} value={district}>
+                                    {district}
+                                    </option>
+                                ))}
                             </select>
                         </div>
                         <div className="flex flex-col">

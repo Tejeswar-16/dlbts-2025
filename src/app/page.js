@@ -56,7 +56,7 @@ export default function Home() {
             Sign In
           </div>
           <div className="font-sans p-2 text-gray-700 md:flex md:justify-center md:text-lg text-center">
-            {"DLBTS " + new Date().getFullYear() + ", Kanchipuram South, Tamil Nadu"}
+            {"DLBTS " + new Date().getFullYear() + `, ${process.env.NEXT_PUBLIC_DISTRICT_NAME}`}
           </div>
           <hr className="mt-2 text-gray-300"></hr>
           <form onSubmit={handleLogin}>

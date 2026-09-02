@@ -90,7 +90,7 @@ export default function Dashboard(){
         }
         if (searchEvent !== "All")
         {
-            filteredContent = filteredContent.filter((fc) => fc.event1 === searchEvent || fc.event2 === searchEvent || fc.groupEvent === searchEvent);
+            filteredContent = filteredContent.filter((fc) => fc.event1 === searchEvent || fc.event2 === searchEvent || fc.groupEvent === searchEvent || fc.teamEvent === searchEvent);
         }
         if (searchSamithi !== "All")
         {
@@ -227,6 +227,10 @@ export default function Dashboard(){
         setLoading(false);
     }
 
+    const samithis = JSON.parse(
+        process.env.NEXT_PUBLIC_DISTRICTS || "[]"
+    );
+
     return (
         <>
             <div className="relative bg-gray-100 py-5 min-h-screen lg:bg-gray-100">
@@ -284,22 +288,11 @@ export default function Dashboard(){
                                 <h1 className="font-sans font-bold text-xl mt-2 ml-3 lg:mx-10">Samithi</h1>
                                 <select value={searchSamithi} onChange={(e) => {setSearchSamithi(e.target.value)}} className="font-sans border rounded-xl ml-3 lg:mx-10 mt-3 w-69 lg:w-60 h-10 p-2">
                                     <option value="All">All</option>
-                                    <option>Chengalpet</option>
-                                    <option>Collectorate</option>
-                                    <option>Guduvancheri</option>
-                                    <option>Indra Nagar</option>
-                                    <option>Irumbuliyur</option>
-                                    <option>Little Kancheepuram</option>
-                                    <option>Madambakkam</option>
-                                    <option>Main Kancheepuram</option>
-                                    <option>Mannivakkam</option>
-                                    <option>Maraimalai Nagar</option>
-                                    <option>Parvathi Nagar</option>
-                                    <option>Perungalathur</option>
-                                    <option>Poondi Bazar</option>
-                                    <option>Sothupakkam</option>
-                                    <option>Sriperumpudur</option>
-                                    <option>Tambaram</option>
+                                    {samithis.map((district) => (
+                                        <option key={district} value={district}>
+                                        {district}
+                                        </option>
+                                    ))}
                                 </select>
                             </div>
                             <div className="flex flex-col">
@@ -311,13 +304,11 @@ export default function Dashboard(){
                                         <option>Veda Chanting</option>
                                         <option>Tamizh Chants</option>
                                         <option>Story Telling (English/Tamil/Bilingual)</option>
-                                        <option>Fancy Dress (English/Tamil/Sanskrit)</option>
-                                        <option>Through My Eyes (English/Tamil)</option>
+                                        <option>Fancy Dress</option>
+                                        <option>Bhajan Singing</option>
                                         <option>Drawing</option>
-                                        <option>Bhajan Singing - Boys</option>
-                                        <option>Bhajan Singing - Girls</option>
                                         <option>Quiz</option>
-                                        <option>Poster Making</option>
+                                        <option>Rangoli</option>
                                         <option>Wealth out of Waste</option>
                                         <option>Altar Decoration - Boys</option>
                                         <option>Altar Decoration - Girls</option>                                                
@@ -335,14 +326,12 @@ export default function Dashboard(){
                                         <option>Tamizh chants - Girls</option>
                                         <option>Just a Minute - English</option>
                                         <option>Just a Minute - Tamil</option>
-                                        <option>Silent Monologue</option>
-                                        <option>Antaranga Sai</option>
+                                        <option>Drawing</option>
+                                        <option>Bhajan Singing - Boys</option>
+                                        <option>Bhajan Singing - Girls</option>
+                                        <option>Quiz</option>
                                         <option>Rangoli</option>
                                         <option>Dumb Charades</option>
-                                        <option>Bhajans - Boys</option>
-                                        <option>Bhajans - Girls</option>
-                                        <option>Quiz</option>
-                                        <option>Poster Making</option>
                                         <option>Wealth out of Waste</option>
                                         <option>Altar Decoration - Boys</option>
                                         <option>Altar Decoration - Girls</option>                                                
@@ -360,20 +349,18 @@ export default function Dashboard(){
                                         <option>Tamizh chants - Girls</option>
                                         <option>Ted Sai - English</option>
                                         <option>Ted Sai - Tamil</option>
-                                        <option>Dual Lens - Boys</option>
-                                        <option>Dual Lens - Girls</option>
-                                        <option>Then and Now</option>
-                                        <option>Bhajans - Boys</option>
-                                        <option>Bhajans - Girls</option>
+                                        <option>Drawing</option>
+                                        <option>Bhajan Singing - Boys</option>
+                                        <option>Bhajan Singing - Girls</option>
                                         <option>Quiz</option>
-                                        <option>Poster Making</option>
+                                        <option>Rangoli</option>
                                         <option>Wealth out of Waste</option>
                                         <option>Altar Decoration - Boys</option>
                                         <option>Altar Decoration - Girls</option>                                                
                                         <option>Rudram Namakam Chanting - Boys</option>
                                         <option>Rudram Namakam Chanting - Girls</option>
                                     </select>
-                                :   
+                                :  
                                     <select value={searchEvent} onChange={(e) => {setSearchEvent(e.target.value)}} className="font-sans border rounded-xl ml-3 lg:mx-10 mt-3 w-69 lg:w-93 h-10 p-2">
                                         <option value="All">All</option>
                                     </select>
@@ -424,22 +411,11 @@ export default function Dashboard(){
                             <h1 className="font-sans font-bold text-xl mt-2 ml-3 lg:mx-10">Samithi</h1>
                             <select value={searchSamithi} onChange={(e) => {setSearchSamithi(e.target.value)}} className="font-sans border rounded-xl ml-3 lg:mx-10 mt-3 w-69 lg:w-60 h-10 p-2">
                                 <option value="All">All</option>
-                                <option>Chengalpet</option>
-                                    <option>Collectorate</option>
-                                    <option>Guduvancheri</option>
-                                    <option>Indra Nagar</option>
-                                    <option>Irumbuliyur</option>
-                                    <option>Little Kancheepuram</option>
-                                    <option>Madambakkam</option>
-                                    <option>Main Kancheepuram</option>
-                                    <option>Mannivakkam</option>
-                                    <option>Maraimalai Nagar</option>
-                                    <option>Parvathi Nagar</option>
-                                    <option>Perungalathur</option>
-                                    <option>Poondi Bazar</option>
-                                    <option>Sothupakkam</option>
-                                    <option>Sriperumpudur</option>
-                                    <option>Tambaram</option>
+                                {samithis.map((district) => (
+                                    <option key={district} value={district}>
+                                    {district}
+                                    </option>
+                                ))}
                             </select>
                         </div>
                         <div className="flex flex-col">
@@ -452,8 +428,8 @@ export default function Dashboard(){
                                     <option>Tamizh Chants</option>
                                     <option>Story Telling (English/Tamil/Bilingual)</option>
                                     <option>Fancy Dress</option>
-                                    <option>Drawing</option>
                                     <option>Bhajan Singing</option>
+                                    <option>Drawing</option>
                                     <option>Quiz</option>
                                     <option>Rangoli</option>
                                     <option>Wealth out of Waste</option>

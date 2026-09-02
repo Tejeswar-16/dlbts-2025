@@ -621,24 +621,22 @@ export default function Register(){
             })
     }
 
-    let samithiMap = {
-        "officials.chengalpet@dlbts.ks" : "Chengalpet",
-        "officials.collectorate@dlbts.ks" : "Collectorate",
-        "officials.guduvancheri@dlbts.ks" : "Guduvancheri",
-        "officials.indranagar@dlbts.ks" : "Indra Nagar",
-        "officials.irumbuliyur@dlbts.ks" : "Irumbuliyur",
-        "officials.littlekancheepuram@dlbts.ks" : "Little Kancheepuram",
-        "officials.madambakkam@dlbts.ks" : "Madambakkam",
-        "officials.mainkancheepuram@dlbts.ks" : "Main Kancheepuram",
-        "officials.mannivakkam@dlbts.ks" : "Mannivakkam",
-        "officials.maraimalainagar@dlbts.ks" : "Maraimalai Nagar",
-        "officials.parvathinagar@dlbts.ks" : "Parvathi Nagar",
-        "officials.perungalathur@dlbts.ks" : "Perungalathur",
-        "officials.poondibazar@dlbts.ks" : "Poondi Bazar",
-        "officials.sothupakkam@dlbts.ks" : "Sothupakkam",
-        "officials.sriperumpudur@dlbts.ks" : "Sriperumpudur",
-        "officials.tambaram@dlbts.ks" : "Tambaram"
-    };
+    const samithis = JSON.parse(
+        process.env.NEXT_PUBLIC_DISTRICTS || "[]"
+    );
+
+    const samithiMap = {};
+        samithis.forEach((samithi) => {
+        const slug = samithi
+            .toLowerCase()
+            .trim()
+            .replace(/[^a-z0-9]+/g, "");
+
+        const email = `officials.${slug}@dlbts.${process.env.NEXT_PUBLIC_DISTRICT_CODE}`;
+
+        samithiMap[email] = samithi;
+    });
+
 
     useEffect(() => {
         async function fetchData(){
@@ -936,22 +934,11 @@ export default function Register(){
                                             (email === "admin@dlbts.ks") ? 
                                                 <select value={samithi} onChange={(e) => {setSamithi(e.target.value)}} name="samithi" required className="p-3 mb-4 mx-2 font-sans w-68 text-lg md:w-180 lg:mx-4 lg:mb-0 lg:w-210 rounded-xl border">
                                                     <option value="">Select a Samithi</option>
-                                                    <option>Chengalpet</option>
-                                                    <option>Collectorate</option>
-                                                    <option>Guduvancheri</option>
-                                                    <option>Indra Nagar</option>
-                                                    <option>Irumbuliyur</option>
-                                                    <option>Little Kancheepuram</option>
-                                                    <option>Madambakkam</option>
-                                                    <option>Main Kancheepuram</option>
-                                                    <option>Mannivakkam</option>
-                                                    <option>Maraimalai Nagar</option>
-                                                    <option>Parvathi Nagar</option>
-                                                    <option>Perungalathur</option>
-                                                    <option>Poondi Bazar</option>
-                                                    <option>Sothupakkam</option>
-                                                    <option>Sriperumpudur</option>
-                                                    <option>Tambaram</option>
+                                                    {samithis.map((district) => (
+                                                        <option key={district} value={district}>
+                                                        {district}
+                                                        </option>
+                                                    ))}
                                                 </select>
                                             :
                                                 <input disabled defaultValue={samithiMap[email]} onChange={(e)=>{setSamithi(e.target.value)}} required className="p-3 mb-4 ml-2 w-68 font-sans text-lg md:w-180 lg:mx-4 lg:mb-0 lg:w-210 rounded-xl border" type="text"/>

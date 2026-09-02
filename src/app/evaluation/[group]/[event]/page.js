@@ -2077,7 +2077,7 @@ export default function Judging(){
                                 </thead>
                                 <tbody>
                                     {
-                                        (judgeEmail.slice(7,9) !== "ge" || judgeEmail.slice(7,9) !== "te") &&
+                                        (judgeEmail.slice(7,9) !== "ge" && judgeEmail.slice(7,9) !== "te") &&
                                         studentData.map((student) => {
                                             let count = 0;
                                             if (student.event1 !== "N/A")

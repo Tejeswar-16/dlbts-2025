@@ -1452,8 +1452,8 @@ export default function Judging(){
             {
                 const q = query(
                         collection(db,"eventLock"),
-                        where("group","==",lockMap[judgeEmail.slice(7,17)][0]),
-                        where("event","==",lockMap[judgeEmail.slice(7,17)][1])
+                        where("group","==",lockMap[judgeEmail.slice(7)][0]),
+                        where("event","==",lockMap[judgeEmail.slice(7)][1])
                     );
                 const querySnapshot = await getDocs(q);
                 const data = querySnapshot.docs.map((doc) => doc.data());

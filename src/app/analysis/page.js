@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import { collection, getDocs, query } from "firebase/firestore";
 import Image from "next/image";
 import { signOut } from "firebase/auth";
-import * as XLSX from "xlsx";
+//import * as XLSX from "xlsx";
 
 export default function Home(){
 
@@ -22,7 +22,6 @@ export default function Home(){
     const [studentData,setStudentData] = useState([]);
     const [click,setClick] = useState(false);
     const [divData,setDivData] = useState([]);
-    const [pptLoading, setPptLoading] = useState(false);
 
     const router = useRouter();
 
@@ -295,7 +294,6 @@ export default function Home(){
     // }
 
     async function handleDownloadPPT() {
-        setPptLoading(true);
         try {
             const res = await fetch("/api/generate-results-ppt", {
                 method: "POST",
@@ -318,9 +316,7 @@ export default function Home(){
         } catch (err) {
             console.error(err);
             alert("Couldn't generate the PPT. Please try again.");
-        } finally {
-            setPptLoading(false);
-        }
+        } 
     }
 
     function buildPptData(studentData) {

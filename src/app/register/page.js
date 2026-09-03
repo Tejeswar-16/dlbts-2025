@@ -739,12 +739,17 @@ export default function Register(){
 
         if (data1[0].close === true){
             setClose(true);
-            alert("Sairam! Registration Form closed!");
         }
         else{
             setClose(false);
         }
     }
+
+    useEffect(() => {
+        if (close){
+           alert("Sairam! Registration Form closed!");
+        }
+    },[close]);
 
     function handleFormClose(){
         setClicked(false);
@@ -764,17 +769,22 @@ export default function Register(){
                                 </div>
                                 <div className="flex flex-col lg:flex-row">
                                     <div className="flex md:flex-row justify-between md:justify-end gap-x-1 mx-1">
-                                        { email === `admin@dlbts.${process.env.NEXT_PUBLIC_DISTRICT_CODE}` && <button onClick={handleCloseRegistration} className="font-sans font-semibold text-sm md:text-lg h-10 lg:h-15 rounded-lg bg-blue-100 px-2 md:rounded-xl mt-2 md:h-10 hover:bg-blue-500 hover:text-white hover:cursor-pointer transition duration-300 ease-in-out">Close Registration</button>}
+                                        { email === `admin@dlbts.${process.env.NEXT_PUBLIC_DISTRICT_CODE}` && 
+                                            !close ? 
+                                            <button onClick={handleCloseRegistration} className="font-sans font-semibold text-sm md:text-lg h-10 lg:h-15 rounded-lg bg-blue-100 px-2 md:rounded-xl mt-2 md:h-10 hover:bg-blue-500 hover:text-white hover:cursor-pointer transition duration-300 ease-in-out">Close Registration</button>
+                                            :
+                                            <button onClick={handleCloseRegistration} className="font-sans font-semibold text-sm md:text-lg h-10 lg:h-15 rounded-lg bg-blue-100 px-2 md:rounded-xl mt-2 md:h-10 hover:bg-blue-500 hover:text-white hover:cursor-pointer transition duration-300 ease-in-out">Open Registration</button>
+                                        }
                                         {
                                         (close && email !== `admin@dlbts.${process.env.NEXT_PUBLIC_DISTRICT_CODE}`) ?
-                                            <button onClick={handleAddStudent} disabled className="font-sans font-semibold w-20 lg:h-15 text-sm md:text-lg rounded-lg bg-gray-300 md:rounded-xl mt-2 h-7 md:h-10 hover:cursor-not-allowed transition duration-300 ease-in-out">Add Student</button>
+                                            <button onClick={handleAddStudent} disabled className="font-sans font-semibold w-40 md:w-51 lg:h-15 text-sm md:text-lg rounded-lg bg-gray-300 md:rounded-xl mt-2 h-7 md:h-10 hover:cursor-not-allowed transition duration-300 ease-in-out">Add Student</button>
                                         :
                                             <button onClick={handleAddStudent} className="font-sans font-semibold w-40 md:w-51 lg:w-40 lg:h-15 text-sm md:text-lg rounded-lg bg-yellow-100 md:rounded-xl mt-2 h-7 md:h-10 hover:bg-yellow-500 hover:cursor-pointer transition duration-300 ease-in-out">Add Student</button>
                                         }
                                         <button onClick={handleDownload} className="font-sans font-semibold w-30 text-sm md:text-lg rounded-lg lg:h-15 bg-fuchsia-200 md:rounded-xl mt-2 h-7 md:h-10 hover:bg-fuchsia-500 hover:cursor-pointer transition duration-300 ease-in-out">Download</button>
                                     </div>
                                     <div className="flex flex md:flex-row justify-between md:justify-end gap-x-2 mx-1">
-                                        <button onClick={() => setManageGrpEvent(true)} className="font-sans font-semibold text-sm md:text-lg rounded-lg lg:h-15 bg-green-200 px-2 md:rounded-xl mt-2 h-7 md:h-10 hover:bg-green-500 hover:cursor-pointer transition duration-300 ease-in-out">Manage Group Events</button>
+                                        {!close && <button onClick={() => setManageGrpEvent(true)} className="font-sans font-semibold text-sm md:text-lg rounded-lg lg:h-15 bg-green-200 px-2 md:rounded-xl mt-2 h-7 md:h-10 hover:bg-green-500 hover:cursor-pointer transition duration-300 ease-in-out">Manage Group Events</button>}
                                         <button onClick={handleLogout} className="font-sans font-semibold w-29 text-sm md:text-lg rounded-lg lg:h-15 bg-red-200 px-2 md:rounded-xl mt-2 h-7 md:h-10 hover:bg-red-500 hover:cursor-pointer hover:text-white transition duration-300 ease-in-out">Logout</button>
                                     </div>
                                 </div>

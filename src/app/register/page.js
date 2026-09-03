@@ -770,9 +770,10 @@ export default function Register(){
                                 <div className="flex flex-col lg:flex-row">
                                     <div className="flex md:flex-row justify-between md:justify-end gap-x-1 mx-1">
                                         { email === `admin@dlbts.${process.env.NEXT_PUBLIC_DISTRICT_CODE}` && 
-                                            !close ? 
-                                            <button onClick={handleCloseRegistration} className="font-sans font-semibold text-sm md:text-lg h-10 lg:h-15 rounded-lg bg-blue-100 px-2 md:rounded-xl mt-2 md:h-10 hover:bg-blue-500 hover:text-white hover:cursor-pointer transition duration-300 ease-in-out">Close Registration</button>
-                                            :
+                                            !close &&
+                                            <button onClick={handleCloseRegistration} className="font-sans font-semibold text-sm md:text-lg h-10 lg:h-15 rounded-lg bg-blue-100 px-2 md:rounded-xl mt-2 md:h-10 hover:bg-blue-500 hover:text-white hover:cursor-pointer transition duration-300 ease-in-out">Close Registration</button>}
+                                        { email === `admin@dlbts.${process.env.NEXT_PUBLIC_DISTRICT_CODE}` && 
+                                            close &&
                                             <button onClick={handleCloseRegistration} className="font-sans font-semibold text-sm md:text-lg h-10 lg:h-15 rounded-lg bg-blue-100 px-2 md:rounded-xl mt-2 md:h-10 hover:bg-blue-500 hover:text-white hover:cursor-pointer transition duration-300 ease-in-out">Open Registration</button>
                                         }
                                         {

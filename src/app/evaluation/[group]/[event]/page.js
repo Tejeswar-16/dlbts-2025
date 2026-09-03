@@ -45,47 +45,47 @@ export default function Judging(){
     }
 
     const lockMap = {
-        "g1sc@dlbts.ks" : ["Group 1","Sloka Chanting"],
-        "g1vc@dlbts.ks" : ["Group 1","Veda Chanting"],
-        "g1tc@dlbts.ks" : ["Group 1","Tamizh Chants"],
-        "g1st@dlbts.ks" : ["Group 1","Story Telling (English/Tamil/Bilingual)"],
-        "g1fd@dlbts.ks" : ["Group 1","Fancy Dress"],
-        "g1dw@dlbts.ks" : ["Group 1","Drawing"],
-        "g1bh@dlbts.ks" : ["Group 1","Bhajan Singing"],
+        "g1sc@dlbts" : ["Group 1","Sloka Chanting"],
+        "g1vc@dlbts" : ["Group 1","Veda Chanting"],
+        "g1tc@dlbts" : ["Group 1","Tamizh Chants"],
+        "g1st@dlbts" : ["Group 1","Story Telling (English/Tamil/Bilingual)"],
+        "g1fd@dlbts" : ["Group 1","Fancy Dress"],
+        "g1dw@dlbts" : ["Group 1","Drawing"],
+        "g1bh@dlbts" : ["Group 1","Bhajan Singing"],
 
-        "g2sb@dlbts.ks" : ["Group 2","Sloka Chanting - Boys"],
-        "g2sg@dlbts.ks" : ["Group 2","Sloka Chanting - Girls"],
-        "g2vb@dlbts.ks" : ["Group 2","Veda Chanting - Boys"],
-        "g2vg@dlbts.ks" : ["Group 2","Veda Chanting - Girls"],
-        "g2tcb@dlbts.ks" : ["Group 2","Tamizh chants - Boys"],
-        "g2tcg@dlbts.ks" : ["Group 2","Tamizh chants - Girls"],
-        "g2jame@dlbts.ks" : ["Group 2","Just a Minute - English"],
-        "g2jamt@dlbts.ks" : ["Group 2","Just a Minute - Tamil"],
-        "g2dw@dlbts.ks" : ["Group 2","Drawing"],
-        "g2bb@dlbts.ks" : ["Group 2","Bhajan Singing - Boys"],
-        "g2bg@dlbts.ks" : ["Group 2","Bhajan Singing - Girls"],
+        "g2sb@dlbts" : ["Group 2","Sloka Chanting - Boys"],
+        "g2sg@dlbts" : ["Group 2","Sloka Chanting - Girls"],
+        "g2vb@dlbts" : ["Group 2","Veda Chanting - Boys"],
+        "g2vg@dlbts" : ["Group 2","Veda Chanting - Girls"],
+        "g2tcb@dlbts" : ["Group 2","Tamizh chants - Boys"],
+        "g2tcg@dlbts" : ["Group 2","Tamizh chants - Girls"],
+        "g2jame@dlbts" : ["Group 2","Just a Minute - English"],
+        "g2jamt@dlbts" : ["Group 2","Just a Minute - Tamil"],
+        "g2dw@dlbts" : ["Group 2","Drawing"],
+        "g2bb@dlbts" : ["Group 2","Bhajan Singing - Boys"],
+        "g2bg@dlbts" : ["Group 2","Bhajan Singing - Girls"],
 
-        "g3sb@dlbts.ks" : ["Group 3","Sloka Chanting - Boys"],
-        "g3sg@dlbts.ks" : ["Group 3","Sloka Chanting - Girls"],
-        "g3vb@dlbts.ks" : ["Group 3","Veda Chanting - Boys"],
-        "g3vg@dlbts.ks" : ["Group 3","Veda Chanting - Girls"],
-        "g3tcb@dlbts.ks" : ["Group 3","Tamizh chants - Boys"],
-        "g3tcg@dlbts.ks" : ["Group 3","Tamizh chants - Girls"],
-        "g3tse@dlbts.ks" : ["Group 3","Ted Sai - English"],
-        "g3tst@dlbts.ks" : ["Group 3","Ted Sai - Tamil"],
-        "g3dw@dlbts.ks" : ["Group 3","Drawing"],
-        "g3bb@dlbts.ks" : ["Group 3","Bhajan Singing - Boys"],
-        "g3bg@dlbts.ks" : ["Group 3","Bhajan Singing - Girls"],
+        "g3sb@dlbts" : ["Group 3","Sloka Chanting - Boys"],
+        "g3sg@dlbts" : ["Group 3","Sloka Chanting - Girls"],
+        "g3vb@dlbts" : ["Group 3","Veda Chanting - Boys"],
+        "g3vg@dlbts" : ["Group 3","Veda Chanting - Girls"],
+        "g3tcb@dlbts" : ["Group 3","Tamizh chants - Boys"],
+        "g3tcg@dlbts" : ["Group 3","Tamizh chants - Girls"],
+        "g3tse@dlbts" : ["Group 3","Ted Sai - English"],
+        "g3tst@dlbts" : ["Group 3","Ted Sai - Tamil"],
+        "g3dw@dlbts" : ["Group 3","Drawing"],
+        "g3bb@dlbts" : ["Group 3","Bhajan Singing - Boys"],
+        "g3bg@dlbts" : ["Group 3","Bhajan Singing - Girls"],
 
-        "tequ@dlbts.ks" : ["Team Events","Quiz"],
-        "terg@dlbts.ks" : ["Team Events","Rangoli"],
-        "tedc@dlbts.ks" : ["Team Events","Dumb Charades"],
-        "teww@dlbts.ks" : ["Team Events","Wealth out of Waste"],
+        "tequ@dlbts" : ["Team Events","Quiz"],
+        "terg@dlbts" : ["Team Events","Rangoli"],
+        "tedc@dlbts" : ["Team Events","Dumb Charades"],
+        "teww@dlbts" : ["Team Events","Wealth out of Waste"],
 
-        "geadb@dlbts.ks" : ["Group Events","Altar Decoration - Boys"],
-        "geadg@dlbts.ks" : ["Group Events","Altar Decoration - Girls"],
-        "gencb@dlbts.ks" : ["Group Events","Rudram Namakam Chanting - Boys"],
-        "gencg@dlbts.ks" : ["Group Events","Rudram Namakam Chanting - Girls"],
+        "geadb@dlbts" : ["Group Events","Altar Decoration - Boys"],
+        "geadg@dlbts" : ["Group Events","Altar Decoration - Girls"],
+        "gencb@dlbts" : ["Group Events","Rudram Namakam Chanting - Boys"],
+        "gencg@dlbts" : ["Group Events","Rudram Namakam Chanting - Girls"],
     }
 
     const params = useParams();
@@ -1452,8 +1452,8 @@ export default function Judging(){
             {
                 const q = query(
                         collection(db,"eventLock"),
-                        where("group","==",lockMap[judgeEmail.slice(7)][0]),
-                        where("event","==",lockMap[judgeEmail.slice(7)][1])
+                        where("group","==",lockMap[judgeEmail.slice(7,17)][0]),
+                        where("event","==",lockMap[judgeEmail.slice(7,17)][1])
                     );
                 const querySnapshot = await getDocs(q);
                 const data = querySnapshot.docs.map((doc) => doc.data());

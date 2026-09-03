@@ -22,6 +22,7 @@ export default function Home(){
     const [studentData,setStudentData] = useState([]);
     const [click,setClick] = useState(false);
     const [divData,setDivData] = useState([]);
+    const [pptLoading, setPptLoading] = useState(false);
 
     const router = useRouter();
 
@@ -274,23 +275,88 @@ export default function Home(){
         })
     }
 
-    function handleDownload(){
+    // function handleDownload(){
         
-        const resultData = studentData.flatMap((students) => (
-            students[1].map((student) => ({
-                group: student[0],
-                event: student[1],
-                name: student[2],
-                samithi: student[3],
-                remarks: student[4],
-                totalMarks: student[5]
-            }))
-        ));
+    //     const resultData = studentData.flatMap((students) => (
+    //         students[1].map((student) => ({
+    //             group: student[0],
+    //             event: student[1],
+    //             name: student[2],
+    //             samithi: student[3],
+    //             remarks: student[4],
+    //             totalMarks: student[5]
+    //         }))
+    //     ));
 
-        const worksheet = XLSX.utils.json_to_sheet(resultData);
-        const workbook = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(workbook,worksheet,"Students");
-        XLSX.writeFile(workbook,"result.xlsx");
+    //     const worksheet = XLSX.utils.json_to_sheet(resultData);
+    //     const workbook = XLSX.utils.book_new();
+    //     XLSX.utils.book_append_sheet(workbook,worksheet,"Students");
+    //     XLSX.writeFile(workbook,"result.xlsx");
+    // }
+
+    async function handleDownloadPPT() {
+        setPptLoading(true);
+        try {
+            const res = await fetch("/api/generate-results-ppt", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ data: buildPptData(studentData) }),
+            });
+            if (!res.ok) {
+                const body = await res.json().catch(() => ({}));
+                throw new Error(body.error || `Request failed (${res.status})`);
+            }
+            const blob = await res.blob();
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement("a");
+            a.href = url;
+            a.download = `DLBTS-${new Date().getFullYear()}-Results.pptx`;
+            document.body.appendChild(a);
+            a.click();
+            a.remove();
+            URL.revokeObjectURL(url);
+        } catch (err) {
+            console.error(err);
+            alert("Couldn't generate the PPT. Please try again.");
+        } finally {
+            setPptLoading(false);
+        }
+    }
+
+    function buildPptData(studentData) {
+        const sections = new Map();
+
+        for (const [key, students] of studentData) {
+            let sectionLabel, eventName;
+            if (key.startsWith("Team Events - ")) {
+                sectionLabel = "Team Events";
+                eventName = key.replace("Team Events - ", "");
+            } else if (key.startsWith("Group Events - ")) {
+                sectionLabel = "Group Events";
+                eventName = key.replace("Group Events - ", "");
+            } else {
+                [sectionLabel, eventName] = key.split(" : ");
+            }
+
+            // student = [group, event, name, samithi, remarks, totalMarks]
+            const sorted = [...students].sort((a, b) => b[5] - a[5]);
+            let tier = 0, prevMark = null;
+            const results = sorted.map((s) => {
+                if (s[5] !== prevMark) tier++;
+                prevMark = s[5];
+                return { rank: tier, name: s[2], samithi: s[3] };
+            });
+
+            if (!sections.has(sectionLabel)) sections.set(sectionLabel, []);
+            sections.get(sectionLabel).push({ event: eventName, results });
+        }
+
+        const order = ["Group 1", "Group 2", "Group 3", "Team Events", "Group Events"];
+        const labels = [
+            ...order.filter((s) => sections.has(s)),
+            ...[...sections.keys()].filter((s) => !order.includes(s)),
+        ];
+        return labels.map((label) => ({ section: label, events: sections.get(label) }));
     }
 
     function handleDivClick(students){
@@ -410,7 +476,7 @@ export default function Home(){
 
                 <div className="mx-auto rounded-xl shadow-xl bg-white w-75 md:w-100 mt-10">
                     <div className="flex justify-end">
-                        <Image onClick={handleDownload} className="mt-2 hover:cursor-pointer" src={"/download.jpg"} width={40} height={20} alt="download"></Image>
+                        <Image onClick={handleDownloadPPT} className="mt-2 hover:cursor-pointer" src={"/download.jpg"} width={40} height={20} alt="download"></Image>
                     </div>
                     <div className="flex flex-row justify-between">
                         <div className="flex flex-col">

@@ -246,7 +246,7 @@ export default function Judging(){
             {
                 setJudgeEmail(user.email);
                 setJudge(cut(user.email).toUpperCase());
-                if (user.email === "admin@dlbts.ks")
+                if (user.email === `admin@dlbts.${process.env.NEXT_PUBLIC_DISTRICT_CODE}`)
                     setDisabled(true);
             }
         })

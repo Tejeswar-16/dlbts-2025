@@ -25,7 +25,7 @@ export default function Home() {
       const userEmail = userCredential.user.email;
       alert("Sairam! Logged in successfully");
 
-      if (userEmail === "admin@dlbts.ks")
+      if (userEmail === `admin@dlbts.${process.env.NEXT_PUBLIC_DISTRICT_CODE}`)
         router.push("/dashboard");
       if (userEmail.startsWith("judge"))
         router.push("/evaluation");

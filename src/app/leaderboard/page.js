@@ -55,7 +55,7 @@ export default function Leadboard(){
             if (user)
             {
                 setEmail(user.email);
-                if (user.email === "admin@dlbts.ks")
+                if (user.email === `admin@dlbts.${process.env.NEXT_PUBLIC_DISTRICT_CODE}`)
                     setName("Admin");
                 else    
                     setName(cut(user.email).toUpperCase());
@@ -65,7 +65,7 @@ export default function Leadboard(){
 
     const router = useRouter();
     function handleEventsClick(){
-        if (email === "admin@dlbts.ks")
+        if (email === `admin@dlbts.${process.env.NEXT_PUBLIC_DISTRICT_CODE}`)
             router.push("/dashboard");
         else
             alert("Sairam! You do not have access to visit Dashboard page");

@@ -121,7 +121,7 @@ export default function Evaluation(){
             console.log(grp,evt)
             if (groupMap[grp] !== judgeGroup || eventMap[evt] !== judgeEvent)
             {
-                if (judgeEmail === "admin@dlbts.ks")
+                if (judgeEmail === `admin@dlbts.${process.env.NEXT_PUBLIC_DISTRICT_CODE}`)
                     router.push("/evaluation/"+judgeGroup.trim().replace(/[\s-()]/g,'').toLowerCase()+"/"+judgeEvent.trim().replace(/[\s-()/]/g,'').toLowerCase());
                 else
                     alert("Sairam! You do not have access to visit this page. Please select the correct group and event");

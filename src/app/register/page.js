@@ -648,7 +648,7 @@ export default function Register(){
             const querySnapshot = await getDocs(q);
             const data = querySnapshot.docs.map((doc) => doc.data());
             let filteredData;
-            if (email === "admin@dlbts.ks")
+            if (email === `admin@dlbts.${process.env.NEXT_PUBLIC_DISTRICT_CODE}`)
                 filteredData = data.filter((fd) => fd.email === email);
             else
                 filteredData = data.filter((fd) => fd.samithi === samithiMap[email]);
@@ -764,9 +764,9 @@ export default function Register(){
                                 </div>
                                 <div className="flex flex-col lg:flex-row">
                                     <div className="flex md:flex-row justify-between md:justify-end gap-x-1 mx-1">
-                                        { email === "admin@dlbts.ks" && <button onClick={handleCloseRegistration} className="font-sans font-semibold text-sm md:text-lg h-10 lg:h-15 rounded-lg bg-blue-100 px-2 md:rounded-xl mt-2 md:h-10 hover:bg-blue-500 hover:text-white hover:cursor-pointer transition duration-300 ease-in-out">Close Registration</button>}
+                                        { email === `admin@dlbts.${process.env.NEXT_PUBLIC_DISTRICT_CODE}` && <button onClick={handleCloseRegistration} className="font-sans font-semibold text-sm md:text-lg h-10 lg:h-15 rounded-lg bg-blue-100 px-2 md:rounded-xl mt-2 md:h-10 hover:bg-blue-500 hover:text-white hover:cursor-pointer transition duration-300 ease-in-out">Close Registration</button>}
                                         {
-                                        (close && email !== "admin@dlbts.ks") ?
+                                        (close && email !== `admin@dlbts.${process.env.NEXT_PUBLIC_DISTRICT_CODE}`) ?
                                             <button onClick={handleAddStudent} disabled className="font-sans font-semibold w-20 lg:h-15 text-sm md:text-lg rounded-lg bg-gray-300 md:rounded-xl mt-2 h-7 md:h-10 hover:cursor-not-allowed transition duration-300 ease-in-out">Add Student</button>
                                         :
                                             <button onClick={handleAddStudent} className="font-sans font-semibold w-40 md:w-51 lg:w-40 lg:h-15 text-sm md:text-lg rounded-lg bg-yellow-100 md:rounded-xl mt-2 h-7 md:h-10 hover:bg-yellow-500 hover:cursor-pointer transition duration-300 ease-in-out">Add Student</button>
@@ -931,7 +931,7 @@ export default function Register(){
                                     </div>
                                     <div>
                                         {
-                                            (email === "admin@dlbts.ks") ? 
+                                            (email === `admin@dlbts.${process.env.NEXT_PUBLIC_DISTRICT_CODE}`) ? 
                                                 <select value={samithi} onChange={(e) => {setSamithi(e.target.value)}} name="samithi" required className="p-3 mb-4 mx-2 font-sans w-68 text-lg md:w-180 lg:mx-4 lg:mb-0 lg:w-210 rounded-xl border">
                                                     <option value="">Select a Samithi</option>
                                                     {samithis.map((district) => (

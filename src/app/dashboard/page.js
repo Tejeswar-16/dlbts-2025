@@ -44,7 +44,7 @@ export default function Dashboard(){
         const a = auth.onAuthStateChanged((user) => {
             if (user)
             {
-                if (user.email != "admin@dlbts.ks")
+                if (user.email != `admin@dlbts.${process.env.NEXT_PUBLIC_DISTRICT_CODE}`)
                 {
                     alert("Sairam! You do not have access to visit Dashboard Page. Please login with correct credentials");
                     router.push("/");

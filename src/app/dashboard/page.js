@@ -200,7 +200,7 @@ export default function Dashboard(){
 
         //Storing data into backup studentDetails
         for(let i=0;i<data.length;i++)
-            await addDoc(collection(db,"backup","2025","studentDetails"),data[i]);
+            await addDoc(collection(db,"backup",`${new Date().getFullYear()}`,"studentDetails"),data[i]);
 
         //Deleting the actual collection
         for (let i=0;i<querySnapshot.docs.length;i++)

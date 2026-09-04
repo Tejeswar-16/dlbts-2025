@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { collection, addDoc, where, query, getDocs, updateDoc, doc, deleteDoc,serverTimestamp  } from "firebase/firestore";
+import { collection, setDoc, addDoc, where, query, getDocs, updateDoc, doc, deleteDoc,serverTimestamp  } from "firebase/firestore";
 import { auth, db } from "@/app/_util/config";
 import Image from "next/image";
 import { signOut } from "firebase/auth";
@@ -12,6 +12,7 @@ import * as XLSX from "xlsx";
 
 export default function Register(){
 
+    const [studentDocId, setStudentDocId] = useState(null);
     const [name,setName] = useState("");
     const [doj,setDoj] = useState("");
     const [dob,setDob] = useState("");
@@ -109,17 +110,20 @@ export default function Register(){
         }
     }
 
-    function handleEvent2Change(event1Value,event2Value){
-        if (event1Value === "Select an event" && event2Value === "Select an event")
+    function handleEvent2Change(event1Value,event2Value,teamEventValue){
+        if (event1Value === "Select an event" && event2Value === "Select an event"){
             setErrorEvent("");
-        else if (event1Value === event2Value)
+            return;
+        }
+        if (event1Value === event2Value){
             setErrorEvent("Sairam! Event 1 and Event 2 cannot be the same");
-        else if ((event1Value === "Drawing" && event2Value === "Quiz") || (event1Value === "Quiz" && event2Value === "Drawing"))
+            return;
+        }
+        if ((event1Value === "Drawing" || event2Value === "Drawing") && teamEventValue === "Quiz"){
             setErrorEvent("Sairam! Students participating in Quiz cannot participate in Drawing and vice-versa");
-        else if ((event1Value === "Bhajans" && event2Value === "Tamizh Chants") || (event1Value === "Tamizh Chants" && event2Value === "Bhajans"))
-            setErrorEvent("Sairam! Same student cannot participate in both Bhajans and Tamizh Chants");
-        else    
-            setErrorEvent("");
+            return;
+        }
+        setErrorEvent("");
     }
 
     function handleGroupChange(event1Value,event2Value,teamEventValue,groupValue){
@@ -200,14 +204,6 @@ export default function Register(){
             setErrorGrp2Exam("Sairam! Students participating in Group 3 events should have definitely appeared for the Group 2 exams");
         else
             setErrorGrp2Exam("");
-    }
-
-    function cleanName(name) {
-        let cleaned = name.replace(/\./g, " ");
-        cleaned = cleaned.trim().replace(/\s+/g, " ");
-        let parts = cleaned.split(" ");
-        parts = parts.filter(word => word.length > 1);
-        return parts.join(" ");
     }
 
     async function handleSelectGrpEvent(eventName) {
@@ -515,18 +511,12 @@ export default function Register(){
             {
                 try
                 {
-                    const id = cleanName(name)+dob;
                     setLoading(true);
-                    const q = query(
-                        collection(db,"studentDetails"),
-                        where("id","==",id),
-                        where("dob","==",dob),
-                    );
-                    const querySnapshot = await getDocs(q);
-                    if (querySnapshot.empty)
+                    if (studentDocId === null)
                     {
-                        await addDoc(collection(db,"studentDetails"),{
-                            id : id,
+                        const studentRef = doc(collection(db, "studentDetails"));
+                        await setDoc(studentRef, {
+                            id : studentRef.id,
                             name : name,
                             dob : dob,
                             doj : doj,
@@ -543,33 +533,29 @@ export default function Register(){
                             email : email
                         });
                         alert("Sairam! Registered Successfully");
-                        window.location.reload();
                     }
                     else
                     {
-                        for (const document of querySnapshot.docs) {
-                            const docRef = doc(db,"studentDetails",document.id);
-                            await updateDoc(docRef,{
-                                id : id,
-                                name : name,
-                                dob : dob,
-                                doj : doj,
-                                grp2Exam : grp2Exam,
-                                gender : gender,
-                                samithi : samithi,
-                                group : group,
-                                event1 : event1 !== "Select an event" ? event1 : "N/A",
-                                event2 : event2 !== "Select an event" ? event2 : "N/A",
-                                teamEvent: teamEvent !== "Select an event" ? teamEvent : "N/A",
-                                groupEvent : groupEvent !== "Select an event" ? groupEvent : "N/A",
-                                attendance : "A",
-                                timestamp : new Date(),
-                                email : email
-                            });
-                        }
+                        const studentRef = doc(db,"studentDetails",studentDocId);
+                        await updateDoc(studentRef,{
+                            name : name,
+                            dob : dob,
+                            doj : doj,
+                            grp2Exam : grp2Exam,
+                            gender : gender,
+                            samithi : samithi,
+                            group : group,
+                            event1 : event1 !== "Select an event" ? event1 : "N/A",
+                            event2 : event2 !== "Select an event" ? event2 : "N/A",
+                            teamEvent: teamEvent !== "Select an event" ? teamEvent : "N/A",
+                            groupEvent : groupEvent !== "Select an event" ? groupEvent : "N/A",
+                            attendance : "A",
+                            timestamp : new Date(),
+                            email : email
+                        });
                         alert("Sairam! Updated Successfully");
-                        window.location.reload();
                     }
+                    window.location.reload();
                 }
                 catch(error)
                 {
@@ -661,6 +647,7 @@ export default function Register(){
 
     function handleAddStudent(){
         setClicked(true);
+        setStudentDocId(null);
         setName("");
         setDob("");
         setDoj("");
@@ -673,8 +660,9 @@ export default function Register(){
         setGroupEvent("Select an event");
     }
 
-    function handleUpdateDetails(nameValue,grpValue,grp2ExamValue,dobValue,dojValue,genderValue,samithiValue,event1Value,event2Value,teamEventValue,grpEventValue){
+    function handleUpdateDetails(docId,nameValue,grpValue,grp2ExamValue,dobValue,dojValue,genderValue,samithiValue,event1Value,event2Value,teamEventValue,grpEventValue){
         setClicked(true);
+        setStudentDocId(docId);
         setName(nameValue);
         setGroup(grpValue);
         setGrp2Exam(grp2ExamValue !== "" ? grp2ExamValue : "N/A");
@@ -696,21 +684,20 @@ export default function Register(){
         XLSX.writeFile(workbook,samithi.toLowerCase()+".xlsx");
     }
 
-    async function handleDeleteStudent(nameVal,dobVal)
+    async function handleDeleteStudent(studentId, nameVal)
     {
         const confirmDelete = window.confirm(`Sairam! Are you sure to delete this student (${nameVal})`)
         if (!confirmDelete)
             return;
-        const id = cleanName(nameVal)+dobVal;
-        const q = query(
-            collection(db,"studentDetails"),
-            where("id","==",id)
-        );
-        const querySnapshot = await getDocs(q);
-        const student = querySnapshot.docs[0];
-        await deleteDoc((doc(db,"studentDetails",student.id)));
-        alert("Deleted sucessfully");
-        window.location.reload();
+        try{
+            await deleteDoc(doc(db,"studentDetails",studentId));
+            alert("Deleted sucessfully");
+            window.location.reload();
+        }
+        catch(error){
+            console.error(error);
+            alert("Unable to delete student");
+        }
     }
 
     async function handleCloseRegistration(){
@@ -818,8 +805,8 @@ export default function Register(){
                                                 <tr key={student.id} className="hover:bg-gray-200 transition duration-300 ease-in-out">
                                                     <td className="font-sans text-lg p-2 border border-black">
                                                         <div className="flex flex-row">
-                                                            <FaEdit onClick={() => handleUpdateDetails(student.name,student.group,student.grp2Exam,student.dob,student.doj,student.gender,student.samithi,student.event1,student.event2,student.teamEvent,student.groupEvent)} className="mx-auto text-blue-800 text-3xl hover:cursor-pointer"/>
-                                                            <MdDelete className="mx-auto hover:cursor-pointer text-red-500 text-3xl" onClick={() => handleDeleteStudent(student.name,student.dob)} />
+                                                            <FaEdit onClick={() => handleUpdateDetails(student.id,student.name,student.group,student.grp2Exam,student.dob,student.doj,student.gender,student.samithi,student.event1,student.event2,student.teamEvent,student.groupEvent)} className="mx-auto text-blue-800 text-3xl hover:cursor-pointer"/>
+                                                            <MdDelete className="mx-auto hover:cursor-pointer text-red-500 text-3xl" onClick={() => handleDeleteStudent(student.id,student.name)} />
                                                         </div>
                                                     </td>
                                                     <td className="font-sans text-lg p-2 border border-black">{student.name}</td>
@@ -963,7 +950,7 @@ export default function Register(){
                                             Pick to register for the 1st event
                                         </div>
                                         <div>
-                                            <select value={event1} onChange={(e) => {setEvent1(e.target.value);handleEvent2Change(e.target.value,event2);handleGroupChange(e.target.value,event2,teamEvent,groupEvent)}} name="event1" className="p-3 mb-4 mx-2 font-sans w-68 text-lg md:w-180 lg:mx-4 lg:mb-0 lg:w-210 rounded-xl border">
+                                            <select value={event1} onChange={(e) => {setEvent1(e.target.value);handleEvent2Change(e.target.value,event2,teamEvent);handleGroupChange(e.target.value,event2,teamEvent,groupEvent)}} name="event1" className="p-3 mb-4 mx-2 font-sans w-68 text-lg md:w-180 lg:mx-4 lg:mb-0 lg:w-210 rounded-xl border">
                                                 <option value="Select an event">Select an event</option>
                                                 <option>Sloka Chanting</option>
                                                 <option>Veda Chanting</option>
@@ -982,7 +969,7 @@ export default function Register(){
                                             Pick to register for the 1st event
                                         </div>
                                         <div>
-                                            <select value={event1} onChange={(e) => {setEvent1(e.target.value);handleEvent2Change(e.target.value,event2);handleGender1(gender,e.target.value);handleGroupChange(e.target.value,event2,teamEvent,groupEvent)}} name="event1" className="p-3 mb-4 mx-2 font-sans w-68 text-lg md:w-180 lg:mx-4 lg:mb-0 lg:w-210 rounded-xl border">
+                                            <select value={event1} onChange={(e) => {setEvent1(e.target.value);handleEvent2Change(e.target.value,event2,teamEvent);handleGender1(gender,e.target.value);handleGroupChange(e.target.value,event2,teamEvent,groupEvent)}} name="event1" className="p-3 mb-4 mx-2 font-sans w-68 text-lg md:w-180 lg:mx-4 lg:mb-0 lg:w-210 rounded-xl border">
                                                 <option value="Select an event">Select an event</option>
                                                 <option>Sloka Chanting - Boys</option>
                                                 <option>Sloka Chanting - Girls</option>
@@ -1005,7 +992,7 @@ export default function Register(){
                                             Pick to register for the 1st event
                                         </div>
                                         <div>
-                                            <select value={event1} onChange={(e) => {setEvent1(e.target.value);handleEvent2Change(e.target.value,event2);handleGender1(gender,e.target.value);handleGroupChange(e.target.value,event2,teamEvent,groupEvent)}} name="event1" className="p-3 mb-4 mx-2 font-sans w-68 text-lg md:w-180 lg:mx-4 lg:mb-0 lg:w-210 rounded-xl border">
+                                            <select value={event1} onChange={(e) => {setEvent1(e.target.value);handleEvent2Change(e.target.value,event2,teamEvent);handleGender1(gender,e.target.value);handleGroupChange(e.target.value,event2,teamEvent,groupEvent)}} name="event1" className="p-3 mb-4 mx-2 font-sans w-68 text-lg md:w-180 lg:mx-4 lg:mb-0 lg:w-210 rounded-xl border">
                                                 <option value="Select an event">Select an event</option>
                                                 <option>Sloka Chanting - Boys</option>
                                                 <option>Sloka Chanting - Girls</option>
@@ -1032,7 +1019,7 @@ export default function Register(){
                                             Pick to register for the 2nd event (OPTIONAL)
                                         </div>
                                         <div>
-                                            <select value={event2} onChange={(e) => {setEvent2(e.target.value);handleEvent2Change(event1,e.target.value);handleGender2(gender,e.target.value);handleGroupChange(event1,e.target.value,teamEvent,groupEvent)}} name="event2" className="p-3 mb-4 mx-2 font-sans text-lg w-68 md:w-180 lg:mx-4 lg:mb-0 lg:w-210 rounded-xl border">
+                                            <select value={event2} onChange={(e) => {setEvent2(e.target.value);handleEvent2Change(event1,e.target.value,teamEvent);handleGender2(gender,e.target.value);handleGroupChange(event1,e.target.value,teamEvent,groupEvent)}} name="event2" className="p-3 mb-4 mx-2 font-sans text-lg w-68 md:w-180 lg:mx-4 lg:mb-0 lg:w-210 rounded-xl border">
                                                 <option value="Select an event">Select an event</option>
                                                 <option>Sloka Chanting</option>
                                                 <option>Veda Chanting</option>
@@ -1052,7 +1039,7 @@ export default function Register(){
                                             Pick to register for the 2nd event (OPTIONAL)
                                         </div>
                                         <div>
-                                            <select value={event2} onChange={(e) => {setEvent2(e.target.value);handleEvent2Change(event1,e.target.value);handleGender2(gender,e.target.value);handleGroupChange(event1,e.target.value,teamEvent,groupEvent)}} name="event2" className="p-3 mb-4 mx-2 font-sans w-68 text-lg md:w-180 lg:mx-4 lg:mb-0 lg:w-210 rounded-xl border">
+                                            <select value={event2} onChange={(e) => {setEvent2(e.target.value);handleEvent2Change(event1,e.target.value,teamEvent);handleGender2(gender,e.target.value);handleGroupChange(event1,e.target.value,teamEvent,groupEvent)}} name="event2" className="p-3 mb-4 mx-2 font-sans w-68 text-lg md:w-180 lg:mx-4 lg:mb-0 lg:w-210 rounded-xl border">
                                                 <option value="Select an event">Select an event</option>
                                                  <option>Sloka Chanting - Boys</option>
                                                 <option>Sloka Chanting - Girls</option>
@@ -1076,7 +1063,7 @@ export default function Register(){
                                             Pick to register for the 2nd event (OPTIONAL)
                                         </div>
                                         <div>
-                                            <select value={event2} onChange={(e) => {setEvent2(e.target.value);handleEvent2Change(event1,e.target.value);handleGender2(gender,e.target.value);handleGroupChange(event1,e.target.value,teamEvent,groupEvent)}} name="event2" className="p-3 mb-4 mx-2 font-sans w-68 text-lg md:w-180 lg:mx-4 lg:mb-0 lg:w-210 rounded-xl border">
+                                            <select value={event2} onChange={(e) => {setEvent2(e.target.value);handleEvent2Change(event1,e.target.value,teamEvent);handleGender2(gender,e.target.value);handleGroupChange(event1,e.target.value,teamEvent,groupEvent)}} name="event2" className="p-3 mb-4 mx-2 font-sans w-68 text-lg md:w-180 lg:mx-4 lg:mb-0 lg:w-210 rounded-xl border">
                                                 <option value="Select an event">Select an event</option>
                                                 <option>Sloka Chanting - Boys</option>
                                                 <option>Sloka Chanting - Girls</option>
@@ -1103,7 +1090,7 @@ export default function Register(){
                                             Pick to register for the TEAM event (OPTIONAL)
                                         </div>
                                         <div>
-                                            <select value={teamEvent} onChange={(e) => {setTeamEvent(e.target.value);handleGroupChange(event1,event2,e.target.value,groupEvent);handleTeamGender(gender,e.target.value)}} name="teamEvent1" className="p-3 mb-4 mx-2 font-sans w-68 text-lg md:w-180 lg:mx-4 lg:mb-0 lg:w-210 rounded-xl border">
+                                            <select value={teamEvent} onChange={(e) => {setTeamEvent(e.target.value);handleEvent2Change(event1,event2,e.target.value);handleGroupChange(event1,event2,e.target.value,groupEvent);handleTeamGender(gender,e.target.value)}} name="teamEvent1" className="p-3 mb-4 mx-2 font-sans w-68 text-lg md:w-180 lg:mx-4 lg:mb-0 lg:w-210 rounded-xl border">
                                                 <option value="Select an event">Select an event</option>
                                                 <option>Wealth out of Waste</option>
                                                 <option>Quiz</option>
@@ -1118,7 +1105,7 @@ export default function Register(){
                                             Pick to register for the TEAM event (OPTIONAL)
                                         </div>
                                         <div>
-                                            <select value={teamEvent} onChange={(e) => {setTeamEvent(e.target.value);handleGroupChange(event1,event2,e.target.value,groupEvent);handleTeamGender(gender,e.target.value)}} name="teamEvent1" className="p-3 mb-4 mx-2 font-sans w-68 text-lg md:w-180 lg:mx-4 lg:mb-0 lg:w-210 rounded-xl border">
+                                            <select value={teamEvent} onChange={(e) => {setTeamEvent(e.target.value);handleEvent2Change(event1,event2,e.target.value);handleGroupChange(event1,event2,e.target.value,groupEvent);handleTeamGender(gender,e.target.value)}} name="teamEvent1" className="p-3 mb-4 mx-2 font-sans w-68 text-lg md:w-180 lg:mx-4 lg:mb-0 lg:w-210 rounded-xl border">
                                                 <option value="Select an event">Select an event</option>
                                                 <option>Dumb Charades</option>
                                                 <option>Wealth out of Waste</option>
@@ -1134,7 +1121,7 @@ export default function Register(){
                                             Pick to register for the TEAM event (OPTIONAL)
                                         </div>
                                         <div>
-                                            <select value={teamEvent} onChange={(e) => {setTeamEvent(e.target.value);handleGroupChange(event1,event2,e.target.value,groupEvent);handleTeamGender(gender,e.target.value)}} name="teamEvent1" className="p-3 mb-4 mx-2 font-sans w-68 text-lg md:w-180 lg:mx-4 lg:mb-0 lg:w-210 rounded-xl border">
+                                            <select value={teamEvent} onChange={(e) => {setTeamEvent(e.target.value);handleEvent2Change(event1,event2,e.target.value);handleGroupChange(event1,event2,e.target.value,groupEvent);handleTeamGender(gender,e.target.value)}} name="teamEvent1" className="p-3 mb-4 mx-2 font-sans w-68 text-lg md:w-180 lg:mx-4 lg:mb-0 lg:w-210 rounded-xl border">
                                                 <option value="Select an event">Select an event</option>
                                                 <option>Wealth out of Waste</option>
                                                 <option>Quiz</option>

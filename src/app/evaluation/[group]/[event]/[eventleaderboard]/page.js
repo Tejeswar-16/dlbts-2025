@@ -308,7 +308,7 @@ export default function EventLeaderboard(){
                                             ((email.slice(7,9) === "ge") || (email.slice(7,9) === "te")) ? 
                                                 <>
                                                     {process.env.NEXT_PUBLIC_DISTRICT_CODE === 'ks' && <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Samithi Name</td>}
-                                                    {process.env.NEXT_PUBLIC_DISTRICT_CODE === 'ks' && <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Student IDs</td>}
+                                                    <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Student IDs</td>
                                                 </>
                                             :
                                                 <>

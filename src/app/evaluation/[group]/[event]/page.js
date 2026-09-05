@@ -98,6 +98,7 @@ export default function Judging(){
     const [loading,setLoading] = useState(false);
     const [clicked,setClicked] = useState(false);
     const [amName,setAmName] = useState("");
+    const [amStudentId,setAmStudentId] = useState("");
     const [amDoB,setAmDoB] = useState("");
     const [amGroup,setAmGroup] = useState("");
     const [amGender,setAmGender] = useState("");
@@ -351,8 +352,9 @@ export default function Judging(){
         return parts.join(" ");
     }
 
-    function handleAwardMarks(name,dob,group,gender,samithi){
+    function handleAwardMarks(id,name,dob,group,gender,samithi){
         setClicked(true);
+        setAmStudentId(id);
         setAmName(name);
         setAmDoB(dob);
         setAmGroup(group);
@@ -373,6 +375,7 @@ export default function Judging(){
                 {
                     filteredData = [{
                         id : "",
+                        studentId: id,
                         bhaavam : 0,
                         tune : 0,
                         pronunciation : 0,
@@ -402,6 +405,7 @@ export default function Judging(){
                 {
                     filteredData = [{
                         id : "",
+                        studentId: id,
                         bhaavam : 0,
                         shruthi : 0,
                         memory_pronunciation : 0,
@@ -433,6 +437,7 @@ export default function Judging(){
                 {
                     filteredData = [{
                         id : "",
+                        studentId: id,
                         bhaavam : 0,
                         intonation : 0,
                         pronunciation : 0,
@@ -462,6 +467,7 @@ export default function Judging(){
                 {
                     filteredData = [{
                         id : "",
+                        studentId: id,
                         presentation : 0,
                         content : 0,
                         language : 0,
@@ -489,6 +495,7 @@ export default function Judging(){
                 {
                     filteredData = [{
                         id : "",
+                        studentId: id,
                         theme : 0,
                         colour_coordination : 0,
                         layout : 0,
@@ -516,6 +523,7 @@ export default function Judging(){
                 {
                     filteredData = [{
                         id : "",
+                        studentId: id,
                         shruthi : 0,
                         ragam : 0,
                         talam : 0,
@@ -549,6 +557,7 @@ export default function Judging(){
                 {
                     filteredData = [{
                         id : "",
+                        studentId: id,
                         asthetics : 0,
                         resource_management : 0,
                         teamwork : 0,
@@ -576,6 +585,7 @@ export default function Judging(){
                 {
                     filteredData = [{
                         id : "",
+                        studentId: id,
                         totalMarks : 0,
                         remarks: "",
                         dob : "",
@@ -598,6 +608,7 @@ export default function Judging(){
                 {
                     filteredData = [{
                         id : "",
+                        studentId: id,
                         character_representation : 0,
                         expression_delivery : 0,
                         content_relevance : 0,
@@ -625,6 +636,7 @@ export default function Judging(){
                 {
                     filteredData = [{
                         id : "",
+                        studentId: id,
                         content : 0,
                         language_fluency : 0,
                         overall_presentation : 0,
@@ -652,6 +664,7 @@ export default function Judging(){
                 {
                     filteredData = [{
                         id : "",
+                        studentId: id,
                         content_relevance : 0,
                         personal_connection : 0,
                         expression_delivery : 0,
@@ -681,6 +694,7 @@ export default function Judging(){
                 {
                     filteredData = [{
                         id : "",
+                        studentId: id,
                         accurate_sayings : 0,
                         totalMarks : 0,
                         remarks: "",
@@ -704,6 +718,7 @@ export default function Judging(){
                 {
                     filteredData = [{
                         id : "",
+                        studentId: id,
                         creativity_uniqueness : 0,
                         wastage_minimisation : 0,
                         utility_practicality : 0,
@@ -735,6 +750,7 @@ export default function Judging(){
                 {
                     filteredData = [{
                         id : "",
+                        studentId: id,
                         theme_relevance : 0,
                         creativity : 0,
                         colour_combination : 0,
@@ -786,6 +802,7 @@ export default function Judging(){
                 const docRef = doc(db,"studentMarks",document.id);
                 await updateDoc(docRef,{
                         id : id,
+                        studentId: amStudentId,
                         name : amName,
                         dob : amDoB,
                         group : amGroup,
@@ -807,6 +824,7 @@ export default function Judging(){
             {
                 await addDoc(collection(db,"studentMarks"),{
                         id : id,
+                        studentId: amStudentId,
                         name : amName,
                         dob : amDoB,
                         group : amGroup,
@@ -833,6 +851,7 @@ export default function Judging(){
                 const docRef = doc(db,"studentMarks",document.id);
                 await updateDoc(docRef,{
                         id : id,
+                        studentId: amStudentId,
                         name : amName,
                         dob : amDoB,
                         group : amGroup,
@@ -855,6 +874,7 @@ export default function Judging(){
             {
                 await addDoc(collection(db,"studentMarks"),{
                         id : id,
+                        studentId: amStudentId,
                         name : amName,
                         dob : amDoB,
                         group : amGroup,
@@ -882,6 +902,7 @@ export default function Judging(){
                 const docRef = doc(db,"studentMarks",document.id);
                 await updateDoc(docRef,{
                         id : id,
+                        studentId: amStudentId,
                         name : amName,
                         dob : amDoB,
                         group : amGroup,
@@ -903,6 +924,7 @@ export default function Judging(){
             {
                 await addDoc(collection(db,"studentMarks"),{
                         id : id,
+                        studentId: amStudentId,
                         name : amName,
                         dob : amDoB,
                         group : amGroup,
@@ -929,6 +951,7 @@ export default function Judging(){
                 const docRef = doc(db,"studentMarks",document.id);
                 await updateDoc(docRef,{
                         id : id,
+                        studentId: amStudentId,
                         name : amName,
                         dob : amDoB,
                         group : amGroup,
@@ -949,6 +972,7 @@ export default function Judging(){
             {
                 await addDoc(collection(db,"studentMarks"),{
                         id : id,
+                        studentId: amStudentId,
                         name : amName,
                         dob : amDoB,
                         group : amGroup,
@@ -974,6 +998,7 @@ export default function Judging(){
                 const docRef = doc(db,"studentMarks",document.id);
                 await updateDoc(docRef,{
                         id : id,
+                        studentId: amStudentId,
                         name : amName,
                         dob : amDoB,
                         group : amGroup,
@@ -994,6 +1019,7 @@ export default function Judging(){
             {
                 await addDoc(collection(db,"studentMarks"),{
                         id : id,
+                        studentId: amStudentId,
                         name : amName,
                         dob : amDoB,
                         group : amGroup,
@@ -1019,6 +1045,7 @@ export default function Judging(){
                 const docRef = doc(db,"studentMarks",document.id);
                 await updateDoc(docRef,{
                         id : id,
+                        studentId: amStudentId,
                         name : amName,
                         dob : amDoB,
                         group : amGroup,
@@ -1042,6 +1069,7 @@ export default function Judging(){
             {
                 await addDoc(collection(db,"studentMarks"),{
                         id : id,
+                        studentId: amStudentId,
                         name : amName,
                         dob : amDoB,
                         group : amGroup,
@@ -1070,6 +1098,7 @@ export default function Judging(){
                 const docRef = doc(db,"studentMarks",document.id);
                 await updateDoc(docRef,{
                         id : id,
+                        studentId: amStudentId,
                         name : amName,
                         dob : amDoB,
                         group : amGroup,
@@ -1090,6 +1119,7 @@ export default function Judging(){
             {
                 await addDoc(collection(db,"studentMarks"),{
                         id : id,
+                        studentId: amStudentId,
                         name : amName,
                         dob : amDoB,
                         group : amGroup,
@@ -1115,6 +1145,7 @@ export default function Judging(){
                 const docRef = doc(db,"studentMarks",document.id);
                 await updateDoc(docRef,{
                         id : id,
+                        studentId: amStudentId,
                         name : amName,
                         dob : amDoB,
                         group : amGroup,
@@ -1132,6 +1163,7 @@ export default function Judging(){
             {
                 await addDoc(collection(db,"studentMarks"),{
                         id : id,
+                        studentId: amStudentId,
                         name : amName,
                         dob : amDoB,
                         group : amGroup,
@@ -1154,6 +1186,7 @@ export default function Judging(){
                 const docRef = doc(db,"studentMarks",document.id);
                 await updateDoc(docRef,{
                         id : id,
+                        studentId: amStudentId,
                         name : amName,
                         dob : amDoB,
                         group : amGroup,
@@ -1174,6 +1207,7 @@ export default function Judging(){
             {
                 await addDoc(collection(db,"studentMarks"),{
                         id : id,
+                        studentId: amStudentId,
                         name : amName,
                         dob : amDoB,
                         group : amGroup,
@@ -1199,6 +1233,7 @@ export default function Judging(){
                 const docRef = doc(db,"studentMarks",document.id);
                 await updateDoc(docRef,{
                         id : id,
+                        studentId: amStudentId,
                         name : amName,
                         dob : amDoB,
                         group : amGroup,
@@ -1219,6 +1254,7 @@ export default function Judging(){
             {
                 await addDoc(collection(db,"studentMarks"),{
                         id : id,
+                        studentId: amStudentId,
                         name : amName,
                         dob : amDoB,
                         group : amGroup,
@@ -1244,6 +1280,7 @@ export default function Judging(){
                 const docRef = doc(db,"studentMarks",document.id);
                 await updateDoc(docRef,{
                         id : id,
+                        studentId: amStudentId,
                         name : amName,
                         dob : amDoB,
                         group : amGroup,
@@ -1265,6 +1302,7 @@ export default function Judging(){
             {
                 await addDoc(collection(db,"studentMarks"),{
                         id : id,
+                        studentId: amStudentId,
                         name : amName,
                         dob : amDoB,
                         group : amGroup,
@@ -1291,6 +1329,7 @@ export default function Judging(){
                 const docRef = doc(db,"studentMarks",document.id);
                 await updateDoc(docRef,{
                         id : id,
+                        studentId: amStudentId,
                         name : amName,
                         dob : amDoB,
                         group : amGroup,
@@ -1309,6 +1348,7 @@ export default function Judging(){
             {
                 await addDoc(collection(db,"studentMarks"),{
                         id : id,
+                        studentId: amStudentId,
                         name : amName,
                         dob : amDoB,
                         group : amGroup,
@@ -1332,6 +1372,7 @@ export default function Judging(){
                 const docRef = doc(db,"studentMarks",document.id);
                 await updateDoc(docRef,{
                         id : id,
+                        studentId: amStudentId,
                         name : amName,
                         dob : amDoB,
                         group : amGroup,
@@ -1354,6 +1395,7 @@ export default function Judging(){
             {
                 await addDoc(collection(db,"studentMarks"),{
                         id : id,
+                        studentId: amStudentId,
                         name : amName,
                         dob : amDoB,
                         group : amGroup,
@@ -1381,6 +1423,7 @@ export default function Judging(){
                 const docRef = doc(db,"studentMarks",document.id);
                 await updateDoc(docRef,{
                         id : id,
+                        studentId: amStudentId,
                         name : amName,
                         dob : amDoB,
                         group : amGroup,
@@ -1403,6 +1446,7 @@ export default function Judging(){
             {
                 await addDoc(collection(db,"studentMarks"),{
                         id : id,
+                        studentId: amStudentId,
                         name : amName,
                         dob : amDoB,
                         group : amGroup,
@@ -1530,7 +1574,7 @@ export default function Judging(){
                 ...team,
                 members: (team.members || []).map((member) => ({
                     ...member,
-                    present: presentIds.has(member.studentId)
+                    present: presentIds.has(member.docId)
                 }))
             }))
             .filter((team) =>
@@ -2081,7 +2125,8 @@ export default function Judging(){
                                                 <td className="font-sans px-2 py-4 font-semibold border border-black">
                                                     <div className="md:flex md:flex-row md:justify-between md:items-center">
                                                         <div>
-                                                            <h1 className="font-sans font-bold text-lg lg:text-2xl">{student.name}</h1>
+                                                            {process.env.NEXT_PUBLIC_DISTRICT_CODE === 'ks' && <h1 className="font-sans font-bold text-lg lg:text-2xl">{student.name}</h1>}
+                                                            <h1 className="font-sans font-bold text-lg lg:text-2xl">{student.studentId}</h1>
                                                         </div>
                                                         <div className="flex flex-col justify-between items-center mt-2 mb-2 lg:mt-0 lg:mb-0">
                                                             <h1 className="font-sans text-sm lg:text-md">Group: {student.group}</h1>
@@ -2098,7 +2143,7 @@ export default function Judging(){
                                                         )
                                                     }
                                                 </td>
-                                                <td className="font-sans px-2 py-2 border border-black"><button disabled={disabled} onClick={() => {handleAwardMarks(student.name,student.dob,student.group,student.gender,student.samithi)}} className={!disabled ? `bg-yellow-200 p-2 rounded-xl font-semibold shadow-xl hover:cursor-pointer` : `bg-gray-200 p-2 rounded-xl shadow-xl hover:cursor-not-allowed`}>Award Marks</button></td>
+                                                <td className="font-sans px-2 py-2 border border-black"><button disabled={disabled} onClick={() => {handleAwardMarks(student.studentId,student.name,student.dob,student.group,student.gender,student.samithi)}} className={!disabled ? `bg-yellow-200 p-2 rounded-xl font-semibold shadow-xl hover:cursor-pointer` : `bg-gray-200 p-2 rounded-xl shadow-xl hover:cursor-not-allowed`}>Award Marks</button></td>
                                             </tr>
                                         )})
                                     }
@@ -2116,7 +2161,8 @@ export default function Judging(){
                                                             {
                                                                 group.members.map((student,index) => (
                                                                     <div key={index} className="border p-2 m-2 rounded-lg shadow-lg shadow-gray-500">
-                                                                        <h1 className="font-sans text-sm lg:text-md">Name: {student.name} ({student.present ? "Present" : "Absent"})</h1>
+                                                                        {process.env.NEXT_PUBLIC_DISTRICT_CODE === 'ks' && <h1 className="font-sans text-sm lg:text-md">Name: {student.name} ({student.present ? "Present" : "Absent"})</h1>}
+                                                                        <h1 className="font-sans text-sm lg:text-md">ID: {student.studentId} ({student.present ? "Present" : "Absent"})</h1>
                                                                         <h1 className="font-sans text-sm lg:text-md">Group: {student.group}</h1>
                                                                         <h1 className="font-sans text-sm lg:text-md">Gender: {student.gender}</h1>
                                                                         <h1 className="font-sans text-sm lg:text-md">DOB: {student.dob}</h1>
@@ -2126,7 +2172,7 @@ export default function Judging(){
                                                         </div>                                                        
                                                     </div>
                                                 </td>
-                                                <td className="font-sans px-2 py-2 border border-black"><button disabled={disabled} onClick={() => {handleAwardMarks(group.members.map((s) => s.name).join(", ") ,group.members.map((s) => s.dob).join(", "),group.members.map((s) => s.group).join(", "),group.members[0].gender,group.samithi)}} className={!disabled ? `bg-yellow-200 p-2 rounded-lg font-semibold shadow-lg shadow-yellow-100 hover:cursor-pointer` : `bg-gray-200 p-2 rounded-xl shadow-xl hover:cursor-not-allowed`}>Award Marks</button></td>
+                                                <td className="font-sans px-2 py-2 border border-black"><button disabled={disabled} onClick={() => {handleAwardMarks(group.members.map((s) => s.studentId).join(", "),group.members.map((s) => s.name).join(", ") ,group.members.map((s) => s.dob).join(", "),group.members.map((s) => s.group).join(", "),group.members[0].gender,group.samithi)}} className={!disabled ? `bg-yellow-200 p-2 rounded-lg font-semibold shadow-lg shadow-yellow-100 hover:cursor-pointer` : `bg-gray-200 p-2 rounded-xl shadow-xl hover:cursor-not-allowed`}>Award Marks</button></td>
                                             </tr>
                                         ))
                                     }
@@ -2143,7 +2189,7 @@ export default function Judging(){
                                 <button onClick={handleClose} className="rounded-md p-1 font-sans text-sm hover:cursor-pointer text-gray-100">❌</button>
                             </div>
                             <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Award Marks</h1>
-                            <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Student Name: {amName}</h1>
+                            {process.env.NEXT_PUBLIC_DISTRICT_CODE === 'ks' && <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Student Name: {amName}</h1>}
                             <table className="mx-auto text-center w-70 md:w-100 mt-2 mb-2">
                                 <thead className="bg-blue-950 text-white">
                                     <tr>

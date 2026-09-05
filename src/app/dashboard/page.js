@@ -44,7 +44,7 @@ export default function Dashboard(){
         const a = auth.onAuthStateChanged((user) => {
             if (user)
             {
-                if (user.email != `admin@dlbts.${process.env.NEXT_PUBLIC_DISTRICT_CODE}`)
+                if ((user.email != `admin@dlbts.${process.env.NEXT_PUBLIC_DISTRICT_CODE}` && !user.email.startsWith('registrationdesk')))
                 {
                     alert("Sairam! You do not have access to visit Dashboard Page. Please login with correct credentials");
                     router.push("/");
@@ -243,13 +243,19 @@ export default function Dashboard(){
                         <div className="flex flex-col md:flex md:flex-row md:justify-end">
                             <div className="flex flex-col md:flex-row">
                                 <div className="flex flex-col">
-                                    <button onClick={handleBackup} className="font-sans font-semibold text-sm rounded-lg border border-blue-500 bg-blue-200 px-2 md:rounded-xl mt-1 mb-1 mx-2 md:mx-2 hover:text-black hover:bg-blue-500 hover:text-white hover:cursor-pointer transition duration-300 ease-in-out">Backup</button>
-                                    <button onClick={handleEventClick} className="font-sans font-semibold text-sm rounded-lg border border-fuchsia-500 bg-fuchsia-200 px-2 md:rounded-xl mb-1 mx-2 md:mx-2 hover:text-black hover:bg-fuchsia-500 hover:cursor-pointer transition duration-300 ease-in-out">Events</button>        
-                                    <button onClick={handleEventsClick} className="font-sans font-semibold text-sm rounded-lg border border-yellow-500 bg-yellow-100 px-2 md:rounded-xl mb-2 mx-1 md:mx-2 hover:bg-yellow-500 hover:cursor-pointer transition duration-300 ease-in-out">Leaderboard</button>
+                                    {
+                                        adminEmail === `admin@dlbts.${process.env.NEXT_PUBLIC_DISTRICT_CODE}` &&
+                                        <>
+                                            <button onClick={handleBackup} className="font-sans font-semibold text-sm rounded-lg border border-blue-500 bg-blue-200 px-2 md:rounded-xl mt-1 mb-1 mx-2 md:mx-2 hover:text-black hover:bg-blue-500 hover:text-white hover:cursor-pointer transition duration-300 ease-in-out">Backup</button>
+                                            <button onClick={handleEventClick} className="font-sans font-semibold text-sm rounded-lg border border-fuchsia-500 bg-fuchsia-200 px-2 md:rounded-xl mb-1 mx-2 md:mx-2 hover:text-black hover:bg-fuchsia-500 hover:cursor-pointer transition duration-300 ease-in-out">Events</button>        
+                                            <button onClick={handleEventsClick} className="font-sans font-semibold text-sm rounded-lg border border-yellow-500 bg-yellow-100 px-2 md:rounded-xl mb-2 mx-1 md:mx-2 hover:bg-yellow-500 hover:cursor-pointer transition duration-300 ease-in-out">Leaderboard</button>
+                                        </>
+                                    }
                                 </div>
                                 <div className="flex flex-col">
-                                    <button onClick={handleEClick} className="font-sans font-semibold text-sm rounded-lg border border-purple-500 bg-purple-200 px-2 md:rounded-xl mx-2 w-40 md:w-25 md:mx-2 md:mt-1 hover:text-black hover:bg-purple-500 hover:cursor-pointer transition duration-300 ease-in-out">Registration Form</button>
-                                    <button onClick={handleLogout} className="font-sans font-semibold text-sm rounded-lg border border-red-500 bg-red-200 px-2 md:rounded-xl mx-2 md:mx-2 hover:bg-red-500 mt-1 mb-1 md:mt-2 hover:cursor-pointer hover:text-white transition duration-300 ease-in-out">Logout</button>
+                                    {adminEmail === `admin@dlbts.${process.env.NEXT_PUBLIC_DISTRICT_CODE}` && <button onClick={handleEClick} className="font-sans font-semibold text-sm rounded-lg border border-purple-500 bg-purple-200 px-2 md:rounded-xl mx-2 w-40 md:w-25 md:mx-2 md:mt-1 hover:text-black hover:bg-purple-500 hover:cursor-pointer transition duration-300 ease-in-out">Registration Form</button>}
+                                    {adminEmail === `admin@dlbts.${process.env.NEXT_PUBLIC_DISTRICT_CODE}` && <button onClick={handleLogout} className="font-sans font-semibold text-sm rounded-lg border border-red-500 bg-red-200 px-2 md:rounded-xl mx-2 md:mx-2 hover:bg-red-500 mt-1 mb-1 md:mt-2 hover:cursor-pointer hover:text-white transition duration-300 ease-in-out">Logout</button>}
+                                    {adminEmail.startsWith('registrationdesk') && <button onClick={handleLogout} className="font-sans font-semibold text-sm rounded-lg border border-red-500 bg-red-200 px-2 md:rounded-xl mx-2 md:mx-2 hover:bg-red-500 mt-1 mb-1 md:mt-2 h-15 text-lg md:text-xl hover:cursor-pointer hover:text-white transition duration-300 ease-in-out">Logout</button>}
                                 </div>
                             </div>
                         </div>
@@ -560,7 +566,7 @@ export default function Dashboard(){
                                     studentData.map((student) => (
                                         <tr key={student.id} className={student.attendance === "P" ? "hover:bg-green-200 bg-green-100 transition duration-300 ease-in-out" : "hover:bg-red-200 bg-red-100 transition duration-300 ease-in-out"}>
                                             <td onClick={() => handleAttendance(student.id)} className="font-sans text-lg px-4 py-2 border border-black hover:cursor-pointer select-none">{student.attendance}</td>
-                                            <td className="font-sans text-lg px-4 py-2 border border-black">{student.name}</td>
+                                            <td className="font-sans text-lg px-4 py-2 border border-black">{student.name} ({student.studentId})</td>
                                             <td className="font-sans text-lg px-4 py-2 border border-black">{student.gender}</td>
                                             <td className="font-sans text-lg px-4 py-2 border border-black">{student.dob}</td>
                                             <td className="font-sans text-lg px-4 py-2 border border-black">{student.doj}</td>

@@ -27,6 +27,8 @@ export default function Home() {
 
       if (userEmail === `admin@dlbts.${process.env.NEXT_PUBLIC_DISTRICT_CODE}`)
         router.push("/dashboard");
+      if (userEmail.startsWith('registrationdesk'))
+        router.push("/dashboard");
       if (userEmail.startsWith("judge"))
         router.push("/evaluation");
       if (userEmail.startsWith("officials"))

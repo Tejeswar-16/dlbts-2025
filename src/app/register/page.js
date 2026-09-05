@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { collection, setDoc, addDoc, where, query, getDocs, updateDoc, doc, deleteDoc,serverTimestamp  } from "firebase/firestore";
+import { runTransaction, collection, setDoc, addDoc, where, query, getDocs, updateDoc, doc, deleteDoc,serverTimestamp  } from "firebase/firestore";
 import { auth, db } from "@/app/_util/config";
 import Image from "next/image";
 import { signOut } from "firebase/auth";
@@ -378,7 +378,8 @@ export default function Register(){
         try {
             setSavingTeam(true);
             const members = selectedStudents.map((student) => ({
-                studentId: student.docId,
+                studentId: student.studentId,
+                docId: student.docId,
                 name: student.name || "",
                 gender: student.gender || "",
                 dob: student.dob || "",
@@ -478,9 +479,28 @@ export default function Register(){
 
     const router = useRouter();
 
+    const getNextStudentNumber = async () => {
+        const counterRef = doc(db, "counters", "studentCounter");
+        const nextNumber = await runTransaction(db, async (transaction) => {
+            const counterDoc = await transaction.get(counterRef);
+            let currentNumber = 0;
+            if (counterDoc.exists()) {
+                currentNumber = counterDoc.data().value || 0;
+            }
+            const newNumber = currentNumber + 1;
+            transaction.set(
+                counterRef,
+                { value: newNumber },
+                { merge: true }
+            );
+            return newNumber;
+        });
+        return nextNumber;
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (errorDoB !== "" || errorEvent !== "" || groupError !== "" || genderError !== "" || genderError2 !== "" || grpGenderError !== "" || errorDOJ !== "" || errorGrp2Exam != "" || teamError != "") 
+        if (errorDoB !== "" || errorEvent !== "" || groupError !== "" || genderError !== "" || genderError2 !== "" || grpGenderError !== "" || errorDOJ !== "" || errorGrp2Exam !== "" || teamError != "") 
         {
             if (errorDoB !== "") 
                 alert(errorDoB);
@@ -514,9 +534,18 @@ export default function Register(){
                     setLoading(true);
                     if (studentDocId === null)
                     {
+                        const studentNumber = await getNextStudentNumber();
+                        const studentId =
+                            `${process.env.NEXT_PUBLIC_DISTRICT_CODE.toUpperCase()}` +
+                            `${group[0]}` +
+                            `${group[group.length - 1]}` +
+                            `${gender[0]}` +
+                            `${new Date().getFullYear()}` +
+                            `${String(studentNumber).padStart(3, "0")}`;
                         const studentRef = doc(collection(db, "studentDetails"));
                         await setDoc(studentRef, {
                             id : studentRef.id,
+                            studentId: studentId,
                             name : name,
                             dob : dob,
                             doj : doj,

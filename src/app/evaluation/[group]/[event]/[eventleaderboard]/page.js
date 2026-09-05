@@ -200,6 +200,7 @@ export default function EventLeaderboard(){
                     existing[`judge${judgeNumber}Remarks`] = remarks;
                 } else {
                     const newStudent = {
+                        studentId: current.studentId,
                         name: current.name,
                         dob: current.dob,
                         gender: current.gender,
@@ -238,8 +239,6 @@ export default function EventLeaderboard(){
             });
             const judgeEmailList = Array.from(judgeEmailsSet);
             setJudgeEmails(judgeEmailList);
-            console.log(judgeEmails);
-
             setLoading(false);
         }
         getData();
@@ -306,10 +305,14 @@ export default function EventLeaderboard(){
                                     <tr>
                                         {
                                             ((email.slice(7,9) === "ge") || (email.slice(7,9) === "te")) ? 
-                                                <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Samithi Name</td>
+                                                <>
+                                                    {process.env.NEXT_PUBLIC_DISTRICT_CODE === 'ks' && <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Samithi Name</td>}
+                                                    {process.env.NEXT_PUBLIC_DISTRICT_CODE === 'ks' && <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Student IDs</td>}
+                                                </>
                                             :
                                                 <>
-                                                    <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Name</td>
+                                                    {process.env.NEXT_PUBLIC_DISTRICT_CODE === 'ks' && <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Name</td>}
+                                                    <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">ID</td>
                                                     <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">DOB</td>
                                                     <td className="font-sans px-4 py-2 text-xl font-semibold border border-white">Gender</td>
                                                 </>
@@ -327,10 +330,14 @@ export default function EventLeaderboard(){
                                             <tr key={`${student.name}_${student.dob}_${student.samithi}`} className="hover:bg-gray-200 transition duration-300 ease-in-out">
                                                 {
                                                     ((email.slice(7,9) === "ge") || (email.slice(7,9) === "te")) ? 
-                                                        <td className="font-sans text-lg px-4 py-2 border border-black">{student.samithi} ({student.name})</td>
+                                                        <>
+                                                            {process.env.NEXT_PUBLIC_DISTRICT_CODE === 'ks' && <td className="font-sans text-lg px-4 py-2 border border-black">{student.samithi} ({student.name})</td>}
+                                                            <td className="font-sans text-lg px-4 py-2 border border-black">{student.studentId}</td>
+                                                        </>
                                                     :
                                                         <>
-                                                            <td className="font-sans text-lg px-4 py-2 border border-black">{student.name}</td>
+                                                            {process.env.NEXT_PUBLIC_DISTRICT_CODE === 'ks' && <td className="font-sans text-lg px-4 py-2 border border-black">{student.name}</td>}
+                                                            <td className="font-sans text-lg px-4 py-2 border border-black">{student.studentId}</td>
                                                             <td className="font-sans text-lg px-4 py-2 border border-black">{student.dob}</td>
                                                             <td className="font-sans text-lg px-4 py-2 border border-black">{student.gender}</td>
                                                         </>

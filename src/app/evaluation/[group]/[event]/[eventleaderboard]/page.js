@@ -239,6 +239,7 @@ export default function EventLeaderboard(){
             });
             const judgeEmailList = Array.from(judgeEmailsSet);
             setJudgeEmails(judgeEmailList);
+            console.log(judgeEmails);
             setLoading(false);
         }
         getData();

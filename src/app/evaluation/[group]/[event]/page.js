@@ -146,7 +146,10 @@ export default function Judging(){
     const [adTeamwork,setAdTeamwork] = useState(0);
     const [adTotal,setAdTotal] = useState(0);
     const [adRemarks,setAdRemarks] = useState("");
-    const [qMark,setQMark] = useState(0);
+    const [qGeneral,setQGeneral] = useState("");
+    const [qAV,setQAV] = useState("");
+    const [qRapid,setQRapid] = useState("");
+    const [qTotal,setQTotal] = useState(0);
     const [qRemarks,setQRemarks] = useState("");
     const [fdCharRep,setFdCharRep] = useState("");
     const [fdExpDel,setFdExpDel] = useState("");
@@ -343,6 +346,10 @@ export default function Judging(){
     useEffect(() => {
         setRgTotal(Number(rgCreativity)+Number(rgColor)+Number(rgSymmetry)+Number(rgTheme)+Number(rgTeam));
     },[rgCreativity,rgColor,rgSymmetry,rgTheme,rgTeam]);
+
+    useEffect(() => {
+        setQTotal(Number(qGeneral)+Number(qAV)+Number(qRapid));
+    },[qGeneral,qAV,qRapid])
 
     function cleanName(name) {
         let cleaned = name.replace(/\./g, " ");
@@ -586,6 +593,9 @@ export default function Judging(){
                     filteredData = [{
                         id : "",
                         studentId: id,
+                        generalRound : 0,
+                        avRound : 0,
+                        rapidFireRound : 0,
                         totalMarks : 0,
                         remarks: "",
                         dob : "",
@@ -599,7 +609,9 @@ export default function Judging(){
                     }]
                 }
                 const mark = filteredData[0];
-                setQMark(mark.totalMarks);
+                setQGeneral(mark.generalRound);
+                setQAV(mark.avRound);
+                setQRapid(mark.rapidFireRound);
                 setQRemarks(mark.remarks);
             }
             else if ((event === "Fancy Dress"))
@@ -1152,7 +1164,10 @@ export default function Judging(){
                         samithi : amSamithi,
                         gender : amGender,
                         event : event,
-                        totalMarks : qMark,
+                        generalRound: qGeneral,
+                        avRound: qAV,
+                        rapidFireRound: qRapid,
+                        totalMarks : qTotal,
                         remarks: qRemarks,
                         judge : judgeEmail
                     });
@@ -1170,7 +1185,10 @@ export default function Judging(){
                         samithi : amSamithi,
                         gender : amGender,
                         event : event,
-                        totalMarks : qMark,
+                        generalRound: qGeneral,
+                        avRound: qAV,
+                        rapidFireRound: qRapid,
+                        totalMarks : qTotal,
                         remarks: qRemarks,
                         judge : judgeEmail,
                         lock : ""
@@ -1973,7 +1991,32 @@ export default function Judging(){
                     {((event === "Quiz")) && 
                     <>
                         <h1 className="flex justify-center font-sans font-bold text-md md:text-xl lg:text-xl p-2">Evaluation Criteria</h1>
-                        <h1 className="flex justify-center text-blue-900 bg-gray-200 rounded-xl shadow-xl mx-4 text-center font-sans font-bold text-md md:text-xl lg:text-xl p-2">Assessed through general round, audio visual round, and rapid fire round.</h1>
+                        <table className="mx-auto text-center w-70 md:w-150 lg:w-150">
+                            <thead className="bg-blue-950 text-white">
+                                <tr>
+                                    <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Criteria</th>
+                                    <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Marks</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td className="font-sans px-2 py-2 font-semibold border border-black">General Round</td>
+                                    <td className="font-sans px-2 py-2 font-semibold border border-black">10</td>
+                                </tr>
+                                <tr>
+                                    <td className="font-sans px-2 py-2 font-semibold border border-black">AV Round</td>
+                                    <td className="font-sans px-2 py-2 font-semibold border border-black">10</td>
+                                </tr>
+                                <tr>
+                                    <td className="font-sans px-2 py-2 font-semibold border border-black">Rapid Fire Round</td>
+                                    <td className="font-sans px-2 py-2 font-semibold border border-black">10</td>
+                                </tr>
+                                <tr>
+                                    <td className="font-sans px-2 py-2 font-semibold border bg-gray-200 border-black">TOTAL</td>
+                                    <td className="font-sans px-2 py-2 font-semibold border bg-gray-200 border-black">30 marks</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </>
                     }
 
@@ -1989,7 +2032,7 @@ export default function Judging(){
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td className="font-sans px-2 py-2 font-semibold border border-black">Accuracy</td>
+                                    <td className="font-sans px-2 py-2 font-semibold border border-black">Theme</td>
                                     <td className="font-sans px-2 py-2 font-semibold border border-black">10</td>
                                 </tr>
                                 <tr>
@@ -3323,10 +3366,76 @@ export default function Judging(){
                             </div>
                             <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Award Marks</h1>
                             <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Student Name: {amName}</h1>
-                            <div className="flex justify-center flex-col justify-center items-center">
-                                <h1 className="font-sans text-xl mt-2 font-semibold">Enter the marks</h1>
-                                <input value={qMark} onChange={(e) => setQMark(e.target.value)} className="font-sans rounded-xl border md:w-100 p-2 w-70 mx-4 mb-4" type="number" placeholder="Enter the marks here..."></input>
-                            </div>
+                            <table className="mx-auto text-center w-70 md:w-100 mt-2 mb-2">
+                                <thead className="bg-blue-950 text-white">
+                                    <tr>
+                                        <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Criteria</th>
+                                        <th className="font-sans px-2 py-2 font-semibold border border-gray-400">Marks</th>
+                                    </tr>
+                                </thead>
+                                {marks.map((mark) => (
+                                    <tbody key={mark.id}>
+                                        <tr>
+                                            <td className="font-sans px-2 py-2 font-semibold border border-black">General Round</td>
+                                            <td className="font-sans px-2 py-2 font-semibold border border-black">
+                                                <select value={qGeneral} onChange={(e) => {setQGeneral(e.target.value)}} name="marks" className="w-20 border rounded-xl p-2">
+                                                    <option>0</option>
+                                                    <option>1</option>
+                                                    <option>2</option>
+                                                    <option>3</option>
+                                                    <option>4</option>
+                                                    <option>5</option>
+                                                    <option>6</option>
+                                                    <option>7</option>
+                                                    <option>8</option>
+                                                    <option>9</option>
+                                                    <option>10</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td className="font-sans px-2 py-2 font-semibold border border-black">AV Round</td>
+                                            <td className="font-sans px-2 py-2 font-semibold border border-black">
+                                                <select value={qAV} onChange={(e) => {setQAV(e.target.value)}} name="marks" className="w-20 border rounded-xl p-2">
+                                                    <option>0</option>
+                                                    <option>1</option>
+                                                    <option>2</option>
+                                                    <option>3</option>
+                                                    <option>4</option>
+                                                    <option>5</option>
+                                                    <option>6</option>
+                                                    <option>7</option>
+                                                    <option>8</option>
+                                                    <option>9</option>
+                                                    <option>10</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td className="font-sans px-2 py-2 font-semibold border border-black">Rapid Fire Round</td>
+                                            <td className="font-sans px-2 py-2 font-semibold border border-black">
+                                                <select value={qRapid} onChange={(e) => {setQRapid(e.target.value)}} name="marks" className="w-20 border rounded-xl p-2">
+                                                    <option>0</option>
+                                                    <option>1</option>
+                                                    <option>2</option>
+                                                    <option>3</option>
+                                                    <option>4</option>
+                                                    <option>5</option>
+                                                    <option>6</option>
+                                                    <option>7</option>
+                                                    <option>8</option>
+                                                    <option>9</option>
+                                                    <option>10</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td className="font-sans px-2 py-2 font-semibold border bg-gray-200 border-black">TOTAL</td>
+                                            <td className="font-sans px-2 py-2 font-semibold border bg-gray-200 border-black">{qTotal} marks</td>
+                                        </tr>
+                                    </tbody>
+                                ))}
+                            </table>
                             <div className="flex justify-center">
                                 <textarea value={qRemarks} onChange={(e)=>{setQRemarks(e.target.value)}} type="text" maxLength={100} placeholder="Enter your remarks here (max 100 characters)" className="resize-none font-sans p-2 mb-2 rounded-xl w-70 h-30 md:w-100 md:h-20 border"></textarea>
                             </div>

@@ -20,6 +20,12 @@ export default function LogisticsList(){
     const [grp3Male,setGrp3Male] = useState(0);    
     const [grp3Female,setGrp3Female] = useState(0);
     const [grp3Total,setGrp3Total] = useState(0);
+    const [presentMale,setPresentMale] = useState(0);    
+    const [presentFemale,setPresentFemale] = useState(0);
+    const [presentTotal,setPresentTotal] = useState(0);
+    const [absentMale,setAbsentMale] = useState(0);    
+    const [absentFemale,setAbsentFemale] = useState(0);
+    const [absentTotal,setAbsentTotal] = useState(0);
     const [loading,setLoading] = useState(false);
 
     useEffect(() => {
@@ -39,6 +45,12 @@ export default function LogisticsList(){
                 getCountFromServer(query(collection(db,"studentDetails"),where("group","==","Group 3"))),
                 getCountFromServer(query(collection(db,"studentDetails"),where("group","==","Group 3"),where("gender","==","Male"))),
                 getCountFromServer(query(collection(db,"studentDetails"),where("group","==","Group 3"),where("gender","==","Female"))),
+                getCountFromServer(query(collection(db,"studentDetails"),where("attendance","==","P"))),
+                getCountFromServer(query(collection(db,"studentDetails"),where("attendance","==","P"),where("gender","==","Male"))),
+                getCountFromServer(query(collection(db,"studentDetails"),where("attendance","==","P"),where("gender","==","Female"))),
+                getCountFromServer(query(collection(db,"studentDetails"),where("attendance","==","A"))),
+                getCountFromServer(query(collection(db,"studentDetails"),where("attendance","==","A"),where("gender","==","Male"))),
+                getCountFromServer(query(collection(db,"studentDetails"),where("attendance","==","A"),where("gender","==","Female"))),
             ]
 
             const result = await Promise.all(q);
@@ -55,6 +67,12 @@ export default function LogisticsList(){
             setGrp3Total(result[9].data().count);
             setGrp3Male(result[10].data().count);
             setGrp3Female(result[11].data().count);
+            setPresentTotal(result[12].data().count);
+            setPresentMale(result[13].data().count);
+            setPresentFemale(result[14].data().count);
+            setAbsentTotal(result[15].data().count);
+            setAbsentMale(result[16].data().count);
+            setAbsentFemale(result[17].data().count);
 
             setLoading(false);
         }
@@ -85,6 +103,18 @@ export default function LogisticsList(){
             "maleCount" : grp3Male,
             "femaleCount" : grp3Female,
             "totalCount" : grp3Total
+        },
+        {
+            "heading" : "Present Students",
+            "maleCount" : presentMale,
+            "femaleCount" : presentFemale,
+            "totalCount" : presentTotal
+        },
+        {
+            "heading" : "Absent Students",
+            "maleCount" : absentMale,
+            "femaleCount" : absentFemale,
+            "totalCount" : absentTotal
         }
     ]
     
@@ -100,7 +130,7 @@ export default function LogisticsList(){
                     </div>
                 </>
             }
-            <div className="flex flex-wrap lg:justify-center">
+            <div className="flex flex-row w-75 md:w-180 lg:w-250 flex-wrap justify-center mx-auto">
                 {students.map((student) => (
                     <div key={student.heading} className="w-full md:w-1/2 lg:w-[250px]">
                         <Logistics key={student.heading} heading={student.heading} maleCount={student.maleCount} femaleCount={student.femaleCount} totalCount={student.totalCount}></Logistics>

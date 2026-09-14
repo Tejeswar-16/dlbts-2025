@@ -858,8 +858,13 @@ export default function Register(){
                                                 <tr key={student.id} className="hover:bg-gray-200 transition duration-300 ease-in-out">
                                                     <td className="font-sans text-lg p-2 border border-black">
                                                         <div className="flex flex-row">
-                                                            <FaEdit onClick={() => handleUpdateDetails(student.id,student.name,student.group,student.grp2Exam,student.dob,student.doj,student.gender,student.samithi,student.event1,student.event2,student.teamEvent,student.groupEvent,student.event1Prize,student.event2Prize,student.teamPrize,student.groupPrize)} className="mx-auto text-blue-800 text-3xl hover:cursor-pointer"/>
-                                                            <MdDelete className="mx-auto hover:cursor-pointer text-red-500 text-3xl" onClick={() => handleDeleteStudent(student.id,student.name)} />
+                                                            {
+                                                                close ? <FaEdit onClick={null} className="mx-auto text-blue-800 text-3xl hover:cursor-not-allowed"/> : <FaEdit onClick={() => handleUpdateDetails(student.id,student.name,student.group,student.grp2Exam,student.dob,student.doj,student.gender,student.samithi,student.event1,student.event2,student.teamEvent,student.groupEvent,student.event1Prize,student.event2Prize,student.teamPrize,student.groupPrize)} className="mx-auto text-blue-800 text-3xl hover:cursor-pointer"/>
+                                                            }
+                                                            
+                                                            {
+                                                                close ? <MdDelete className="mx-auto hover:cursor-not-allowed text-red-500 text-3xl" onClick={null} /> : <MdDelete className="mx-auto hover:cursor-pointer text-red-500 text-3xl" onClick={() => handleDeleteStudent(student.id,student.name)} />
+                                                            }
                                                         </div>
                                                     </td>
                                                     <td className="font-sans text-lg p-2 border border-black">{student.name}</td>

@@ -555,9 +555,13 @@ export default function Dashboard(){
                                     <th className="font-sans px-4 py-2 font-semibold border border-gray-400">Samithi</th>
                                     <th className="font-sans px-4 py-2 font-semibold border border-gray-400">Group 2 Exam</th>
                                     <th className="font-sans px-4 py-2 font-semibold border border-gray-400">Event 1</th>
+                                    {process.env.NEXT_PUBLIC_DISTRICT_CODE === 'kn' && <th className="font-sans px-4 py-2 font-semibold border border-gray-400">Prize (Event 1)</th>}
                                     <th className="font-sans px-4 py-2 font-semibold border border-gray-400">Event 2</th>
+                                    {process.env.NEXT_PUBLIC_DISTRICT_CODE === 'kn' && <th className="font-sans px-4 py-2 font-semibold border border-gray-400">Prize (Event 2)</th>}
                                     <th className="font-sans px-4 py-2 font-semibold border border-gray-400">Team Event</th>
+                                    {process.env.NEXT_PUBLIC_DISTRICT_CODE === 'kn' && <th className="font-sans px-4 py-2 font-semibold border border-gray-400">Prize (Team Event)</th>}
                                     <th className="font-sans px-4 py-2 font-semibold border border-gray-400">Group Event</th>
+                                    {process.env.NEXT_PUBLIC_DISTRICT_CODE === 'kn' && <th className="font-sans px-4 py-2 font-semibold border border-gray-400">Prize (Group Event)</th>}
                                 </tr>
                             </thead>
                             <tbody>
@@ -574,9 +578,13 @@ export default function Dashboard(){
                                             <td className="font-sans text-lg px-4 py-2 border border-black">{student.samithi}</td>
                                             <td className="font-sans text-lg px-4 py-2 border border-black">{student.grp2Exam}</td>
                                             <td className="font-sans text-lg px-4 py-2 border border-black">{student.event1}</td>
+                                            {process.env.NEXT_PUBLIC_DISTRICT_CODE === 'kn' && <td className="font-sans text-lg px-4 py-2 border border-black">{student.event1Prize}</td>}
                                             <td className="font-sans text-lg px-4 py-2 border border-black">{student.event2}</td>
+                                            {process.env.NEXT_PUBLIC_DISTRICT_CODE === 'kn' && <td className="font-sans text-lg px-4 py-2 border border-black">{student.event2Prize}</td>}
                                             <td className="font-sans text-lg px-4 py-2 border border-black">{student.teamEvent}</td>
+                                            {process.env.NEXT_PUBLIC_DISTRICT_CODE === 'kn' && <td className="font-sans text-lg px-4 py-2 border border-black">{student.teamPrize}</td>}
                                             <td className="font-sans text-lg px-4 py-2 border border-black">{student.groupEvent}</td>
+                                            {process.env.NEXT_PUBLIC_DISTRICT_CODE === 'kn' && <td className="font-sans text-lg px-4 py-2 border border-black">{student.groupPrize}</td>}
                                         </tr>
                                     ))
                                 )

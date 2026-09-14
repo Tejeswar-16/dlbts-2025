@@ -19,6 +19,10 @@ export default function Register(){
     const [grp2Exam,setGrp2Exam] = useState("");
     const [gender,setGender] = useState("");
     const [samithi,setSamithi] = useState("");
+    const [samithiPrize1,setSamithiPrize1] = useState("");
+    const [samithiPrize2,setSamithiPrize2] = useState("");
+    const [samithiPrizeTeam,setSamithiPrizeTeam] = useState("");
+    const [samithiPrizeGroup,setSamithiPrizeGroup] = useState("");
     const [group,setGroup] = useState("");
     const [event1,setEvent1] = useState("Select an event");
     const [event2,setEvent2] = useState("Select an event");
@@ -557,6 +561,10 @@ export default function Register(){
                             event2 : event2 !== "Select an event" ? event2 : "N/A",
                             teamEvent: teamEvent !== "Select an event" ? teamEvent : "N/A",
                             groupEvent : groupEvent !== "Select an event" ? groupEvent : "N/A",
+                            event1Prize: samithiPrize1 !== "Select an option" ? samithiPrize1 : "N/A",
+                            event2Prize: samithiPrize2 !== "Select an option" ? samithiPrize2 : "N/A",
+                            teamPrize: samithiPrizeTeam !== "Select an option" ? samithiPrizeTeam : "N/A",
+                            groupPrize: samithiPrizeGroup !== "Select an option" ? samithiPrizeGroup : "N/A",
                             attendance : "A",
                             timestamp : new Date(),
                             email : email
@@ -578,6 +586,10 @@ export default function Register(){
                             event2 : event2 !== "Select an event" ? event2 : "N/A",
                             teamEvent: teamEvent !== "Select an event" ? teamEvent : "N/A",
                             groupEvent : groupEvent !== "Select an event" ? groupEvent : "N/A",
+                            event1Prize: samithiPrize1 !== "Select an option" ? samithiPrize1 : "N/A",
+                            event2Prize: samithiPrize2 !== "Select an option" ? samithiPrize2 : "N/A",
+                            teamPrize: samithiPrizeTeam !== "Select an option" ? samithiPrizeTeam : "N/A",
+                            groupPrize: samithiPrizeGroup !== "Select an option" ? samithiPrizeGroup : "N/A",
                             attendance : "A",
                             timestamp : new Date(),
                             email : email
@@ -687,9 +699,13 @@ export default function Register(){
         setEvent1("Select an event");
         setEvent2("Select an event");
         setGroupEvent("Select an event");
+        setSamithiPrize1("Select an option");
+        setSamithiPrize2("Select an option");
+        setSamithiPrizeTeam("Select an option");
+        setSamithiPrizeGroup("Select an option");
     }
 
-    function handleUpdateDetails(docId,nameValue,grpValue,grp2ExamValue,dobValue,dojValue,genderValue,samithiValue,event1Value,event2Value,teamEventValue,grpEventValue){
+    function handleUpdateDetails(docId,nameValue,grpValue,grp2ExamValue,dobValue,dojValue,genderValue,samithiValue,event1Value,event2Value,teamEventValue,grpEventValue,event1PrizeValue,event2PrizeValue,teamPrizeValue,groupPrizeValue){
         setClicked(true);
         setStudentDocId(docId);
         setName(nameValue);
@@ -703,6 +719,10 @@ export default function Register(){
         setEvent2(event2Value !== "N/A" ? event2Value : "Select an event");
         setTeamEvent(teamEventValue !== "N/A" ? teamEventValue : "Select an event");
         setGroupEvent(grpEventValue !== "N/A" ? grpEventValue : "Select an event");
+        setSamithiPrize1(event1PrizeValue !== "N/A" ? event1PrizeValue : "Select an option");
+        setSamithiPrize2(event2PrizeValue !== "N/A" ? event2PrizeValue : "Select an option");
+        setSamithiPrizeTeam(teamPrizeValue !== "N/A" ? teamPrizeValue : "Select an option");
+        setSamithiPrizeGroup(groupPrizeValue !== "N/A" ? groupPrizeValue : "Select an option");
     }
 
     function handleDownload(){
@@ -823,9 +843,13 @@ export default function Register(){
                                             <th className="font-sans p-2 font-semibold border border-gray-400">Gender</th>
                                             <th className="font-sans p-2 font-semibold border border-gray-400">Samithi</th>
                                             <th className="font-sans p-2 font-semibold border border-gray-400">Event 1</th>
+                                            {process.env.NEXT_PUBLIC_DISTRICT_CODE === 'kn' && <th className="font-sans p-2 font-semibold border border-gray-400">Prize (Event 1)</th>}
                                             <th className="font-sans p-2 font-semibold border border-gray-400">Event 2</th>
+                                            {process.env.NEXT_PUBLIC_DISTRICT_CODE === 'kn' && <th className="font-sans p-2 font-semibold border border-gray-400">Prize (Event 2)</th>}
                                             <th className="font-sans p-2 font-semibold border border-gray-400">Team Event</th>
+                                            {process.env.NEXT_PUBLIC_DISTRICT_CODE === 'kn' && <th className="font-sans p-2 font-semibold border border-gray-400">Prize (Team)</th>}
                                             <th className="font-sans p-2 font-semibold border border-gray-400">Group Event</th>
+                                            {process.env.NEXT_PUBLIC_DISTRICT_CODE === 'kn' && <th className="font-sans p-2 font-semibold border border-gray-400">Prize (Group)</th>}
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -834,7 +858,7 @@ export default function Register(){
                                                 <tr key={student.id} className="hover:bg-gray-200 transition duration-300 ease-in-out">
                                                     <td className="font-sans text-lg p-2 border border-black">
                                                         <div className="flex flex-row">
-                                                            <FaEdit onClick={() => handleUpdateDetails(student.id,student.name,student.group,student.grp2Exam,student.dob,student.doj,student.gender,student.samithi,student.event1,student.event2,student.teamEvent,student.groupEvent)} className="mx-auto text-blue-800 text-3xl hover:cursor-pointer"/>
+                                                            <FaEdit onClick={() => handleUpdateDetails(student.id,student.name,student.group,student.grp2Exam,student.dob,student.doj,student.gender,student.samithi,student.event1,student.event2,student.teamEvent,student.groupEvent,student.event1Prize,student.event2Prize,student.teamPrize,student.groupPrize)} className="mx-auto text-blue-800 text-3xl hover:cursor-pointer"/>
                                                             <MdDelete className="mx-auto hover:cursor-pointer text-red-500 text-3xl" onClick={() => handleDeleteStudent(student.id,student.name)} />
                                                         </div>
                                                     </td>
@@ -846,9 +870,13 @@ export default function Register(){
                                                     <td className="font-sans text-lg p-2 border border-black">{student.gender}</td>
                                                     <td className="font-sans text-lg p-2 border border-black">{student.samithi}</td>
                                                     <td className="font-sans text-lg p-2 border border-black">{student.event1}</td>
+                                                    {process.env.NEXT_PUBLIC_DISTRICT_CODE === 'kn' && <td className="font-sans text-lg p-2 border border-black">{student.event1Prize}</td>}
                                                     <td className="font-sans text-lg p-2 border border-black">{student.event2}</td>
+                                                    {process.env.NEXT_PUBLIC_DISTRICT_CODE === 'kn' && <td className="font-sans text-lg p-2 border border-black">{student.event2Prize}</td>}
                                                     <td className="font-sans text-lg p-2 border border-black">{student.teamEvent}</td>
+                                                    {process.env.NEXT_PUBLIC_DISTRICT_CODE === 'kn' && <td className="font-sans text-lg p-2 border border-black">{student.teamPrize}</td>}
                                                     <td className="font-sans text-lg p-2 border border-black">{student.groupEvent}</td>
+                                                    {process.env.NEXT_PUBLIC_DISTRICT_CODE === 'kn' && <td className="font-sans text-lg p-2 border border-black">{student.groupPrize}</td>}
                                                 </tr>
                                             ))
                                         }
@@ -1042,6 +1070,23 @@ export default function Register(){
                                     <></>
                                 }
 
+                                {
+                                    (process.env.NEXT_PUBLIC_DISTRICT_CODE === 'kn' && event1 !== "Select an event") && 
+                                        <div className="mx-auto mt-8 rounded-2xl shadow-2xl lg:w-220 lg:h-35 bg-gray-100">
+                                            <div className="p-4 font-sans text-xl">
+                                                Samithi Level Prize for 1st event
+                                            </div>
+                                            <div>
+                                                <select value={samithiPrize1}  onChange={(e) => {setSamithiPrize1(e.target.value);}} name="samithiPrize" className="p-3 mb-4 mx-2 font-sans w-68 text-lg md:w-180 lg:mx-4 lg:mb-0 lg:w-210 rounded-xl border">
+                                                    <option value="Select an event">Select an option</option>
+                                                    <option>1st</option>
+                                                    <option>2nd</option>
+                                                    <option>3rd</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                }
+
                                 { (group === "Group 1") ? 
                                     <div className="mx-auto mt-8 rounded-2xl shadow-2xl lg:w-220 lg:h-35 bg-gray-100">
                                         <div className="p-4 font-sans text-xl">
@@ -1113,6 +1158,23 @@ export default function Register(){
                                 :   <></>
                                 }
 
+                                {
+                                    (process.env.NEXT_PUBLIC_DISTRICT_CODE === 'kn' && event2 !== "Select an event") && 
+                                        <div className="mx-auto mt-8 rounded-2xl shadow-2xl lg:w-220 lg:h-35 bg-gray-100">
+                                            <div className="p-4 font-sans text-xl">
+                                                Samithi Level Prize for 2st event
+                                            </div>
+                                            <div>
+                                                <select value={samithiPrize2} onChange={(e) => {setSamithiPrize2(e.target.value);}} name="samithiPrize" className="p-3 mb-4 mx-2 font-sans w-68 text-lg md:w-180 lg:mx-4 lg:mb-0 lg:w-210 rounded-xl border">
+                                                    <option value="Select an event">Select an option</option>
+                                                    <option>1st</option>
+                                                    <option>2nd</option>
+                                                    <option>3rd</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                }
+
                                 {(group === "Group 1") ? 
                                     <div className="mx-auto mt-8 rounded-2xl shadow-2xl lg:w-220 pb-4 bg-gray-100">
                                         <div className="p-4 font-sans text-xl">
@@ -1160,6 +1222,23 @@ export default function Register(){
                                         </div>
                                     </div>
                                 : <></>
+                                }
+
+                                {
+                                    (process.env.NEXT_PUBLIC_DISTRICT_CODE === 'kn' && teamEvent !== "Select an event") && 
+                                        <div className="mx-auto mt-8 rounded-2xl shadow-2xl lg:w-220 lg:h-35 bg-gray-100">
+                                            <div className="p-4 font-sans text-xl">
+                                                Samithi Level Prize for TEAM event
+                                            </div>
+                                            <div>
+                                                <select value={samithiPrizeTeam} onChange={(e) => {setSamithiPrizeTeam(e.target.value);}} name="samithiPrize" className="p-3 mb-4 mx-2 font-sans w-68 text-lg md:w-180 lg:mx-4 lg:mb-0 lg:w-210 rounded-xl border">
+                                                    <option value="Select an event">Select an option</option>
+                                                    <option>1st</option>
+                                                    <option>2nd</option>
+                                                    <option>3rd</option>
+                                                </select>
+                                            </div>
+                                        </div>
                                 }
 
                                 {(group === "Group 1") ? 
@@ -1214,6 +1293,23 @@ export default function Register(){
                                         </div>
                                     </div>
                                 : <></>
+                                }
+
+                                {
+                                    (process.env.NEXT_PUBLIC_DISTRICT_CODE === 'kn' && groupEvent !== "Select an event") && 
+                                        <div className="mx-auto mt-8 rounded-2xl shadow-2xl lg:w-220 lg:h-35 bg-gray-100">
+                                            <div className="p-4 font-sans text-xl">
+                                                Samithi Level Prize for GROUP event
+                                            </div>
+                                            <div>
+                                                <select value={samithiPrizeGroup} onChange={(e) => {setSamithiPrizeGroup(e.target.value);}} name="samithiPrize" className="p-3 mb-4 mx-2 font-sans w-68 text-lg md:w-180 lg:mx-4 lg:mb-0 lg:w-210 rounded-xl border">
+                                                    <option value="Select an event">Select an option</option>
+                                                    <option>1st</option>
+                                                    <option>2nd</option>
+                                                    <option>3rd</option>
+                                                </select>
+                                            </div>
+                                        </div>
                                 }
 
                                 <div className="flex justify-center mx-auto mt-7 mb-5 lg:mb-0 lg:mt-12 border rounded-xl lg:rounded-2xl shadow-2xl w-25 h-10 md:w-30 md:h-15 md:text-xl lg:w-35 lg:h-15 bg-gray-200">

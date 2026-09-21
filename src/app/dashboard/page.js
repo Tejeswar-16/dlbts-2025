@@ -5,7 +5,7 @@ import { auth } from "../_util/config";
 import LogisticsList from "../LogisticsList";
 import Image from "next/image";
 import { db } from "../_util/config";
-import { query, collection, getDocs, doc, updateDoc, where, onSnapshot, addDoc, deleteDoc } from "firebase/firestore";
+import { query, collection, getDocs, doc, updateDoc, addDoc, deleteDoc } from "firebase/firestore";
 import { useRouter } from "next/navigation";
 import { signOut } from "firebase/auth";
 import * as XLSX from "xlsx";
@@ -25,6 +25,7 @@ export default function Dashboard(){
     const [studentData,setStudentData] = useState([]);
     const [fileName,setFileName] = useState("");
     const [backup,setBackup] = useState(false);
+    const [displayedStudents, setDisplayedStudents] = useState([]);
 
     const router = useRouter();
     function handleEventsClick(){
@@ -65,70 +66,93 @@ export default function Dashboard(){
         })
     },[]);
 
-    async function getData()
-    {
+    async function getData() {
         setLoading(true);
-        setCountMale(0);
-        setCountFemale(0);
-        setCount(0);
-        setFilterHeading("Search by Name, Group, Samithi or Event")
 
-        const q = query(
-            collection(db,"studentDetails")
-        );
-        const querySnapshot = await getDocs(q);
-        const data = querySnapshot.docs.map((doc) => doc.data());
+        try {
+            const snapshot = await getDocs(
+                collection(db, "studentDetails")
+            );
 
-        let filteredContent = data;
-        if (searchName !== "")
-        {
-            filteredContent = filteredContent.filter((fc) => (fc.name).includes(searchName));
-        }
-        if (searchGroup !== "All")
-        {   
-            filteredContent = filteredContent.filter((fc) => fc.group === searchGroup);
-        }
-        if (searchEvent !== "All")
-        {
-            filteredContent = filteredContent.filter((fc) => fc.event1 === searchEvent || fc.event2 === searchEvent || fc.groupEvent === searchEvent || fc.teamEvent === searchEvent);
-        }
-        if (searchSamithi !== "All")
-        {
-            filteredContent = filteredContent.filter((fc) => fc.samithi === searchSamithi);
-        }
-        filteredContent = filteredContent.sort((x,y) => x.name.localeCompare(y.name));
-        setStudentData(filteredContent);
+            const data = snapshot.docs.map((document) => ({
+                id: document.id,
+                ...document.data()
+            }));
 
-        if (searchName !== "" || searchGroup !== "All" || searchEvent !== "All" || searchSamithi !== "All")
-        {
-            const maleContent = filteredContent.filter((fc) => fc.gender === "Male");
-            const femaleContent = filteredContent.filter((fc) => fc.gender === "Female");
-            setCountMale(maleContent.length);
-            setCountFemale(femaleContent.length);
-            setCount(maleContent.length + femaleContent.length);
-        }
+            data.sort((x, y) => x.name.localeCompare(y.name));
 
-        let headingParts = [];
-        let excelHeading = [];
-
-        if (searchName !== "") {headingParts.push(`Name: ${searchName}`); excelHeading.push(`Name: ${searchName}`); }
-        if (searchGroup !== "All") {headingParts.push(`Group: ${searchGroup}`); excelHeading.push(`Group: ${searchGroup}`);}
-        if (searchSamithi !== "All") {headingParts.push(`Samithi: ${searchSamithi}`); excelHeading.push(`Samithi: ${searchSamithi}`);}
-        if (searchEvent !== "All") {headingParts.push(`Event: ${searchEvent}`); excelHeading.push(`Event: ${searchEvent}`);}
-        if (headingParts.length === 0){
-            setFilterHeading("Search by Name, Group, Samithi or Event");
-            setFileName("all-students");
+            setStudentData(data);
+        } catch (error) {
+            console.log("Error fetching student data:", error);
+        } finally {
+            setLoading(false);
         }
-        else{
-            setFilterHeading("Search by " + headingParts.join(", "));
-            setFileName(excelHeading.join("-"));
-        }
-        setLoading(false);
     }
+
+    // async function getData()
+    // {
+    //     setLoading(true);
+    //     setCountMale(0);
+    //     setCountFemale(0);
+    //     setCount(0);
+    //     setFilterHeading("Search by Name, Group, Samithi or Event")
+
+    //     const q = query(
+    //         collection(db,"studentDetails")
+    //     );
+    //     const querySnapshot = await getDocs(q);
+    //     const data = querySnapshot.docs.map((doc) => doc.data());
+
+    //     let filteredContent = data;
+    //     if (searchName !== "")
+    //     {
+    //         filteredContent = filteredContent.filter((fc) => (fc.name).includes(searchName));
+    //     }
+    //     if (searchGroup !== "All")
+    //     {   
+    //         filteredContent = filteredContent.filter((fc) => fc.group === searchGroup);
+    //     }
+    //     if (searchEvent !== "All")
+    //     {
+    //         filteredContent = filteredContent.filter((fc) => fc.event1 === searchEvent || fc.event2 === searchEvent || fc.groupEvent === searchEvent || fc.teamEvent === searchEvent);
+    //     }
+    //     if (searchSamithi !== "All")
+    //     {
+    //         filteredContent = filteredContent.filter((fc) => fc.samithi === searchSamithi);
+    //     }
+    //     filteredContent = filteredContent.sort((x,y) => x.name.localeCompare(y.name));
+    //     setStudentData(filteredContent);
+
+    //     if (searchName !== "" || searchGroup !== "All" || searchEvent !== "All" || searchSamithi !== "All")
+    //     {
+    //         const maleContent = filteredContent.filter((fc) => fc.gender === "Male");
+    //         const femaleContent = filteredContent.filter((fc) => fc.gender === "Female");
+    //         setCountMale(maleContent.length);
+    //         setCountFemale(femaleContent.length);
+    //         setCount(maleContent.length + femaleContent.length);
+    //     }
+
+    //     let headingParts = [];
+    //     let excelHeading = [];
+
+    //     if (searchName !== "") {headingParts.push(`Name: ${searchName}`); excelHeading.push(`Name: ${searchName}`); }
+    //     if (searchGroup !== "All") {headingParts.push(`Group: ${searchGroup}`); excelHeading.push(`Group: ${searchGroup}`);}
+    //     if (searchSamithi !== "All") {headingParts.push(`Samithi: ${searchSamithi}`); excelHeading.push(`Samithi: ${searchSamithi}`);}
+    //     if (searchEvent !== "All") {headingParts.push(`Event: ${searchEvent}`); excelHeading.push(`Event: ${searchEvent}`);}
+    //     if (headingParts.length === 0){
+    //         setFilterHeading("Search by Name, Group, Samithi or Event");
+    //         setFileName("all-students");
+    //     }
+    //     else{
+    //         setFilterHeading("Search by " + headingParts.join(", "));
+    //         setFileName(excelHeading.join("-"));
+    //     }
+    //     setLoading(false);
+    // }
 
     useEffect(() => {
         getData();
-    },[searchName,searchGroup,searchEvent,searchSamithi]);
+    },[]);
 
     function handleLogout(){
         signOut(auth)
@@ -149,37 +173,146 @@ export default function Dashboard(){
         router.push("/evaluation")
     }
 
-    //Modified for displaying only Group 1 students
+    // //Modified for displaying only Group 1 students
+    // useEffect(() => {
+    //     onSnapshot(collection(db,"studentDetails"), (snapshot) => {
+    //         let updatedData = snapshot.docs.map((doc) => ({
+    //             id : doc.id,
+    //             ...doc.data()
+    //         })); 
+    //         updatedData = updatedData.sort((x,y) => x.name.localeCompare(y.name));
+    //         setStudentData(updatedData);
+    //     });
+    // },[]);
+
     useEffect(() => {
-        onSnapshot(collection(db,"studentDetails"), (snapshot) => {
-            let updatedData = snapshot.docs.map((doc) => ({
-                id : doc.id,
-                ...doc.data()
-            })); 
-            updatedData = updatedData.sort((x,y) => x.name.localeCompare(y.name));
-            setStudentData(updatedData);
-        });
-    },[]);
+        let filteredContent = [...studentData];
+        if (searchName !== "") {
+            filteredContent = filteredContent.filter((student) =>
+                student.name.includes(searchName)
+            );
+        }
+        if (searchGroup !== "All") {
+            filteredContent = filteredContent.filter(
+                (student) => student.group === searchGroup
+            );
+        }
+        if (searchEvent !== "All") {
+            filteredContent = filteredContent.filter(
+                (student) =>
+                    student.event1 === searchEvent ||
+                    student.event2 === searchEvent ||
+                    student.groupEvent === searchEvent ||
+                    student.teamEvent === searchEvent
+            );
+        }
+        if (searchSamithi !== "All") {
+            filteredContent = filteredContent.filter(
+                (student) => student.samithi === searchSamithi
+            );
+        }
+        filteredContent.sort((x, y) =>
+            x.name.localeCompare(y.name)
+        );
+        setDisplayedStudents(filteredContent);
+        const maleCount = filteredContent.filter(
+            (student) => student.gender === "Male"
+        ).length;
+        const femaleCount = filteredContent.filter(
+            (student) => student.gender === "Female"
+        ).length;
+        setCountMale(maleCount);
+        setCountFemale(femaleCount);
+        setCount(maleCount + femaleCount);
+
+        let headingParts = [];
+        let excelHeading = [];
+
+        if (searchName !== "") {
+            headingParts.push(`Name: ${searchName}`);
+            excelHeading.push(`Name: ${searchName}`);
+        }
+
+        if (searchGroup !== "All") {
+            headingParts.push(`Group: ${searchGroup}`);
+            excelHeading.push(`Group: ${searchGroup}`);
+        }
+
+        if (searchSamithi !== "All") {
+            headingParts.push(`Samithi: ${searchSamithi}`);
+            excelHeading.push(`Samithi: ${searchSamithi}`);
+        }
+
+        if (searchEvent !== "All") {
+            headingParts.push(`Event: ${searchEvent}`);
+            excelHeading.push(`Event: ${searchEvent}`);
+        }
+
+        if (headingParts.length === 0) {
+            setFilterHeading(
+                "Search by Name, Group, Samithi or Event"
+            );
+            setFileName("all-students");
+        } else {
+            setFilterHeading(
+                "Search by " + headingParts.join(", ")
+            );
+            setFileName(excelHeading.join("-"));
+        }
+    }, [studentData,searchName,searchGroup,searchEvent,searchSamithi]);
+
+    // const handleAttendance = async (id) => {
+    //      const q = query(
+    //         collection(db,"studentDetails"),
+    //         where("id","==",id)
+    //      );
+    //      const querySnapshot = await getDocs(q);
+    //      querySnapshot.forEach(async (document) => {
+    //         const docRef = doc(db,"studentDetails",document.id);
+    //         const currentAttendance = document.data().attendance;
+    //         await updateDoc(docRef,{
+    //             attendance : (currentAttendance === "P") ? "A" : "P"
+    //         });
+    //      });
+
+    //      getData();
+    // }
 
     const handleAttendance = async (id) => {
-         const q = query(
-            collection(db,"studentDetails"),
-            where("id","==",id)
-         );
-         const querySnapshot = await getDocs(q);
-         querySnapshot.forEach(async (document) => {
-            const docRef = doc(db,"studentDetails",document.id);
-            const currentAttendance = document.data().attendance;
-            await updateDoc(docRef,{
-                attendance : (currentAttendance === "P") ? "A" : "P"
-            });
-         });
+        try {
+            const student = studentData.find(
+                (student) => student.id === id
+            );
+            if (!student) {
+                console.log("Student not found");
+                return;
+            }
+            const newAttendance = student.attendance === "P" ? "A" : "P";
 
-         getData();
-    }
+            const docRef = doc(db,"studentDetails",id);
+
+            await updateDoc(docRef, {
+                attendance: newAttendance
+            });
+
+            setStudentData((prev) =>
+                prev.map((student) =>
+                    student.id === id
+                        ? {
+                            ...student,
+                            attendance: newAttendance
+                        }
+                        : student
+                )
+            );
+
+        } catch (error) {
+            console.log("Error updating attendance:",error);
+        }
+    };
 
     function handleDownload(){
-        const worksheet = XLSX.utils.json_to_sheet(studentData);
+        const worksheet = XLSX.utils.json_to_sheet(displayedStudents);
         const workbook = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(workbook,worksheet,"Students");
         XLSX.writeFile(workbook,fileName.toLowerCase()+".xlsx");
@@ -524,7 +657,7 @@ export default function Dashboard(){
                 {loading && 
                     <>
                         <div className="fixed inset-0 flex flex-col justify-center backdrop-blur-sm items-center">
-                            <Image className="rounded-xl" src="/swami.png" alt="swami-img" width="300" height="300"></Image>
+                            {process.env.NEXT_PUBLIC_DISTRICT_CODE !== 'kn' && <Image className="rounded-xl" src="/swami.png" alt="swami-img" width="300" height="300"></Image>}
                             <div className="font-mono m-2 text-3xl font-bold">
                                 Loading...
                             </div>
@@ -567,7 +700,7 @@ export default function Dashboard(){
                             <tbody>
                             {
                                 (!loading &&   
-                                    studentData.map((student) => (
+                                    displayedStudents.map((student) => (
                                         <tr key={student.id} className={student.attendance === "P" ? "hover:bg-green-200 bg-green-100 transition duration-300 ease-in-out" : "hover:bg-red-200 bg-red-100 transition duration-300 ease-in-out"}>
                                             <td onClick={() => handleAttendance(student.id)} className="font-sans text-lg px-4 py-2 border border-black hover:cursor-pointer select-none">{student.attendance}</td>
                                             <td className="font-sans text-lg px-4 py-2 border border-black">{student.name} ({student.studentId})</td>

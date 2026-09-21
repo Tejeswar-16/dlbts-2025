@@ -264,7 +264,7 @@ export default function EventLeaderboard(){
                 {loading && 
                     <>
                         <div className="fixed inset-0 flex flex-col justify-center backdrop-blur-sm items-center">
-                            <Image className="rounded-xl" src="/swami.png" alt="swami-img" width="300" height="300"></Image>
+                            {process.env.NEXT_PUBLIC_DISTRICT_CODE !== 'kn' && <Image className="rounded-xl" src="/swami.png" alt="swami-img" width="300" height="300"></Image>}
                             <div className="font-mono m-2 text-3xl font-bold">
                                 Loading...
                             </div>

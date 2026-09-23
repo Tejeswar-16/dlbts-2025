@@ -24,6 +24,7 @@ export default function Leadboard(){
     const [lock,setLock] = useState("");
     const [clicked,setClicked] = useState(false);
     const [lockedEvents,setLockedEvents] = useState([]);
+    const [allMarksData, setAllMarksData] = useState([]);
 
     let judgeName = "";
     function cut(a)
@@ -72,15 +73,34 @@ export default function Leadboard(){
     }
 
     useEffect(() => {
-        async function getWinners(){
+        async function getMarks() {
             setLoading(true);
-            const q = query(
-                collection(db,"studentMarks"),
-            );
-            const querySnapshot = await getDocs(q);
-            const data = querySnapshot.docs.map((doc) => doc.data());
 
-            let filteredData = data.filter(obj => 
+            const querySnapshot = await getDocs(
+                collection(db, "studentMarks")
+            );
+
+            const data = querySnapshot.docs.map((document) => ({
+                id: document.id,
+                ...document.data()
+            }));
+
+            setAllMarksData(data);
+            setLoading(false);
+        }
+        getMarks();
+    }, []);
+
+    useEffect(() => {
+        async function getWinners(){
+            // setLoading(true);
+            // const q = query(
+            //     collection(db,"studentMarks"),
+            // );
+            // const querySnapshot = await getDocs(q);
+            // const data = querySnapshot.docs.map((doc) => doc.data());
+
+            let filteredData = allMarksData.filter(obj => 
                 obj && Object.keys(obj).length !== 0 && obj.constructor === Object
             );
             //Total Mark Calculation && Cumulative Remarks
@@ -185,10 +205,10 @@ export default function Leadboard(){
                 setHeading("Search by Group, Samithi or Event");
             else
                 setHeading(headingParts.join(", "));
-            setLoading(false);
+            //setLoading(false);
         }   
         getWinners();
-    },[group,samithi,event]);
+    },[allMarksData,group,samithi,event]);
 
     function handlePrizeWinners(){
         const top3 = studentData.slice(0,3);
@@ -234,23 +254,23 @@ export default function Leadboard(){
         },1000);
     },[]);
 
-    useEffect(() => {
-        async function fetchLock(){
-            const q = query(
-                collection(db,"eventLock"),
-                where("group","==",group),
-                where("event","==",event)
-            );
+    // useEffect(() => {
+    //     async function fetchLock(){
+    //         const q = query(
+    //             collection(db,"eventLock"),
+    //             where("group","==",group),
+    //             where("event","==",event)
+    //         );
             
-            const querySnapshot = await getDocs(q);
-            const data = querySnapshot.docs.map((doc) => doc.data());
-            if (data.length !== 0)
-                setLock(data[0].lock);
-            else    
-                setLock("false");
-        }
-        fetchLock();
-    },[group,event]);
+    //         const querySnapshot = await getDocs(q);
+    //         const data = querySnapshot.docs.map((doc) => doc.data());
+    //         if (data.length !== 0)
+    //             setLock(data[0].lock);
+    //         else    
+    //             setLock("false");
+    //     }
+    //     fetchLock();
+    // },[group,event]);
 
     function handleClose(){
         setClicked(false);
@@ -260,47 +280,99 @@ export default function Leadboard(){
         setClicked(true);
     }
 
-    useEffect(() => {
-        async function fetchLockedEvents(){
-            const q = query(
-                collection(db,"eventLock")
-            );
-            const querySnapshot = await getDocs(q);
-            const data = querySnapshot.docs.map((doc) => doc.data());
-            let sortedData = data.sort((x,y) => x.group.localeCompare(y.group));
-            setLockedEvents(sortedData);
-        }
-        fetchLockedEvents();
-    },[clicked]);
+    // useEffect(() => {
+    //     async function fetchLockedEvents(){
+    //         const q = query(
+    //             collection(db,"eventLock")
+    //         );
+    //         const querySnapshot = await getDocs(q);
+    //         const data = querySnapshot.docs.map((doc) => doc.data());
+    //         let sortedData = data.sort((x,y) => x.group.localeCompare(y.group));
+    //         setLockedEvents(sortedData);
+    //     }
+    //     fetchLockedEvents();
+    // },[clicked]);
 
-    async function handleLock(groupValue,eventValue)
-    {
-        const q = query(
-            collection(db,"eventLock"),
-            where("group","==",groupValue),
-            where("event","==",eventValue)
+    // async function handleLock(groupValue,eventValue)
+    // {
+    //     const q = query(
+    //         collection(db,"eventLock"),
+    //         where("group","==",groupValue),
+    //         where("event","==",eventValue)
+    //     );
+    //     const querySnapshot = await getDocs(q);
+    //     querySnapshot.forEach(async (document) => {
+    //         const docRef = doc(db,"eventLock",document.id);
+    //         let currentLock = document.data().lock;
+    //         await updateDoc(docRef,{
+    //             lock : (currentLock === "true") ? "false" : "true"
+    //         });
+    //     });
+    // }
+
+    async function handleLock(groupValue, eventValue) {
+        const currentEvent = lockedEvents.find(
+            (item) =>
+                item.group === groupValue &&
+                item.event === eventValue
         );
-        const querySnapshot = await getDocs(q);
-        querySnapshot.forEach(async (document) => {
-            const docRef = doc(db,"eventLock",document.id);
-            let currentLock = document.data().lock;
-            await updateDoc(docRef,{
-                lock : (currentLock === "true") ? "false" : "true"
-            });
-        });
+
+        if (!currentEvent) return;
+
+        await updateDoc(
+            doc(db, "eventLock", currentEvent.id),
+            {
+                lock:
+                    currentEvent.lock === "true"
+                        ? "false"
+                        : "true"
+            }
+        );
     }
 
-    useEffect(() => {
-        onSnapshot(collection(db,"eventLock"), (snapshot) => {
-            let updatedData = snapshot.docs.map((doc) => ({
-                id : doc.id,
-                ...doc.data()
-            }));
-            let sortedData = updatedData.sort((x,y) => x.group.localeCompare(y.group));
-            setLockedEvents(sortedData);
-        });
-    },[]);
+    // useEffect(() => {
+    //     onSnapshot(collection(db,"eventLock"), (snapshot) => {
+    //         let updatedData = snapshot.docs.map((doc) => ({
+    //             id : doc.id,
+    //             ...doc.data()
+    //         }));
+    //         let sortedData = updatedData.sort((x,y) => x.group.localeCompare(y.group));
+    //         setLockedEvents(sortedData);
+    //     });
+    // },[]);
     
+    useEffect(() => {
+        const unsubscribe = onSnapshot(
+            collection(db, "eventLock"),
+            (snapshot) => {
+                const updatedData = snapshot.docs.map((doc) => ({
+                    id: doc.id,
+                    ...doc.data()
+                }));
+                updatedData.sort(
+                    (x, y) => x.group.localeCompare(y.group)
+                );
+                setLockedEvents(updatedData);
+            }
+        );
+        return () => unsubscribe();
+    }, []);
+
+    useEffect(() => {
+        if (group === "All" || event === "All") {
+            setLock("false");
+            return;
+        }
+
+        const currentEvent = lockedEvents.find(
+            (item) =>
+                item.group === group &&
+                item.event === event
+        );
+
+        setLock(currentEvent ? currentEvent.lock : "false");
+    }, [group, event, lockedEvents]);
+
     function handleAnalysis(){
         router.push("/analysis")
     }

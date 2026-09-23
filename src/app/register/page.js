@@ -596,7 +596,6 @@ export default function Register(){
                         });
                         alert("Sairam! Updated Successfully");
                     }
-                    window.location.reload();
                 }
                 catch(error)
                 {
@@ -665,26 +664,60 @@ export default function Register(){
     });
 
 
-    useEffect(() => {
-        async function fetchData(){
-            closeHelper();
-            setLoading(true);
-            const q = query(
-                collection(db,"studentDetails")
-            );
+    // useEffect(() => {
+    //     async function fetchData(){
+    //         closeHelper();
+    //         setLoading(true);
+    //         const q = query(
+    //             collection(db,"studentDetails")
+    //         );
+    //         const querySnapshot = await getDocs(q);
+    //         const data = querySnapshot.docs.map((doc) => doc.data());
+    //         let filteredData;
+    //         if (email === `admin@dlbts.${process.env.NEXT_PUBLIC_DISTRICT_CODE}`)
+    //             filteredData = data.filter((fd) => fd.email === email);
+    //         else
+    //             filteredData = data.filter((fd) => fd.samithi === samithiMap[email]);
+    //         filteredData = filteredData.sort((x,y) => x.group.localeCompare(y.group));
+    //         setStudentData(filteredData);
+    //         setLoading(false);
+    //     }
+    //     fetchData();
+    // },[email]);
+
+    async function fetchData() {
+        setLoading(true);
+        try {
+            let q;
+            if (email === `admin@dlbts.${process.env.NEXT_PUBLIC_DISTRICT_CODE}`){
+                q = query(
+                    collection(db, "studentDetails")
+                );
+            } else {
+                q = query(
+                    collection(db, "studentDetails"),
+                    where("samithi", "==", samithiMap[email])
+                );
+            }
             const querySnapshot = await getDocs(q);
-            const data = querySnapshot.docs.map((doc) => doc.data());
-            let filteredData;
-            if (email === `admin@dlbts.${process.env.NEXT_PUBLIC_DISTRICT_CODE}`)
-                filteredData = data.filter((fd) => fd.email === email);
-            else
-                filteredData = data.filter((fd) => fd.samithi === samithiMap[email]);
-            filteredData = filteredData.sort((x,y) => x.group.localeCompare(y.group));
-            setStudentData(filteredData);
+            const data = querySnapshot.docs.map((document) => ({
+                id: document.id,
+                ...document.data()
+            }));
+            data.sort((a, b) => a.name.localeCompare(b.name));
+            setStudentData(data);
+        } catch (error) {
+            console.log("Error fetching student data:", error);
+        } finally {
             setLoading(false);
         }
-        fetchData();
-    },[email]);
+    }
+
+    useEffect(() => {
+        if (email) {
+            fetchData();
+        }
+    }, [email]);
 
     function handleAddStudent(){
         setClicked(true);
@@ -741,7 +774,6 @@ export default function Register(){
         try{
             await deleteDoc(doc(db,"studentDetails",studentId));
             alert("Deleted sucessfully");
-            window.location.reload();
         }
         catch(error){
             console.error(error);

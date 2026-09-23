@@ -22,6 +22,7 @@ export default function Home(){
     const [studentData,setStudentData] = useState([]);
     const [click,setClick] = useState(false);
     const [divData,setDivData] = useState([]);
+    const [allMarksData, setAllMarksData] = useState([]);
 
     const router = useRouter();
 
@@ -40,18 +41,38 @@ export default function Home(){
                 setName("Admin");
             }
         })
-    })
+    });
+
+    useEffect(() => {
+        async function fetchMarks() {
+            setLoading(true);
+
+            const querySnapshot = await getDocs(
+                collection(db, "studentMarks")
+            );
+
+            const data = querySnapshot.docs.map((doc) => ({
+                id: doc.id,
+                ...doc.data()
+            }));
+
+            setAllMarksData(data);
+            setLoading(false);
+        }
+
+        fetchMarks();
+    }, []);
 
     useEffect(() => {
         async function fetchData(){
-            setLoading(true);
-            const q = query(
-                collection(db,"studentMarks")
-            );
-            const querySnapshot = await getDocs(q);
-            const data = querySnapshot.docs.map((doc) => doc.data());
+            // setLoading(true);
+            // const q = query(
+            //     collection(db,"studentMarks")
+            // );
+            // const querySnapshot = await getDocs(q);
+            // const data = querySnapshot.docs.map((doc) => doc.data());
             
-            let filteredData = data.filter(obj => 
+            let filteredData = allMarksData.filter(obj => 
                 obj && Object.keys(obj).length !== 0 && obj.constructor === Object
             );
 
@@ -254,10 +275,10 @@ export default function Home(){
             });
 
             setStudentData(Array.from(studentMap.entries()));
-            setLoading(false);
+            //setLoading(false);
         }
         fetchData();
-    },[group,samithi,event]);
+    },[allMarksData,group,samithi,event]);
 
     function handleLeaderboard(){
         router.push("/leaderboard")

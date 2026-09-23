@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useEffect, useState } from "react";
 import { auth, db } from "../_util/config";
 import { useRouter } from "next/navigation";
-import { collection, doc, getDocs, onSnapshot, query, updateDoc, where } from "firebase/firestore";
+import { collection, doc, getDocs, onSnapshot, updateDoc } from "firebase/firestore";
 import { signOut } from "firebase/auth";
 
 export default function Leadboard(){

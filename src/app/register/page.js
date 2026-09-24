@@ -781,43 +781,48 @@ export default function Register(){
         }
     }
 
-    async function handleCloseRegistration(){
-        const q = query(
-            collection(db,"closeRegForm")
-        )
+    async function handleCloseRegistration() {
+        const q = query(collection(db, "closeRegForm"));
         const querySnapshot = await getDocs(q);
-        const data = querySnapshot.docs.map((doc) => doc.data());
 
-        querySnapshot.forEach(async (document) => {
-            const docRef = doc(db,"closeRegForm",document.id);
-            await updateDoc(docRef,{
-                close: !data[0].close
+        if (querySnapshot.empty) {
+            return;
+        }
+
+        const currentClose = querySnapshot.docs[0].data().close;
+
+        for (const document of querySnapshot.docs) {
+            const docRef = doc(db, "closeRegForm", document.id);
+
+            await updateDoc(docRef, {
+                close: !currentClose
             });
-        });
+        }
 
-        closeHelper();
+        await closeHelper();
     }
 
-    async function closeHelper(){
-        const q1 = query(
-            collection(db,"closeRegForm")
-        )
-        const querySnapshot1 = await getDocs(q1);
-        const data1 = querySnapshot1.docs.map((doc) => doc.data());
+    async function closeHelper() {
+        const q = query(collection(db, "closeRegForm"));
+        const querySnapshot = await getDocs(q);
 
-        if (data1[0].close === true){
-            setClose(true);
-        }
-        else{
+        if (querySnapshot.empty) {
             setClose(false);
+            return;
         }
+        const closeValue = querySnapshot.docs[0].data().close;
+        setClose(closeValue);
     }
 
     useEffect(() => {
-        if (close){
-           alert("Sairam! Registration Form closed!");
+        closeHelper();
+    }, []);
+
+    useEffect(() => {
+        if (close) {
+            alert("Sairam! Registration Form closed!");
         }
-    },[close]);
+    }, [close]);
 
     function handleFormClose(){
         setClicked(false);

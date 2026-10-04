@@ -222,18 +222,34 @@ export default function Register(){
 
             let q;
             if (eventName.startsWith("Altar") || eventName.startsWith("Rudram")){
-                q = query(
-                    collection(db, "studentDetails"),
-                    where("groupEvent", "==", eventName),
-                    where("samithi","==",samithiMap[email])
-                );
+                if (email.startsWith("admin")){
+                    q = query(
+                        collection(db, "studentDetails"),
+                        where("groupEvent", "==", eventName),
+                    );
+                }
+                else{
+                    q = query(
+                        collection(db, "studentDetails"),
+                        where("groupEvent", "==", eventName),
+                        where("samithi","==",samithiMap[email])
+                    );
+                }
             }
             else{
-                q = query(
-                    collection(db, "studentDetails"),
-                    where("teamEvent", "==", eventName),
-                    where("samithi","==",samithiMap[email])
-                );
+                if (email.startsWith("admin")){
+                    q = query(
+                        collection(db, "studentDetails"),
+                        where("teamEvent", "==", eventName),
+                    );
+                }   
+                else{
+                    q = query(
+                        collection(db, "studentDetails"),
+                        where("teamEvent", "==", eventName),
+                        where("samithi","==",samithiMap[email])
+                    );
+                }
             }
             
             const querySnapshot = await getDocs(q);
@@ -261,11 +277,20 @@ export default function Register(){
     async function fetchEventTeams(eventName){
         try {
             setTeamsLoading(true);
-            const teamQuery = query(
-                collection(db, "groupEventTeams"),
-                where("eventName", "==", eventName),
-                where("samithi","==",samithiMap[email])
-            );
+            let teamQuery;
+            if (email.startsWith("admin")){
+                teamQuery = query(
+                    collection(db, "groupEventTeams"),
+                    where("eventName", "==", eventName),
+                );
+            }
+            else{
+                teamQuery = query(
+                    collection(db, "groupEventTeams"),
+                    where("eventName", "==", eventName),
+                    where("samithi","==",samithiMap[email])
+                );
+            }
             const teamSnapshot = await getDocs(teamQuery);
             const teams = teamSnapshot.docs.map((document) => ({
                 id: document.id,

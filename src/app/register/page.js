@@ -394,13 +394,15 @@ export default function Register(){
                 return;
             }
         }
-        if (!editingTeamId) {
-            const teamsForSelectedEvent = eventTeams.filter(
-                (team) => team.eventName === selectedGrpEvent
-            );
-            if (teamsForSelectedEvent.length >= MAX_TEAMS_PER_EVENT) {
-                setErrorMsg(`This event already has the maximum of ${MAX_TEAMS_PER_EVENT} teams.`);
-                return;
+        if (!email.startsWith("admin")){
+            if (!editingTeamId) {
+                const teamsForSelectedEvent = eventTeams.filter(
+                    (team) => team.eventName === selectedGrpEvent
+                );
+                if (teamsForSelectedEvent.length >= MAX_TEAMS_PER_EVENT) {
+                    setErrorMsg(`This event already has the maximum of ${MAX_TEAMS_PER_EVENT} teams.`);
+                    return;
+                }
             }
         }
 

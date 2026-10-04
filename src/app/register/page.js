@@ -1528,7 +1528,7 @@ export default function Register(){
                                                     : "Create New Team"
                                                 }
                                             </h3>
-                                            {eventTeams.length >= MAX_TEAMS_PER_EVENT && !editingTeamId ? (
+                                            {eventTeams.length >= MAX_TEAMS_PER_EVENT && !editingTeamId && !email.startsWith("admin") ? (
                                                 <div className="rounded-lg bg-orange-100 p-4 font-semibold text-orange-700">
                                                     This event already has the maximum of {MAX_TEAMS_PER_EVENT} teams.
                                                     Edit or delete an existing team to make changes.

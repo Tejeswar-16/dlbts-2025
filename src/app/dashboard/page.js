@@ -261,6 +261,33 @@ export default function Dashboard(){
         }
     }, [studentData,searchName,searchGroup,searchEvent,searchSamithi]);
 
+    const groupedStudents = {};
+
+    studentData.forEach(student => {
+        const group = student.group;
+        const eventFields = [
+            student.event1,
+            student.event2,
+            student.teamEvent,
+            student.groupEvent
+        ];
+
+        eventFields.forEach(event => {
+            // Skip empty event fields
+            if (event === "N/A") return;
+
+            if (!groupedStudents[group]) {
+                groupedStudents[group] = {};
+            }
+
+            if (!groupedStudents[group][event]) {
+                groupedStudents[group][event] = [];
+            }
+
+            groupedStudents[group][event].push(student);
+        });
+    });
+
     // const handleAttendance = async (id) => {
     //      const q = query(
     //         collection(db,"studentDetails"),
@@ -726,6 +753,95 @@ export default function Dashboard(){
                         </table>
                     </div>
                 </div>
+
+                {process.env.NEXT_PUBLIC_DISTRICT_CODE === 'kn' && <div className="mx-auto bg-white rounded-xl shadow-xl w-full mt-10 p-5">
+                    <h2 className="text-2xl font-bold text-center mb-8">
+                        Group-wise Event Registrations
+                    </h2>
+
+                    <div className="space-y-10">
+                        {Object.entries(groupedStudents).map(([group, events]) => (
+                            <div key={group}>
+                                <h3 className="text-xl font-bold bg-blue-950 text-white p-3 rounded-lg mb-5">
+                                    {group}
+                                </h3>
+
+                                <div className="space-y-8">
+                                    {Object.entries(events).map(([event, students]) => (
+                                        <div key={event}>
+                                            <h4 className="text-lg font-semibold text-gray-800 mb-3">
+                                                {event}
+                                                <span className="ml-2 text-sm font-normal text-gray-500">
+                                                    ({students.length} students)
+                                                </span>
+                                            </h4>
+
+                                            <div className="overflow-x-auto rounded-lg border border-gray-300">
+                                                <table className="w-full text-center border-collapse">
+                                                    <thead className="bg-gray-100">
+                                                        <tr>
+                                                            {[
+                                                                "S.No",
+                                                                "Student ID",
+                                                                "Name",
+                                                                "Gender",
+                                                                "DOB",
+                                                                "Samithi",
+                                                                "Attendance"
+                                                            ].map((heading) => (
+                                                                <th
+                                                                    key={heading}
+                                                                    className="px-4 py-3 border border-gray-300 font-semibold whitespace-nowrap"
+                                                                >
+                                                                    {heading}
+                                                                </th>
+                                                            ))}
+                                                        </tr>
+                                                    </thead>
+
+                                                    <tbody>
+                                                        {students.map((student, index) => (
+                                                            <tr
+                                                                key={student.id}
+                                                                className={
+                                                                    student.attendance === "P"
+                                                                        ? "bg-green-50 hover:bg-green-100"
+                                                                        : "bg-red-50 hover:bg-red-100"
+                                                                }
+                                                            >
+                                                                <td className="px-4 py-2 border border-gray-300">
+                                                                    {index + 1}
+                                                                </td>
+                                                                <td className="px-4 py-2 border border-gray-300">
+                                                                    {student.studentId}
+                                                                </td>
+                                                                <td className="px-4 py-2 border border-gray-300 whitespace-nowrap">
+                                                                    {student.name}
+                                                                </td>
+                                                                <td className="px-4 py-2 border border-gray-300">
+                                                                    {student.gender}
+                                                                </td>
+                                                                <td className="px-4 py-2 border border-gray-300 whitespace-nowrap">
+                                                                    {student.dob}
+                                                                </td>
+                                                                <td className="px-4 py-2 border border-gray-300 whitespace-nowrap">
+                                                                    {student.samithi}
+                                                                </td>
+                                                                <td className="px-4 py-2 border border-gray-300">
+                                                                    {student.attendance}
+                                                                </td>
+                                                            </tr>
+                                                        ))}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>}
             </div>
         </>
     );

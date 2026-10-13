@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { auth } from "../_util/config";
 import LogisticsList from "../LogisticsList";
-import Logistics from "../Logistics";
 import Image from "next/image";
 import { db } from "../_util/config";
 import { query, collection, getDocs, doc, updateDoc, addDoc, deleteDoc } from "firebase/firestore";

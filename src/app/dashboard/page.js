@@ -462,6 +462,184 @@ export default function Dashboard(){
 
                 <LogisticsList/>
 
+                {process.env.NEXT_PUBLIC_DISTRICT_CODE === 'kn' &&
+                <>
+                <div className="font-sans mx-auto bg-white rounded-xl shadow-xl w-full mt-10 p-5">
+                    <h2 className="text-2xl font-bold text-center mb-8">Group-wise Event Registrations</h2>
+
+                    <div className="space-y-8">
+                        {Object.entries(groupedStudents).map(([group, events]) => (
+                            <div key={group}>
+                                <h3 className="text-xl font-bold bg-blue-950 text-white p-3 rounded-lg mb-5">
+                                    {group}
+                                </h3>
+
+                                <div className="flex flex-row flex-wrap justify-center gap-5">
+                                    {Object.entries(events).map(([event, students]) => {
+                                        const maleCount = students.filter(
+                                            student => student.gender === "Male"
+                                        ).length;
+
+                                        const femaleCount = students.filter(
+                                            student => student.gender === "Female"
+                                        ).length;
+
+                                        return (
+                                            <button
+                                                key={event}
+                                                type="button"
+                                                onClick={() =>
+                                                    setSelectedEvent({
+                                                        group,
+                                                        event,
+                                                        students
+                                                    })
+                                                }
+                                                className="w-full sm:w-[calc(50%-10px)] lg:w-[calc(33.333%-14px)] xl:w-[280px] rounded-xl shadow-lg bg-white border border-gray-200 p-4 text-left hover:cursor-pointer hover:shadow-xl hover:scale-[1.02] transition duration-300"
+                                            >    
+                                            
+                                                <h4 className="font-bold text-lg text-center mb-4">
+                                                    {event}
+                                                </h4>
+
+                                                <div className="flex justify-between gap-3">
+                                                    <div className="flex flex-col gap-3 flex-1">
+                                                        <div className="bg-yellow-200 rounded-xl p-3 text-center">
+                                                            <h5 className="font-semibold text-lg">
+                                                                Male
+                                                            </h5>
+                                                            <p className="font-bold text-3xl">
+                                                                {maleCount}
+                                                            </p>
+                                                        </div>
+
+                                                        <div className="bg-yellow-200 rounded-xl p-3 text-center">
+                                                            <h5 className="font-semibold text-lg">
+                                                                Female
+                                                            </h5>
+                                                            <p className="font-bold text-3xl">
+                                                                {femaleCount}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="bg-green-200 rounded-xl p-3 flex-1 flex flex-col items-center justify-center">
+                                                        <h5 className="font-semibold text-lg">
+                                                            Total
+                                                        </h5>
+                                                        <p className="font-semibold">
+                                                            Students
+                                                        </p>
+                                                        <p className="font-bold text-3xl mt-3">
+                                                            {students.length}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </button>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+
+                    </div>
+
+                    {/* Student Details Modal */}
+                    {selectedEvent && (
+                    <div
+                    className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-3"
+                    onClick={() => setSelectedEvent(null)}
+                    >
+                    <div
+                    className="bg-white rounded-xl shadow-2xl w-full max-w-7xl max-h-[90vh] overflow-auto p-5"
+                    onClick={e => e.stopPropagation()}
+                    >
+                    <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-3 mb-5">
+                    <div>
+                    <h2 className="text-2xl font-bold">
+                    {selectedEvent.event}
+                    </h2>
+                    <p className="text-gray-600 mt-1">
+                    {selectedEvent.group} — {selectedEvent.students.length} students
+                    </p>
+                    </div>
+
+                                <button
+                                    type="button"
+                                    onClick={() => setSelectedEvent(null)}
+                                    className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg"
+                                >
+                                    Close ✕
+                                </button>
+                            </div>
+
+                            <div className="overflow-x-auto rounded-lg border border-gray-300">
+                                <table className="w-full text-center border-collapse">
+                                    <thead className="bg-gray-100">
+                                        <tr>
+                                            {[
+                                                "S.No",
+                                                "Student ID",
+                                                "Name",
+                                                "Gender",
+                                                "DOB",
+                                                "Samithi",
+                                                "Attendance"
+                                            ].map(heading => (
+                                                <th
+                                                    key={heading}
+                                                    className="px-4 py-3 border border-gray-300 whitespace-nowrap"
+                                                >
+                                                    {heading}
+                                                </th>
+                                            ))}
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        {selectedEvent.students.map((student, index) => (
+                                            <tr
+                                                key={student.id ?? student.studentId ?? index}
+                                                className={
+                                                    student.attendance === "P"
+                                                        ? "bg-green-50 hover:bg-green-100"
+                                                        : "bg-red-50 hover:bg-red-100"
+                                                }
+                                            >
+                                                <td className="px-4 py-2 border border-gray-300">
+                                                    {index + 1}
+                                                </td>
+                                                <td className="px-4 py-2 border border-gray-300">
+                                                    {student.studentId}
+                                                </td>
+                                                <td className="px-4 py-2 border border-gray-300 whitespace-nowrap">
+                                                    {student.name}
+                                                </td>
+                                                <td className="px-4 py-2 border border-gray-300">
+                                                    {student.gender}
+                                                </td>
+                                                <td className="px-4 py-2 border border-gray-300 whitespace-nowrap">
+                                                    {student.dob}
+                                                </td>
+                                                <td className="px-4 py-2 border border-gray-300 whitespace-nowrap">
+                                                    {student.samithi}
+                                                </td>
+                                                <td className="px-4 py-2 border border-gray-300">
+                                                    {student.attendance}
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    )}
+                    </>
+                }
+
                 <div className="hidden md:flex md:flex-row md:justify-between lg:hidden">
                     <div className="ml-10 mt-10 bg-white shadow-xl rounded-2xl w-75 h-90 lg:w-250 lg:h-45">
                         <input value={searchName} onChange={(e) => {setSearchName(e.target.value.toUpperCase())}} className="mx-auto font-sans text-xl rounded-xl ml-3 w-69 lg:ml-10 lg:w-345 lg:h-10 border p-2 my-4" placeholder="Search student by name"/>
@@ -778,184 +956,6 @@ export default function Dashboard(){
                         </table>
                     </div>
                 </div>
-
-                {process.env.NEXT_PUBLIC_DISTRICT_CODE === 'kn' &&
-                <>
-                <div className="font-sans mx-auto bg-white rounded-xl shadow-xl w-full mt-10 p-5">
-                    <h2 className="text-2xl font-bold text-center mb-8">Group-wise Event Registrations</h2>
-
-                    <div className="space-y-8">
-                        {Object.entries(groupedStudents).map(([group, events]) => (
-                            <div key={group}>
-                                <h3 className="text-xl font-bold bg-blue-950 text-white p-3 rounded-lg mb-5">
-                                    {group}
-                                </h3>
-
-                                <div className="flex flex-row flex-wrap justify-center gap-5">
-                                    {Object.entries(events).map(([event, students]) => {
-                                        const maleCount = students.filter(
-                                            student => student.gender === "Male"
-                                        ).length;
-
-                                        const femaleCount = students.filter(
-                                            student => student.gender === "Female"
-                                        ).length;
-
-                                        return (
-                                            <button
-                                                key={event}
-                                                type="button"
-                                                onClick={() =>
-                                                    setSelectedEvent({
-                                                        group,
-                                                        event,
-                                                        students
-                                                    })
-                                                }
-                                                className="w-full sm:w-[calc(50%-10px)] lg:w-[calc(33.333%-14px)] xl:w-[280px] rounded-xl shadow-lg bg-white border border-gray-200 p-4 text-left hover:cursor-pointer hover:shadow-xl hover:scale-[1.02] transition duration-300"
-                                            >    
-                                            
-                                                <h4 className="font-bold text-lg text-center mb-4">
-                                                    {event}
-                                                </h4>
-
-                                                <div className="flex justify-between gap-3">
-                                                    <div className="flex flex-col gap-3 flex-1">
-                                                        <div className="bg-yellow-200 rounded-xl p-3 text-center">
-                                                            <h5 className="font-semibold text-lg">
-                                                                Male
-                                                            </h5>
-                                                            <p className="font-bold text-3xl">
-                                                                {maleCount}
-                                                            </p>
-                                                        </div>
-
-                                                        <div className="bg-yellow-200 rounded-xl p-3 text-center">
-                                                            <h5 className="font-semibold text-lg">
-                                                                Female
-                                                            </h5>
-                                                            <p className="font-bold text-3xl">
-                                                                {femaleCount}
-                                                            </p>
-                                                        </div>
-                                                    </div>
-
-                                                    <div className="bg-green-200 rounded-xl p-3 flex-1 flex flex-col items-center justify-center">
-                                                        <h5 className="font-semibold text-lg">
-                                                            Total
-                                                        </h5>
-                                                        <p className="font-semibold">
-                                                            Students
-                                                        </p>
-                                                        <p className="font-bold text-3xl mt-3">
-                                                            {students.length}
-                                                        </p>
-                                                    </div>
-                                                </div>
-                                            </button>
-                                        );
-                                    })}
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-
-                    </div>
-
-                    {/* Student Details Modal */}
-                    {selectedEvent && (
-                    <div
-                    className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-3"
-                    onClick={() => setSelectedEvent(null)}
-                    >
-                    <div
-                    className="bg-white rounded-xl shadow-2xl w-full max-w-7xl max-h-[90vh] overflow-auto p-5"
-                    onClick={e => e.stopPropagation()}
-                    >
-                    <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-3 mb-5">
-                    <div>
-                    <h2 className="text-2xl font-bold">
-                    {selectedEvent.event}
-                    </h2>
-                    <p className="text-gray-600 mt-1">
-                    {selectedEvent.group} — {selectedEvent.students.length} students
-                    </p>
-                    </div>
-
-                                <button
-                                    type="button"
-                                    onClick={() => setSelectedEvent(null)}
-                                    className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg"
-                                >
-                                    Close ✕
-                                </button>
-                            </div>
-
-                            <div className="overflow-x-auto rounded-lg border border-gray-300">
-                                <table className="w-full text-center border-collapse">
-                                    <thead className="bg-gray-100">
-                                        <tr>
-                                            {[
-                                                "S.No",
-                                                "Student ID",
-                                                "Name",
-                                                "Gender",
-                                                "DOB",
-                                                "Samithi",
-                                                "Attendance"
-                                            ].map(heading => (
-                                                <th
-                                                    key={heading}
-                                                    className="px-4 py-3 border border-gray-300 whitespace-nowrap"
-                                                >
-                                                    {heading}
-                                                </th>
-                                            ))}
-                                        </tr>
-                                    </thead>
-
-                                    <tbody>
-                                        {selectedEvent.students.map((student, index) => (
-                                            <tr
-                                                key={student.id ?? student.studentId ?? index}
-                                                className={
-                                                    student.attendance === "P"
-                                                        ? "bg-green-50 hover:bg-green-100"
-                                                        : "bg-red-50 hover:bg-red-100"
-                                                }
-                                            >
-                                                <td className="px-4 py-2 border border-gray-300">
-                                                    {index + 1}
-                                                </td>
-                                                <td className="px-4 py-2 border border-gray-300">
-                                                    {student.studentId}
-                                                </td>
-                                                <td className="px-4 py-2 border border-gray-300 whitespace-nowrap">
-                                                    {student.name}
-                                                </td>
-                                                <td className="px-4 py-2 border border-gray-300">
-                                                    {student.gender}
-                                                </td>
-                                                <td className="px-4 py-2 border border-gray-300 whitespace-nowrap">
-                                                    {student.dob}
-                                                </td>
-                                                <td className="px-4 py-2 border border-gray-300 whitespace-nowrap">
-                                                    {student.samithi}
-                                                </td>
-                                                <td className="px-4 py-2 border border-gray-300">
-                                                    {student.attendance}
-                                                </td>
-                                            </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-                    </div>
-
-                    )}
-                    </>
-                }
             </div>
         </>
     );

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { auth } from "../_util/config";
 import LogisticsList from "../LogisticsList";
+import Logistics from "../Logistics";
 import Image from "next/image";
 import { db } from "../_util/config";
 import { query, collection, getDocs, doc, updateDoc, addDoc, deleteDoc } from "firebase/firestore";
@@ -26,6 +27,7 @@ export default function Dashboard(){
     const [fileName,setFileName] = useState("");
     const [backup,setBackup] = useState(false);
     const [displayedStudents, setDisplayedStudents] = useState([]);
+    const [selectedEvent, setSelectedEvent] = useState(null);
 
     const router = useRouter();
     function handleEventsClick(){
@@ -261,24 +263,26 @@ export default function Dashboard(){
         }
     }, [studentData,searchName,searchGroup,searchEvent,searchSamithi]);
 
-    const groupedStudents = {};
+    const groupedStudents = {
+        "Group 1": {},
+        "Group 2": {},
+        "Group 3": {},
+        "Team Events": {},
+        "Group Events": {}
+    };
 
     studentData.forEach(student => {
         const group = student.group;
-        const eventFields = [
+
+        // Individual events go under Group 1, Group 2, or Group 3
+        const individualEvents = [
             student.event1,
-            student.event2,
-            student.teamEvent,
-            student.groupEvent
+            student.event2
         ];
 
-        eventFields.forEach(event => {
-            // Skip empty event fields
-            if (event === "N/A") return;
-
-            if (!groupedStudents[group]) {
-                groupedStudents[group] = {};
-            }
+        individualEvents.forEach(event => {
+            if (!event || event === "N/A") return;
+            if (!groupedStudents[group]) return;
 
             if (!groupedStudents[group][event]) {
                 groupedStudents[group][event] = [];
@@ -286,6 +290,28 @@ export default function Dashboard(){
 
             groupedStudents[group][event].push(student);
         });
+
+        // Team events go into a separate section
+        const teamEvent = student.teamEvent;
+
+        if (teamEvent && teamEvent !== "N/A") {
+            if (!groupedStudents["Team Events"][teamEvent]) {
+                groupedStudents["Team Events"][teamEvent] = [];
+            }
+
+            groupedStudents["Team Events"][teamEvent].push(student);
+        }
+
+        // Group events go into a separate section
+        const groupEvent = student.groupEvent;
+
+        if (groupEvent && groupEvent !== "N/A") {
+            if (!groupedStudents["Group Events"][groupEvent]) {
+                groupedStudents["Group Events"][groupEvent] = [];
+            }
+
+            groupedStudents["Group Events"][groupEvent].push(student);
+        }
     });
 
     // const handleAttendance = async (id) => {
@@ -754,94 +780,183 @@ export default function Dashboard(){
                     </div>
                 </div>
 
-                {process.env.NEXT_PUBLIC_DISTRICT_CODE === 'kn' && <div className="mx-auto bg-white rounded-xl shadow-xl w-full mt-10 p-5">
-                    <h2 className="text-2xl font-bold text-center mb-8">
-                        Group-wise Event Registrations
-                    </h2>
+                {process.env.NEXT_PUBLIC_DISTRICT_CODE === 'kn' &&
+                <>
+                <div className="font-sans mx-auto bg-white rounded-xl shadow-xl w-full mt-10 p-5">
+                    <h2 className="text-2xl font-bold text-center mb-8">Group-wise Event Registrations</h2>
 
-                    <div className="space-y-10">
+                    <div className="space-y-8">
                         {Object.entries(groupedStudents).map(([group, events]) => (
                             <div key={group}>
                                 <h3 className="text-xl font-bold bg-blue-950 text-white p-3 rounded-lg mb-5">
                                     {group}
                                 </h3>
 
-                                <div className="space-y-8">
-                                    {Object.entries(events).map(([event, students]) => (
-                                        <div key={event}>
-                                            <h4 className="text-lg font-semibold text-gray-800 mb-3">
-                                                {event}
-                                                <span className="ml-2 text-sm font-normal text-gray-500">
-                                                    ({students.length} students)
-                                                </span>
-                                            </h4>
+                                <div className="flex flex-row flex-wrap justify-center gap-5">
+                                    {Object.entries(events).map(([event, students]) => {
+                                        const maleCount = students.filter(
+                                            student => student.gender === "Male"
+                                        ).length;
 
-                                            <div className="overflow-x-auto rounded-lg border border-gray-300">
-                                                <table className="w-full text-center border-collapse">
-                                                    <thead className="bg-gray-100">
-                                                        <tr>
-                                                            {[
-                                                                "S.No",
-                                                                "Student ID",
-                                                                "Name",
-                                                                "Gender",
-                                                                "DOB",
-                                                                "Samithi",
-                                                                "Attendance"
-                                                            ].map((heading) => (
-                                                                <th
-                                                                    key={heading}
-                                                                    className="px-4 py-3 border border-gray-300 font-semibold whitespace-nowrap"
-                                                                >
-                                                                    {heading}
-                                                                </th>
-                                                            ))}
-                                                        </tr>
-                                                    </thead>
+                                        const femaleCount = students.filter(
+                                            student => student.gender === "Female"
+                                        ).length;
 
-                                                    <tbody>
-                                                        {students.map((student, index) => (
-                                                            <tr
-                                                                key={student.id}
-                                                                className={
-                                                                    student.attendance === "P"
-                                                                        ? "bg-green-50 hover:bg-green-100"
-                                                                        : "bg-red-50 hover:bg-red-100"
-                                                                }
-                                                            >
-                                                                <td className="px-4 py-2 border border-gray-300">
-                                                                    {index + 1}
-                                                                </td>
-                                                                <td className="px-4 py-2 border border-gray-300">
-                                                                    {student.studentId}
-                                                                </td>
-                                                                <td className="px-4 py-2 border border-gray-300 whitespace-nowrap">
-                                                                    {student.name}
-                                                                </td>
-                                                                <td className="px-4 py-2 border border-gray-300">
-                                                                    {student.gender}
-                                                                </td>
-                                                                <td className="px-4 py-2 border border-gray-300 whitespace-nowrap">
-                                                                    {student.dob}
-                                                                </td>
-                                                                <td className="px-4 py-2 border border-gray-300 whitespace-nowrap">
-                                                                    {student.samithi}
-                                                                </td>
-                                                                <td className="px-4 py-2 border border-gray-300">
-                                                                    {student.attendance}
-                                                                </td>
-                                                            </tr>
-                                                        ))}
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    ))}
+                                        return (
+                                            <button
+                                                key={event}
+                                                type="button"
+                                                onClick={() =>
+                                                    setSelectedEvent({
+                                                        group,
+                                                        event,
+                                                        students
+                                                    })
+                                                }
+                                                className="w-full sm:w-[calc(50%-10px)] lg:w-[calc(33.333%-14px)] xl:w-[280px] rounded-xl shadow-lg bg-white border border-gray-200 p-4 text-left hover:cursor-pointer hover:shadow-xl hover:scale-[1.02] transition duration-300"
+                                            >    
+                                            
+                                                <h4 className="font-bold text-lg text-center mb-4">
+                                                    {event}
+                                                </h4>
+
+                                                <div className="flex justify-between gap-3">
+                                                    <div className="flex flex-col gap-3 flex-1">
+                                                        <div className="bg-yellow-200 rounded-xl p-3 text-center">
+                                                            <h5 className="font-semibold text-lg">
+                                                                Male
+                                                            </h5>
+                                                            <p className="font-bold text-3xl">
+                                                                {maleCount}
+                                                            </p>
+                                                        </div>
+
+                                                        <div className="bg-yellow-200 rounded-xl p-3 text-center">
+                                                            <h5 className="font-semibold text-lg">
+                                                                Female
+                                                            </h5>
+                                                            <p className="font-bold text-3xl">
+                                                                {femaleCount}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className="bg-green-200 rounded-xl p-3 flex-1 flex flex-col items-center justify-center">
+                                                        <h5 className="font-semibold text-lg">
+                                                            Total
+                                                        </h5>
+                                                        <p className="font-semibold">
+                                                            Students
+                                                        </p>
+                                                        <p className="font-bold text-3xl mt-3">
+                                                            {students.length}
+                                                        </p>
+                                                    </div>
+                                                </div>
+                                            </button>
+                                        );
+                                    })}
                                 </div>
                             </div>
                         ))}
                     </div>
-                </div>}
+
+                    </div>
+
+                    {/* Student Details Modal */}
+                    {selectedEvent && (
+                    <div
+                    className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-3"
+                    onClick={() => setSelectedEvent(null)}
+                    >
+                    <div
+                    className="bg-white rounded-xl shadow-2xl w-full max-w-7xl max-h-[90vh] overflow-auto p-5"
+                    onClick={e => e.stopPropagation()}
+                    >
+                    <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-3 mb-5">
+                    <div>
+                    <h2 className="text-2xl font-bold">
+                    {selectedEvent.event}
+                    </h2>
+                    <p className="text-gray-600 mt-1">
+                    {selectedEvent.group} — {selectedEvent.students.length} students
+                    </p>
+                    </div>
+
+                                <button
+                                    type="button"
+                                    onClick={() => setSelectedEvent(null)}
+                                    className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg"
+                                >
+                                    Close ✕
+                                </button>
+                            </div>
+
+                            <div className="overflow-x-auto rounded-lg border border-gray-300">
+                                <table className="w-full text-center border-collapse">
+                                    <thead className="bg-gray-100">
+                                        <tr>
+                                            {[
+                                                "S.No",
+                                                "Student ID",
+                                                "Name",
+                                                "Gender",
+                                                "DOB",
+                                                "Samithi",
+                                                "Attendance"
+                                            ].map(heading => (
+                                                <th
+                                                    key={heading}
+                                                    className="px-4 py-3 border border-gray-300 whitespace-nowrap"
+                                                >
+                                                    {heading}
+                                                </th>
+                                            ))}
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        {selectedEvent.students.map((student, index) => (
+                                            <tr
+                                                key={student.id ?? student.studentId ?? index}
+                                                className={
+                                                    student.attendance === "P"
+                                                        ? "bg-green-50 hover:bg-green-100"
+                                                        : "bg-red-50 hover:bg-red-100"
+                                                }
+                                            >
+                                                <td className="px-4 py-2 border border-gray-300">
+                                                    {index + 1}
+                                                </td>
+                                                <td className="px-4 py-2 border border-gray-300">
+                                                    {student.studentId}
+                                                </td>
+                                                <td className="px-4 py-2 border border-gray-300 whitespace-nowrap">
+                                                    {student.name}
+                                                </td>
+                                                <td className="px-4 py-2 border border-gray-300">
+                                                    {student.gender}
+                                                </td>
+                                                <td className="px-4 py-2 border border-gray-300 whitespace-nowrap">
+                                                    {student.dob}
+                                                </td>
+                                                <td className="px-4 py-2 border border-gray-300 whitespace-nowrap">
+                                                    {student.samithi}
+                                                </td>
+                                                <td className="px-4 py-2 border border-gray-300">
+                                                    {student.attendance}
+                                                </td>
+                                            </tr>
+                                        ))}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    )}
+                    </>
+                }
             </div>
         </>
     );

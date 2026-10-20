@@ -2328,7 +2328,7 @@ export default function Judging(){
                                 <button onClick={handleClose} className="rounded-md p-1 font-sans text-sm hover:cursor-pointer text-gray-100">❌</button>
                             </div>
                             <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Award Marks</h1>
-                            <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Student Name: {amName}</h1>
+                            {process.env.NEXT_PUBLIC_DISTRICT_CODE === 'ks' && <h1 className="flex justify-center text-center font-sans font-bold text-lg md:text-xl pt-2">Student Name: {amName}</h1>}
                             <table className="mx-auto text-center w-70 md:w-100 mt-2 mb-2">
                                 <thead className="bg-blue-950 text-white">
                                     <tr>
@@ -2456,7 +2456,7 @@ export default function Judging(){
                                 ((event === "Rudram Namakam Chanting - Boys") || (event === "Rudram Namakam Chanting - Girls")) ?
                                     <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Samithi Name: {amSamithi}</h1>
                                 :
-                                    <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Student Name: {amName}</h1>
+                                    (process.env.NEXT_PUBLIC_DISTRICT_CODE === 'ks' && (<h1 className="flex justify-center font-sans text-center font-bold text-lg md:text-xl pt-2">Student Name: {amName}</h1>))
                             }
                             <table className="mx-auto text-center w-70 md:w-100 mt-2 mb-2">
                                 <thead className="bg-blue-950 text-white">
@@ -2573,7 +2573,7 @@ export default function Judging(){
                                 <button onClick={handleClose} className="rounded-md p-1 font-sans text-sm hover:cursor-pointer text-gray-100">❌</button>
                             </div>
                             <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Award Marks</h1>
-                            <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Student Name: {amName}</h1>
+                            {process.env.NEXT_PUBLIC_DISTRICT_CODE === 'ks' && <h1 className="flex justify-center font-sans text-center font-bold text-lg md:text-xl pt-2">Student Name: {amName}</h1>}
                             <table className="mx-auto text-center w-70 md:w-100 mt-2 mb-2">
                                 <thead className="bg-blue-950 text-white">
                                     <tr>
@@ -2661,7 +2661,7 @@ export default function Judging(){
                                 <button onClick={handleClose} className="rounded-md p-1 font-sans text-sm hover:cursor-pointer text-gray-100">❌</button>
                             </div>
                             <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Award Marks</h1>
-                            <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Student Name: {amName}</h1>
+                            {process.env.NEXT_PUBLIC_DISTRICT_CODE === 'ks' && <h1 className="flex justify-center text-center font-sans font-bold text-lg md:text-xl pt-2">Student Name: {amName}</h1>}
                             <table className="mx-auto text-center w-70 md:w-100 mt-2 mb-2">
                                 <thead className="bg-blue-950 text-white">
                                     <tr>
@@ -2749,7 +2749,7 @@ export default function Judging(){
                                 <button onClick={handleClose} className="rounded-md p-1 font-sans text-sm hover:cursor-pointer text-gray-100">❌</button>
                             </div>
                             <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Award Marks</h1>
-                            <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Student Name: {amName}</h1>
+                            {process.env.NEXT_PUBLIC_DISTRICT_CODE === 'ks' && <h1 className="flex justify-center text-center font-sans font-bold text-lg md:text-xl pt-2">Student Name: {amName}</h1>}
                             <table className="mx-auto text-center w-70 md:w-100 mt-2 mb-2">
                                 <thead className="bg-blue-950 text-white">
                                     <tr>
@@ -2837,7 +2837,7 @@ export default function Judging(){
                                 <button onClick={handleClose} className="rounded-md p-1 font-sans text-sm hover:cursor-pointer text-gray-100">❌</button>
                             </div>
                             <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Award Marks</h1>
-                            <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Student Name: {amName}</h1>
+                            {process.env.NEXT_PUBLIC_DISTRICT_CODE === 'ks' && <h1 className="flex justify-center font-sans text-center font-bold text-lg md:text-xl pt-2">Student Name: {amName}</h1>}
                             <table className="mx-auto text-center w-70 md:w-100 mt-2 mb-2">
                                 <thead className="bg-blue-950 text-white">
                                     <tr>
@@ -2951,7 +2951,7 @@ export default function Judging(){
                                 <button onClick={handleClose} className="rounded-md p-1 font-sans text-sm hover:cursor-pointer text-gray-100">❌</button>
                             </div>
                             <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Award Marks</h1>
-                            <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Student Name: {amName}</h1>
+                            {process.env.NEXT_PUBLIC_DISTRICT_CODE === 'ks' && <h1 className="flex justify-center font-sans text-center font-bold text-lg md:text-xl pt-2">Student Name: {amName}</h1>}
                             <table className="mx-auto text-center w-70 md:w-100 mt-2 mb-2">
                                 <thead className="bg-blue-950 text-white">
                                     <tr>
@@ -3039,7 +3039,7 @@ export default function Judging(){
                                 <button onClick={handleClose} className="rounded-md p-1 font-sans text-sm hover:cursor-pointer text-gray-100">❌</button>
                             </div>
                             <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Award Marks</h1>
-                            <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Student Name: {amName}</h1>
+                            {process.env.NEXT_PUBLIC_DISTRICT_CODE === 'ks' && <h1 className="flex justify-center font-sans font-bold text-center text-lg md:text-xl pt-2">Student Name: {amName}</h1>}
                             <table className="mx-auto text-center w-70 md:w-100 mt-2 mb-2">
                                 <thead className="bg-blue-950 text-white">
                                     <tr>
@@ -3365,7 +3365,7 @@ export default function Judging(){
                                 <button onClick={handleClose} className="rounded-md p-1 font-sans text-sm hover:cursor-pointer text-gray-100">❌</button>
                             </div>
                             <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Award Marks</h1>
-                            <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Student Name: {amName}</h1>
+                            {process.env.NEXT_PUBLIC_DISTRICT_CODE === 'ks' && <h1 className="flex justify-center font-sans font-bold text-center text-lg md:text-xl pt-2">Student Name: {amName}</h1>}
                             <table className="mx-auto text-center w-70 md:w-100 mt-2 mb-2">
                                 <thead className="bg-blue-950 text-white">
                                     <tr>
@@ -3453,7 +3453,7 @@ export default function Judging(){
                                 <button onClick={handleClose} className="rounded-md p-1 font-sans text-sm hover:cursor-pointer text-gray-100">❌</button>
                             </div>
                             <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Award Marks</h1>
-                            <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Student Name: {amName}</h1>
+                            {process.env.NEXT_PUBLIC_DISTRICT_CODE === 'ks' && <h1 className="flex justify-center font-sans font-bold text-center text-lg md:text-xl pt-2">Student Name: {amName}</h1>}
                             <div className="flex justify-center items-center flex-col">
                                 <h1 className="font-bold mt-4">Enter the number of accurate sayings</h1>
                                 <input value={tedcAccurateSaying} onChange={(e) => setTeDcAccurateSaying(e.target.value)} className="font-sans rounded-xl border p-2 w-70 md:w-100 mx-4 mb-2" type="number" placeholder="Enter the marks here..."></input>
@@ -3478,7 +3478,7 @@ export default function Judging(){
                                 <button onClick={handleClose} className="rounded-md p-1 font-sans text-sm hover:cursor-pointer text-gray-100">❌</button>
                             </div>
                             <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Award Marks</h1>
-                            <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Samithi Name: {amSamithi}</h1>
+                            <h1 className="flex justify-center font-sans font-bold text-lg text-center md:text-xl pt-2">Samithi Name: {amSamithi}</h1>
                             <table className="mx-auto text-center w-70 md:w-100 mt-2 mb-2">
                                 <thead className="bg-blue-950 text-white">
                                     <tr>

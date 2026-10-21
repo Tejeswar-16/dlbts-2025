@@ -2198,7 +2198,11 @@ export default function Judging(){
                                                 <td className="font-sans px-2 py-4 font-semibold border border-black">
                                                     <div className="md:flex md:flex-row md:justify-between md:items-center">
                                                         <div>
-                                                            <h1 className="font-sans font-bold text-lg mx-auto flex justify-center items-center lg:text-xl">{group.teamName.toUpperCase()}</h1>
+                                                            {process.env.NEXT_PUBLIC_DISTRICT_CODE === "kn" ? 
+                                                                <h1 className="font-sans font-bold text-lg mx-auto flex justify-center items-center lg:text-xl">{((group.teamName).substring((group.teamName).length-6)).toUpperCase()}</h1>
+                                                                :
+                                                                <h1 className="font-sans font-bold text-lg mx-auto flex justify-center items-center lg:text-xl">{(group.teamName).toUpperCase()}</h1>
+                                                            }
                                                         </div>
                                                         <div className="flex flex-col justify-between items-center mt-2 mb-2 lg:mt-0 lg:mb-0">
                                                             {
@@ -2454,7 +2458,7 @@ export default function Judging(){
                             <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Award Marks</h1>
                             {   
                                 ((event === "Rudram Namakam Chanting - Boys") || (event === "Rudram Namakam Chanting - Girls")) ?
-                                    <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Samithi Name: {amSamithi}</h1>
+                                    (process.env.NEXT_PUBLIC_DISTRICT_CODE === 'ks'&& (<h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Samithi Name: {amSamithi}</h1>))
                                 :
                                     (process.env.NEXT_PUBLIC_DISTRICT_CODE === 'ks' && (<h1 className="flex justify-center font-sans text-center font-bold text-lg md:text-xl pt-2">Student Name: {amName}</h1>))
                             }
@@ -3277,7 +3281,7 @@ export default function Judging(){
                                 <button onClick={handleClose} className="rounded-md p-1 font-sans text-sm hover:cursor-pointer text-gray-100">❌</button>
                             </div>
                             <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Award Marks</h1>
-                            <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Samithi Name: {amSamithi}</h1>
+                            {process.env.NEXT_PUBLIC_DISTRICT_CODE === "ks" && <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Samithi Name: {amSamithi}</h1>}
                             <table className="mx-auto text-center w-70 md:w-100 mt-2 mb-2">
                                 <thead className="bg-blue-950 text-white">
                                     <tr>
@@ -3478,7 +3482,7 @@ export default function Judging(){
                                 <button onClick={handleClose} className="rounded-md p-1 font-sans text-sm hover:cursor-pointer text-gray-100">❌</button>
                             </div>
                             <h1 className="flex justify-center font-sans font-bold text-lg md:text-xl pt-2">Award Marks</h1>
-                            <h1 className="flex justify-center font-sans font-bold text-lg text-center md:text-xl pt-2">Samithi Name: {amSamithi}</h1>
+                            {process.env.NEXT_PUBLIC_DISTRICT_CODE === "ks" && <h1 className="flex justify-center font-sans font-bold text-lg text-center md:text-xl pt-2">Samithi Name: {amSamithi}</h1>}
                             <table className="mx-auto text-center w-70 md:w-100 mt-2 mb-2">
                                 <thead className="bg-blue-950 text-white">
                                     <tr>

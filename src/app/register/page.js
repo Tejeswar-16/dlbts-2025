@@ -1537,7 +1537,7 @@ export default function Register(){
                                             <div className="flex flex-col md:flex-row gap-3">
                                                 <input
                                                     type="text"
-                                                    value={teamName}
+                                                    defaultValue={teamName}
                                                     className="flex-1 rounded-lg border px-4 py-3 outline-none focus:ring-2 focus:ring-green-400"
                                                 />
                                                 <button

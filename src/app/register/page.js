@@ -259,11 +259,15 @@ export default function Register(){
             }));
             setGrpEventStudents(students);
             const teamsForEvent = await fetchEventTeams(eventName);
-            setTeamName(
-                teamsForEvent.length >= MAX_TEAMS_PER_EVENT
-                    ? ""
-                    : teamsForEvent.length === 0 ? `${samithiMap[email]}: Team A` : `${samithiMap[email]}: Team B`
-            );
+            if (email.startsWith("admin"))
+                setTeamName("");
+            else{
+                setTeamName(
+                    teamsForEvent.length >= MAX_TEAMS_PER_EVENT
+                        ? ""
+                        : teamsForEvent.length === 0 ? `${samithiMap[email]}: Team A` : `${samithiMap[email]}: Team B`
+                );
+            }
         }
         catch(error) {
             console.log(error);

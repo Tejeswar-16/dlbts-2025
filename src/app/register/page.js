@@ -1538,7 +1538,6 @@ export default function Register(){
                                                 <input
                                                     type="text"
                                                     value={teamName}
-                                                    readOnly
                                                     className="flex-1 rounded-lg border px-4 py-3 outline-none focus:ring-2 focus:ring-green-400"
                                                 />
                                                 <button

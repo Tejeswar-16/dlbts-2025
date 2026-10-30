@@ -8,6 +8,8 @@ import { signOut } from "firebase/auth";
 import { useRouter } from "next/navigation";
 import { MdDelete } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
+import { TbDownload } from "react-icons/tb";
+import { generateCertificatePDF } from "../_util/generateCertificatePDF";
 import * as XLSX from "xlsx";
 
 export default function Register(){
@@ -859,6 +861,46 @@ export default function Register(){
         setClicked(false);
     }
 
+    const handleCertificateDownload = async (student) => {
+        try {
+            if (student.event1 !== "N/A"){
+                await generateCertificatePDF(
+                    student.name,
+                    student.group,
+                    student.samithi,
+                    student.event1
+                );
+            }
+            if (student.event2 !== "N/A"){
+                await generateCertificatePDF(
+                    student.name,
+                    student.group,
+                    student.samithi,
+                    student.event2
+                );
+            }
+            if (student.teamEvent !== "N/A"){
+                await generateCertificatePDF(
+                    student.name,
+                    student.group,
+                    student.samithi,
+                    student.teamEvent
+                );
+            }
+            if (student.groupEvent !== "N/A"){
+                await generateCertificatePDF(
+                    student.name,
+                    student.group,
+                    student.samithi,
+                    student.groupEvent
+                );
+            }
+        } catch (error) {
+            console.error("Certificate download failed:", error);
+            alert("Unable to generate certificate.");
+        }
+    };
+
     return (
         <>
             <div className="relative bg-gray-100 py-5 min-h-screen lg:bg-gray-100">
@@ -903,6 +945,7 @@ export default function Register(){
                                     <thead className="bg-blue-950 text-white">
                                         <tr>
                                             <th className="font-sans p-2 font-semibold border border-gray-400">Action</th>
+                                            <th className="font-sans p-2 font-semibold border border-gray-400">Download Participation Certificate</th>
                                             <th className="font-sans p-2 font-semibold border border-gray-400">Name</th>
                                             <th className="font-sans p-2 font-semibold border border-gray-400">Group</th>
                                             <th className="font-sans p-2 font-semibold border border-gray-400">Group 2 Exam</th>
@@ -935,6 +978,7 @@ export default function Register(){
                                                             }
                                                         </div>
                                                     </td>
+                                                    <td className="font-sans text-lg p-2 border border-black"><TbDownload onClick={() => {if (student.attendance === "P") {handleCertificateDownload(student);}}} className={`mx-auto text-3xl ${student.attendance === "P" ? "hover:cursor-pointer text-blue-900" : "hover:cursor-not-allowed text-blue-300"}`}/></td>
                                                     <td className="font-sans text-lg p-2 border border-black">{student.name}</td>
                                                     <td className="font-sans text-lg p-2 border border-black">{student.group}</td>
                                                     <td className="font-sans text-lg p-2 border border-black">{student.grp2Exam}</td>

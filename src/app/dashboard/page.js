@@ -462,7 +462,7 @@ export default function Dashboard(){
 
                 <LogisticsList/>
 
-                {(process.env.NEXT_PUBLIC_DISTRICT_CODE === 'kn' || process.env.NEXT_PUBLIC_DISTRICT_CODE === 'ks')&&
+                {(process.env.NEXT_PUBLIC_DISTRICT_CODE === 'kn')&&
                 <>
                 <div className="font-sans mx-auto bg-white rounded-xl shadow-xl w-full mt-10 p-5">
                     <h2 className="text-2xl font-bold text-center mb-8">Group-wise Event Registrations</h2>

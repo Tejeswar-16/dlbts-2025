@@ -9,7 +9,7 @@ import { useRouter } from "next/navigation";
 import { MdDelete } from "react-icons/md";
 import { FaEdit } from "react-icons/fa";
 import { TbDownload } from "react-icons/tb";
-import { generateCertificatePDF } from "../_util/generateCertificatePDF";
+import { generateCertificatePDF } from "../_util/generateCertificatePdf";
 import * as XLSX from "xlsx";
 
 export default function Register(){

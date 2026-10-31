@@ -57,7 +57,7 @@ export default function Register(){
     const [errorMsg, setErrorMsg] = useState("");
 
     const MIN_TEAM_SIZE_AD = 2;
-    const MIN_TEAM_SIZE_NC = 2;
+    const MIN_TEAM_SIZE_NC = 1;
     const MAX_TEAM_SIZE_AD = 4;
     const MAX_TEAM_SIZE_NC = 3;
     const MAX_TEAMS_PER_EVENT = 2;
